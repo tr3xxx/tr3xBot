@@ -5,6 +5,7 @@ import requests
 #import traceback
 import random
 from discord.ext import commands
+from requests.api import get
 #from discord.utils import get
 
 
@@ -37,19 +38,19 @@ async def on_ready():
             memberings=memberings+1
             online=online+1
     
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='tr3xBotBETA'),status=discord.Status.dnd)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name='tr3xBotBETA'),status=discord.Status.dnd)
     
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
     
-    #memchncheck = get(guild.voice_channels, name='⚫ 𝙈𝙚𝙢𝙗𝙚𝙧:')
-    #if memchncheck is None:
-        #await guild.create_voice_channel(f"⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: {memberings}", overwrites=None, reason=None)
-    #onlchncheck = get(guild.voice_channels, name='🟢 𝙊𝙣𝙡𝙞𝙣𝙚:')
-    #if onlchncheck is None:
-        #await guild.create_voice_channel(f"🟢 𝙊𝙣𝙡𝙞𝙣𝙚: {online}", overwrites=None, reason=None)
+    memchncheck = get(guild.voice_channels, name='⚫ 𝙈𝙚𝙢𝙗𝙚𝙧:')
+    if memchncheck is None:
+        await guild.create_voice_channel(f"⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: {memberings}", overwrites=None, reason=None)
+    onlchncheck = get(guild.voice_channels, name='🟢 𝙊𝙣𝙡𝙞𝙣𝙚:')
+    if onlchncheck is None:
+        await guild.create_voice_channel(f"🟢 𝙊𝙣𝙡𝙞𝙣𝙚: {online}", overwrites=None, reason=None)
     
   
     #channel  = await guild.create_text_channel as message.guild.create_text_channel ("⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: ",memberings)
