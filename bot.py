@@ -40,13 +40,18 @@ async def on_ready():
             memberings=memberings+1
             online=online+1
     
+<<<<<<< HEAD
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='tr3xBotBETA'),status=discord.Status.dnd)
+=======
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name='th'),status=discord.Status.dnd)
+>>>>>>> 62bf2194d012c2a96b06ca0d4c99b1055726ed22
     
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
     
+<<<<<<< HEAD
     memchncheck = get(guild.voice_channels, name='⚫ 𝙈𝙚𝙢𝙗𝙚𝙧:')
     if memchncheck is None:
         await guild.create_voice_channel(f"⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: {memberings}", overwrites=None, reason=None)
@@ -60,18 +65,52 @@ async def on_ready():
 
     #channel  = await guild.create_text_channel as message.guild.create_text_channel ("⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: ",memberings)
     #channel2 = await guild.create_text_channel as message.guild.create_text_channel ("🟢 𝙊𝙣𝙡𝙞𝙣𝙚: ",online)
+=======
+    online = get(guild.voice_channels, name='tr3xBot ONLINE')
+    if online is None:
+        await guild.create_voice_channel(f"tr3xBot ONLINE", overwrites=None, reason=None)
+
+    #memchncheck = get(guild.voice_channels, name='⚫ 𝙈𝙚𝙢𝙗𝙚𝙧:')
+    #if memchncheck is None:
+     #   await guild.create_voice_channel(f"⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: {memberings}", overwrites=None, reason=None)
+    #onlchncheck = get(guild.voice_channels, name='🟢 𝙊𝙣𝙡𝙞𝙣𝙚:')
+    #if onlchncheck is None:
+    #    await guild.create_voice_channel(f"🟢 𝙊𝙣𝙡𝙞𝙣𝙚: {online}", overwrites=None, reason=None)
     
-
-
+ 
+>>>>>>> 62bf2194d012c2a96b06ca0d4c99b1055726ed22
     
 #################################################### 
- 
+
+<<<<<<< HEAD
+
+=======
+@bot.command() #tdc disconnects the bot 
+async def dc(ctx):  
+>>>>>>> 62bf2194d012c2a96b06ca0d4c99b1055726ed22
+    
+    await ctx.send("Bot shutdown")
+    guild = bot.get_guild(718926812033581108)
+
+    existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
+    existing_channel.delete()
+
+    await bot.change_presence(status=discord.Status.invisible)
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
+    await ctx.bot.logout()
+    
+
 @bot.command()  #bsay "smth with unlimited args"
 async def say(ctx,*, arg):  
     await ctx.send(arg)
             
            
+<<<<<<< HEAD
 @bot.command() #bh help 
+=======
+@bot.command() #th
+>>>>>>> 62bf2194d012c2a96b06ca0d4c99b1055726ed22
 async def h(ctx):
     
     embed = discord.Embed(title="tr3xBot Help",
