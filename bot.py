@@ -70,11 +70,11 @@ async def h(ctx):
     embed = discord.Embed(title="tr3xBot Help",
     description= 'Commands:\n\n**broulette BID** -> BID can be: black,red or a number between 0-36\n**bclear x** -> deletes x msgs\n**bsay x** -> says x\n**bkill name** -> kills someone\n**bhug** -> hug urself',
     color=0x22a7f0)
-    #embed.add_field(name="broulette BID",value="-> BID can be: black,red or a number between 0-36",inline=False)
-    #embed.add_field(name="bclear x",value="-> deletes x msgs",inline=False)
-    #embed.add_field(name="say x",value="-> says x",inline=False)
-    #embed.add_field(name="bkill name",value="-> kills someone",inline=False)
-    #embed.add_field(name="bhug",value="-> hug urself",inline=False)
+    embed.add_field(name="broulette BID",value="-> BID can be: black,red or a number between 0-36",inline=False)
+    embed.add_field(name="bclear x",value="-> deletes x msgs",inline=False)
+    embed.add_field(name="say x",value="-> says x",inline=False)
+    embed.add_field(name="bkill name",value="-> kills someone",inline=False)
+    embed.add_field(name="bhug",value="-> hug urself",inline=False)
     embed.set_footer(text="by tr3xGaming")
     await ctx.send(embed=embed)
     
@@ -152,11 +152,16 @@ async def hug(ctx):
         
    
                    
-@bot.command()  #bkill to kill someone 
+@bot.command()  #bkill name/@name to kill someone 
 async def kill(ctx,arg):
-     
-    await ctx.channel.purge(limit=1)
-    await ctx.send("{} is sus ".format(ctx.message.author.mention))
+
+    if arg != None:
+         await ctx.send("{}".format(ctx.message.author.mention)+" killed "+arg)
+         
+    else:
+         await ctx.send("tell me who... tkill @example")
+    #await ctx.channel.purge(limit=1)
+    
        
     
 bot.run(token)
