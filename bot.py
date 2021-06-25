@@ -65,8 +65,8 @@ async def say(ctx,*, arg):
     await ctx.send(arg)
             
            
-@bot.command() #thelp
-async def help(ctx):
+@bot.command() #th
+async def hp(ctx):
     
     embed = discord.Embed(title="tr3xBot Help",
     description= 'Commands:\n\n**broulette BID** -> BID can be: black,red or a number between 0-36\n**bclear x** -> deletes x msgs\n**bsay x** -> says x\n**bkill name** -> kills someone\n**bhug** -> hug urself',
