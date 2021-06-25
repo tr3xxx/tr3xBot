@@ -97,6 +97,7 @@ async def h(ctx):
     embed.add_field(name="tdm",value="-> sends a nice dm to you",inline=False)
     embed.add_field(name="tdc",value="-> disconnect bot",inline=False)
     embed.set_footer(text="by tr3xGaming")
+    await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
     
     
