@@ -4,6 +4,7 @@ import discord
 import time
 from discord import message
 from discord import client
+from discord.ext.commands.bot import Bot
 from discord.ext.commands.converter import ColourConverter
 import requests
 import sys
@@ -14,12 +15,13 @@ from requests.api import get
 from discord.utils import get
 from time import sleep
 import threading
+import schedule
 
 
 #from gevent.libev.corecext import async
 intents = discord.Intents().all()
 bot = commands.Bot(command_prefix="t", intents=intents)
-token = "ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.tlR6Ko8z_UNIFz9piYeuuZb0TYI"
+token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.8X6Rtyc5mfEdvJBdAk5JNZ0wijk"
 guild = bot.get_guild(718926812033581108)
 
 
@@ -203,18 +205,41 @@ async def dm(ctx):
 async def channel(ctx):
     
     guild = bot.get_guild(718926812033581108)
-    await guild.create_voice_channel(ctx.message.author.name+"'s channel",overwrites=None, reason=None ,category=discord.utils.get(ctx.guild.categories, name='—————talks—————'))
-    channel = discord.utils.get(ctx.guild.channels, name=ctx.message.author.name+"'s channel")
     voice_state=ctx.message.author.voice
+
     if voice_state == None:
-        await ctx.author.send("You have to be in a voice channel")
+        #await ctx.author.send("You have to be in a voice channel")
     else :
-        member = ctx.message.author
+        #await guild.create_voice_channel(ctx.message.author.name+"'s channel",overwrites=None, reason=None ,category=discord.utils.get(ctx.guild.categories, name='———Auto Talks———'))
+
+        #channel = discord.utils.get(ctx.guild.channels, name=ctx.message.author.name+"'s channel")
+        #member = ctx.message.author
+
+        #await member.move_to(channel)
+        #while True:
+         #time.sleep(10)
+         #if len(channel.members)==0: 
+                 #await channel.delete(reason=None)
+                # break
+       
+@bot.event
+async def on_voice_state_update(member, before, after):
+  
+    guild = bot.get_guild(718926812033581108)
+    username = str(member)
+    ch = 
+    category = guild.get_channel(660213767820410908)
+
+    if after.channel == ch:
+        channel = await guild.create_voice_channel(
+            name=username+"`s channel",
+            category=discord.utils.get(after.guild.categories, name='———Auto Talks———'),
+            user_limit=99
+        )
         await member.move_to(channel)
-        if len(channel.members)==0: 
-           await channel.delete(reason=None)
-        
-           
-            
-           
+        #3await channel.set_permissions(member, manage_channels=True)
+    if not before.channel.members and before.channel != ch:
+        await before.channel.delete()
+  
+
 bot.run(token)
