@@ -1,7 +1,10 @@
 
+import asyncio
 import discord
 import time
 from discord import message
+from discord import client
+from discord.ext.commands.converter import ColourConverter
 import requests
 import sys
 import traceback
@@ -9,14 +12,15 @@ import random
 from discord.ext import commands
 from requests.api import get
 from discord.utils import get
-
+from time import sleep
+import threading
 
 
 #from gevent.libev.corecext import async
 intents = discord.Intents().all()
 bot = commands.Bot(command_prefix="t", intents=intents)
-token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.8X6Rtyc5mfEdvJBdAk5JNZ0wijk"
-
+token = "ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.tlR6Ko8z_UNIFz9piYeuuZb0TYI"
+guild = bot.get_guild(718926812033581108)
 
 
 
@@ -191,5 +195,23 @@ async def dm(ctx):
     await ctx.author.send("Hello, this is a DM! "+ "{}".format(ctx.message.author.mention))
 
     #await ctx.channel.purge(limit=1) 
+
+@bot.command()
+async def channel(ctx):
     
+    guild = bot.get_guild(718926812033581108)
+    await guild.create_voice_channel(ctx.message.author.name+"'s channel",overwrites=None, reason=None ,category=discord.utils.get(ctx.guild.categories, name='—————talks—————'))
+    channel = discord.utils.get(ctx.guild.channels, name=ctx.message.author.name+"'s channel")
+    voice_state=ctx.message.author.voice
+    if voice_state == None:
+        await ctx.author.send("You have to be in a voice channel")
+    else :
+        member = ctx.message.author
+        await member.move_to(channel)
+        if len(channel.members)==0: 
+           await channel.delete(reason=None)
+        
+           
+            
+           
 bot.run(token)
