@@ -95,7 +95,7 @@ async def h(ctx):
     embed.add_field(name="bkill name",value="-> kills someone",inline=False)
     embed.add_field(name="bhug",value="-> hug urself",inline=False)
     embed.set_footer(text="by tr3xGaming")
-    await ctx.send(embed=embed)
+    await ctx.author.send(embed=embed)
     
     
 @bot.command() #bembed fach, aufgabe, datum 
