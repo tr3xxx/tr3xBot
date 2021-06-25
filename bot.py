@@ -1,12 +1,12 @@
 import discord
 import time
 import requests
-#import sys
-#import traceback
+import sys
+import traceback
 import random
 from discord.ext import commands
 from requests.api import get
-#from discord.utils import get
+from discord.utils import get
 
 
 
