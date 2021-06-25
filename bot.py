@@ -1,5 +1,7 @@
+
 import discord
 import time
+from discord import message
 import requests
 import sys
 import traceback
@@ -38,7 +40,7 @@ async def on_ready():
             memberings=memberings+1
             online=online+1
     
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name='tr3xBotBETA'),status=discord.Status.dnd)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='tr3xBotBETA'),status=discord.Status.dnd)
     
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
@@ -50,12 +52,16 @@ async def on_ready():
         await guild.create_voice_channel(f"⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: {memberings}", overwrites=None, reason=None)
     onlchncheck = get(guild.voice_channels, name='🟢 𝙊𝙣𝙡𝙞𝙣𝙚:')
     if onlchncheck is None:
-        await guild.create_voice_channel(f"🟢 𝙊𝙣𝙡𝙞𝙣𝙚: {online}", overwrites=None, reason=None)
+       await guild.create_voice_channel(f"🟢 𝙊𝙣𝙡𝙞𝙣𝙚: {online}", overwrites=None, reason=None)
     
   
+
+
+
     #channel  = await guild.create_text_channel as message.guild.create_text_channel ("⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: ",memberings)
     #channel2 = await guild.create_text_channel as message.guild.create_text_channel ("🟢 𝙊𝙣𝙡𝙞𝙣𝙚: ",online)
     
+
 
     
 #################################################### 
@@ -65,8 +71,8 @@ async def say(ctx,*, arg):
     await ctx.send(arg)
             
            
-@bot.command() #th
-async def hp(ctx):
+@bot.command() #bh help 
+async def h(ctx):
     
     embed = discord.Embed(title="tr3xBot Help",
     description= 'Commands:\n\n**broulette BID** -> BID can be: black,red or a number between 0-36\n**bclear x** -> deletes x msgs\n**bsay x** -> says x\n**bkill name** -> kills someone\n**bhug** -> hug urself',
@@ -163,6 +169,15 @@ async def kill(ctx,arg):
          await ctx.send("tell me who... tkill @example")
     #await ctx.channel.purge(limit=1)
     
-       
+#@bot.command()   
+#async def dm(ctx, user: discord.User, *, message=None):
+ #   message = message or ""
+  #  await user.send(user, message)
+
+@bot.command()
+async def dm(ctx):
+    await ctx.author.send("Hello, this is a DM! "+ "{}".format(ctx.message.author.mention))
+
+    #await ctx.channel.purge(limit=1) 
     
 bot.run(token)
