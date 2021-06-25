@@ -93,12 +93,15 @@ async def h(ctx):
     embed = discord.Embed(title="tr3xBot Help",
     description= 'Commands:\n\n**broulette BID** -> BID can be: black,red or a number between 0-36\n**bclear x** -> deletes x msgs\n**bsay x** -> says x\n**bkill name** -> kills someone\n**bhug** -> hug urself',
     color=0x22a7f0)
-    embed.add_field(name="broulette BID",value="-> BID can be: black,red or a number between 0-36",inline=False)
-    embed.add_field(name="bclear x",value="-> deletes x msgs",inline=False)
-    embed.add_field(name="say x",value="-> says x",inline=False)
-    embed.add_field(name="bkill name",value="-> kills someone",inline=False)
-    embed.add_field(name="bhug",value="-> hug urself",inline=False)
+    embed.add_field(name="troulette BID",value="-> BID can be: black,red or a number between 0-36",inline=False)
+    embed.add_field(name="tclear x",value="-> deletes x msgs",inline=False)
+    embed.add_field(name="tsay x",value="-> says whatever you want",inline=False)
+    embed.add_field(name="tkill name",value="-> kill these foes",inline=False)
+    embed.add_field(name="thug",value="-> hug urself",inline=False)
+    embed.add_field(name="tdm",value="-> sends a nice dm to you",inline=False)
+    embed.add_field(name="tdc",value="-> disconnect bot",inline=False)
     embed.set_footer(text="by tr3xGaming")
+    await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
     
     
