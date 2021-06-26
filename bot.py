@@ -76,8 +76,8 @@ async def dc(ctx):
     await ctx.send("Bot shutdown")
     guild = bot.get_guild(718926812033581108)
 
-    existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
-    existing_channel.delete()
+    #existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
+    #existing_channel.delete()
 
     await bot.change_presence(status=discord.Status.invisible)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
@@ -200,44 +200,24 @@ async def dm(ctx):
     await ctx.author.send("Hello, this is a DM! "+ "{}".format(ctx.message.author.mention))
 
     #await ctx.channel.purge(limit=1) 
-
-@bot.command()
-async def channel(ctx):
-    
-    guild = bot.get_guild(718926812033581108)
-    voice_state=ctx.message.author.voice
-
-    if voice_state == None:
-        #await ctx.author.send("You have to be in a voice channel")
-    else :
-        #await guild.create_voice_channel(ctx.message.author.name+"'s channel",overwrites=None, reason=None ,category=discord.utils.get(ctx.guild.categories, name='———Auto Talks———'))
-
-        #channel = discord.utils.get(ctx.guild.channels, name=ctx.message.author.name+"'s channel")
-        #member = ctx.message.author
-
-        #await member.move_to(channel)
-        #while True:
-         #time.sleep(10)
-         #if len(channel.members)==0: 
-                 #await channel.delete(reason=None)
-                # break
-       
+      
 @bot.event
 async def on_voice_state_update(member, before, after):
-  
     guild = bot.get_guild(718926812033581108)
-    username = str(member)
-    ch = 
-    category = guild.get_channel(660213767820410908)
+    username = str(member.name)
+    ch = guild.get_channel(858272905108258816)
+    category = guild.get_channel(858020017822892092)
 
     if after.channel == ch:
         channel = await guild.create_voice_channel(
             name=username+"`s channel",
-            category=discord.utils.get(after.guild.categories, name='———Auto Talks———'),
-            user_limit=99
+            category=category,
+            overwrites=None,
+            reason=None,
+            user_limit=10,
+            bitrate=256000
         )
         await member.move_to(channel)
-        #3await channel.set_permissions(member, manage_channels=True)
     if not before.channel.members and before.channel != ch:
         await before.channel.delete()
   
