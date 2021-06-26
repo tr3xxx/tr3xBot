@@ -15,14 +15,16 @@ from requests.api import get
 from discord.utils import get
 from time import sleep
 import threading
-import schedule
-
+from discord.ext import commands
+import DiscordUtils
+import os
 
 #from gevent.libev.corecext import async
 intents = discord.Intents().all()
-bot = commands.Bot(command_prefix="t", intents=intents)
-token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.8X6Rtyc5mfEdvJBdAk5JNZ0wijk"
+bot = commands.Bot(command_prefix="w", intents=intents)
+token = "ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.tlR6Ko8z_UNIFz9piYeuuZb0TYI"
 guild = bot.get_guild(718926812033581108)
+music = DiscordUtils.Music
 
 
 
@@ -52,11 +54,7 @@ async def on_ready():
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
-
-    online = get(guild.voice_channels, name='tr3xBot ONLINE')
-    if online is None:
-        await guild.create_voice_channel(f"tr3xBot ONLINE", overwrites=None, reason=None)
-
+  
     #memchncheck = get(guild.voice_channels, name='⚫ 𝙈𝙚𝙢𝙗𝙚𝙧:')
     #if memchncheck is None:
      #   await guild.create_voice_channel(f"⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: {memberings}", overwrites=None, reason=None)
@@ -208,38 +206,32 @@ async def channel(ctx):
     voice_state=ctx.message.author.voice
 
     if voice_state == None:
-        #await ctx.author.send("You have to be in a voice channel")
+        await ctx.author.send("You have to be in a voice channel")
     else :
-        #await guild.create_voice_channel(ctx.message.author.name+"'s channel",overwrites=None, reason=None ,category=discord.utils.get(ctx.guild.categories, name='———Auto Talks———'))
+        await guild.create_voice_channel(ctx.message.author.name+"'s channel",overwrites=None, reason=None ,category=discord.utils.get(ctx.guild.categories, name='———Auto Talks———'))
 
-        #channel = discord.utils.get(ctx.guild.channels, name=ctx.message.author.name+"'s channel")
-        #member = ctx.message.author
+        channel = discord.utils.get(ctx.guild.channels, name=ctx.message.author.name+"'s channel")
+        member = ctx.message.author
+        await member.move_to(channel) 
 
-        #await member.move_to(channel)
-        #while True:
-         #time.sleep(10)
-         #if len(channel.members)==0: 
-                 #await channel.delete(reason=None)
-                # break
-       
-@bot.event
-async def on_voice_state_update(member, before, after):
-  
-    guild = bot.get_guild(718926812033581108)
-    username = str(member)
-    ch = 
-    category = guild.get_channel(660213767820410908)
+@bot.command()
+async def join(ctx):
+    voicetrue=ctx.author.voice
+    if voicetrue is None:
+        return await ctx.send('You are not currently in a voice channel')
+    await ctx.author.voice.channel.connect()
+    await ctx.send('Joined your voice channel')
 
-    if after.channel == ch:
-        channel = await guild.create_voice_channel(
-            name=username+"`s channel",
-            category=discord.utils.get(after.guild.categories, name='———Auto Talks———'),
-            user_limit=99
-        )
-        await member.move_to(channel)
-        #3await channel.set_permissions(member, manage_channels=True)
-    if not before.channel.members and before.channel != ch:
-        await before.channel.delete()
-  
+@bot.command()
+async def leave(ctx):
+    voicetrue=ctx.author.voice
+    mevoicetrue=ctx.guild.me.voice
+    if voicetrue is None:
+        return await ctx.send('You are not currently in a voice channel')
+    if mevoicetrue is None:
+        return await ctx.send('I am not currently in a voice channel')
+    await ctx.voice_client.disconnect()
+    await ctx.send('Left your voice channel')
+
 
 bot.run(token)
