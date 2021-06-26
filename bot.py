@@ -24,7 +24,7 @@ intents = discord.Intents().all()
 bot = commands.Bot(command_prefix="w", intents=intents)
 token = "ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.tlR6Ko8z_UNIFz9piYeuuZb0TYI"
 guild = bot.get_guild(718926812033581108)
-music = DiscordUtils.Music
+music = DiscordUtils.Music()
 
 
 
@@ -233,6 +233,26 @@ async def leave(ctx):
         return await ctx.send('I am not currently in a voice channel')
     await ctx.voice_client.disconnect()
     await ctx.send('Left your voice channel')
+
+@bot.command()
+async def play(ctx, *, url,):
+    voicetrue=ctx.author.voice
+    if voicetrue is None:
+        return await ctx.send('You are not currently in a voice channel')
+    await ctx.author.voice.channel.connect()
+    await ctx.send('Joined your voice channel')
+    guild = bot.get_guild(718926812033581108)
+    P = music.get_player(guild_id = guild.id)
+    if not P:
+                P = music.create_player(ctx)
+    if not ctx.voice_client.is_playing():
+                await P.queue(url, search=True)
+                song = await P.play()
+                await ctx.send(f'I have started playing `{song.name}`')
+    else:
+                song = await P.queue(url, search=True)
+                await ctx.send(f'`{song.name}` has been added to playlist')
+    
 
 
       
