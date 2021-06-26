@@ -48,7 +48,7 @@ async def on_ready():
             memberings=memberings+1
             online=online+1
     
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name='th'),status=discord.Status.dnd)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='th for help'),status=discord.Status.do_not_disturb)
     
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
@@ -252,9 +252,6 @@ async def play(ctx, *, url,):
     else:
                 song = await P.queue(url, search=True)
                 await ctx.send(f'`{song.name}` has been added to playlist')
-    
-
-
       
 @bot.event
 async def on_voice_state_update(member, before, after):
