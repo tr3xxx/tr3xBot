@@ -74,8 +74,8 @@ async def dc(ctx):
     await ctx.send("Bot shutdown")
     guild = bot.get_guild(718926812033581108)
 
-    existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
-    existing_channel.delete()
+    #existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
+    #existing_channel.delete()
 
     await bot.change_presence(status=discord.Status.invisible)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
@@ -199,6 +199,7 @@ async def dm(ctx):
 
     #await ctx.channel.purge(limit=1) 
 
+
 @bot.command()
 async def channel(ctx):
     
@@ -232,6 +233,29 @@ async def leave(ctx):
         return await ctx.send('I am not currently in a voice channel')
     await ctx.voice_client.disconnect()
     await ctx.send('Left your voice channel')
+
+
+      
+@bot.event
+async def on_voice_state_update(member, before, after):
+    guild = bot.get_guild(718926812033581108)
+    username = str(member.name)
+    ch = guild.get_channel(858272905108258816)
+    category = guild.get_channel(858020017822892092)
+
+    if after.channel == ch:
+        channel = await guild.create_voice_channel(
+            name=username+"`s channel",
+            category=category,
+            overwrites=None,
+            reason=None,
+            user_limit=10,
+            bitrate=256000
+        )
+        await member.move_to(channel)
+    if not before.channel.members and before.channel != ch:
+        await before.channel.delete()
+  
 
 
 bot.run(token)
