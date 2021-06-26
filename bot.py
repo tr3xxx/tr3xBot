@@ -103,7 +103,11 @@ async def h(ctx):
     embed.set_footer(text="by tr3xGaming")
     await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
-    
+
+@bot.command()
+async def help(ctx):
+    await ctx.send("th for help")
+
     
 @bot.command() #bembed fach, aufgabe, datum 
 async def embed(ctx, *, arg): 
