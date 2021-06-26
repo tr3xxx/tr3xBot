@@ -21,8 +21,8 @@ import os
 
 #from gevent.libev.corecext import async
 intents = discord.Intents().all()
-bot = commands.Bot(command_prefix="w", intents=intents)
-token = "ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.tlR6Ko8z_UNIFz9piYeuuZb0TYI"
+bot = commands.Bot(command_prefix="t", intents=intents)
+token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.8X6Rtyc5mfEdvJBdAk5JNZ0wijk"
 guild = bot.get_guild(718926812033581108)
 music = DiscordUtils.Music
 
