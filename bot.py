@@ -1,5 +1,6 @@
 
 import asyncio
+from DiscordUtils.Music import EmptyQueue
 import discord
 import time
 from discord import message
@@ -18,6 +19,7 @@ import threading
 from discord.ext import commands
 import DiscordUtils
 import os
+from asyncio import sleep
 
 #from gevent.libev.corecext import async
 intents = discord.Intents().all()
@@ -68,7 +70,8 @@ async def on_ready():
     
 #################################################### 
 
-@bot.command() #tdc disconnects the bot 
+@bot.command() #tdc disconnects the bot
+@commands.has_permissions(administrator=True)
 async def dc(ctx):
 
     await ctx.send("Bot shutdown")
@@ -76,11 +79,15 @@ async def dc(ctx):
 
     #existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
     #existing_channel.delete()
+    
+   # if ctx.voice_client.is_playing():                  #soll dafür sorgen, wenn der bot tdced wird auch alle vcs leavt: geht aber akt nicht
+   #     await ctx.voice_client.disconnect()
+       
 
     await bot.change_presence(status=discord.Status.invisible)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
-    await ctx.bot.logout()
+    await ctx.bot.close()
  
 @bot.command()  #bsay "smth with unlimited args"
 async def say(ctx,*, arg):  
@@ -104,9 +111,6 @@ async def h(ctx):
     await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
 
-@bot.command()
-async def help(ctx):
-    await ctx.send("th for help")
 
     
 @bot.command() #bembed fach, aufgabe, datum 
@@ -205,21 +209,6 @@ async def dm(ctx):
 
 
 @bot.command()
-async def channel(ctx):
-    
-    guild = bot.get_guild(718926812033581108)
-    voice_state=ctx.message.author.voice
-
-    if voice_state == None:
-        await ctx.author.send("You have to be in a voice channel")
-    else :
-        await guild.create_voice_channel(ctx.message.author.name+"'s channel",overwrites=None, reason=None ,category=discord.utils.get(ctx.guild.categories, name='———Auto Talks———'))
-
-        channel = discord.utils.get(ctx.guild.channels, name=ctx.message.author.name+"'s channel")
-        member = ctx.message.author
-        await member.move_to(channel) 
-
-@bot.command()
 async def join(ctx):
     voicetrue=ctx.author.voice
     if voicetrue is None:
@@ -235,15 +224,19 @@ async def leave(ctx):
         return await ctx.send('You are not currently in a voice channel')
     if mevoicetrue is None:
         return await ctx.send('I am not currently in a voice channel')
+    guild = bot.get_guild(718926812033581108)
+    P = music.get_player(guild_id = guild.id)
+    await P.stop()
     await ctx.voice_client.disconnect()
     await ctx.send('Left your voice channel')
 
 @bot.command()
-async def play(ctx, *, url,):
+async def play(ctx, *, url):
     voicetrue=ctx.author.voice
     if voicetrue is None:
         return await ctx.send('You are not currently in a voice channel')
-    await ctx.author.voice.channel.connect()
+    if ctx.voice_client == None:
+     await ctx.author.voice.channel.connect()
     await ctx.send('Joined your voice channel')
     guild = bot.get_guild(718926812033581108)
     P = music.get_player(guild_id = guild.id)
@@ -253,9 +246,41 @@ async def play(ctx, *, url,):
                 await P.queue(url, search=True)
                 song = await P.play()
                 await ctx.send(f'I have started playing `{song.name}`')
+                #
+                #while ctx.voice_client.is_playing():            # Das soll eig den bot, wenn er nichts mehr spielt
+                #    await sleep(1)                              # kicken aber er kickt ihn einfach random zwischendurch
+                #await ctx.voice_client.disconnect()             
+                
     else:
                 song = await P.queue(url, search=True)
-                await ctx.send(f'`{song.name}` has been added to playlist')
+                await ctx.send(f'`{song.name}` has been added to queue')
+    
+
+@bot.command()
+async def skip(ctx):
+    guild = bot.get_guild(718926812033581108)
+    P = music.get_player(guild_id = guild.id)
+    await P.skip()
+    if P.queue is EmptyQueue:                                              # funktioniert noch nicht, ka wie man checkt ob die queue leer ist 
+        await ctx.send("There are no new Songs in the queue")              # also ob sie dann 0 oder None oder EmptyQueue ist.
+
+@bot.command()
+async def pause(ctx):
+    guild = bot.get_guild(718926812033581108)
+    P = music.get_player(guild_id = guild.id)
+    await P.pause()
+
+@bot.command()
+async def resume(ctx):
+    guild = bot.get_guild(718926812033581108)
+    P = music.get_player(guild_id = guild.id)
+    await P.resume()
+
+@bot.command()
+async def stop(ctx):
+    guild = bot.get_guild(718926812033581108)
+    P = music.get_player(guild_id = guild.id)
+    await P.stop()
       
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -274,9 +299,25 @@ async def on_voice_state_update(member, before, after):
             bitrate=256000
         )
         await member.move_to(channel)
-    if not before.channel.members and before.channel != ch:
+    if not before.channel.members and before.channel != ch and before.channel != None:
         await before.channel.delete()
-  
+
+@bot.event
+async def on_member_join(member):
+    print(member+" joined the server")
+@bot.event
+async def on_member_remove(member):
+    print(member+" left the server")
+@bot.event
+async def on_member_ban(guild, user):
+    print(user+" got banned")
+@bot.event
+async def on_member_unban(guild, user):
+    print(user+" got unbanned")
+@bot.event
+async def on_invite_create(invite):
+    print("an invite was created "+(invite))
+
 
 
 bot.run(token)
