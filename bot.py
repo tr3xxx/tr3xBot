@@ -24,8 +24,8 @@ import aiohttp
 
 #from gevent.libev.corecext import async
 intents = discord.Intents().all()
-bot = commands.Bot(command_prefix="w", intents=intents)
-token = "ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.tlR6Ko8z_UNIFz9piYeuuZb0TYI"
+bot = commands.Bot(command_prefix="t",help_command=None, intents=intents)
+token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.8X6Rtyc5mfEdvJBdAk5JNZ0wijk"
 guild = bot.get_guild(718926812033581108)
 music = DiscordUtils.Music()
 import youtube_dl
@@ -84,27 +84,27 @@ class Music(commands.Cog):
 
 
 @bot.event #login
-async def on_ready():
+async def on_ready(): #wird beim start ausgeführt
     
-    guild = bot.get_guild(718926812033581108)
+    guild = bot.get_guild(718926812033581108) #guild id des servers
  
-    members = bot.guilds[0].members
+    members = bot.guilds[0].members #array mit allen members des servers
     #print(members)
-    ip = requests.get('http://api.ipify.org').text
+    ip = requests.get('http://api.ipify.org').text #hier her kriegt man die ip
     
     memberings=0
     online=0
     
     for i in members:
-        if i.status == discord.Status.offline:
-            memberings=memberings+1
-        elif i.status != discord.Status.offline:
+        if i.status == discord.Status.offline:                         # brechenung der members ings 
+            memberings=memberings+1                                    # und der online members
+        elif i.status != discord.Status.offline:                        
             memberings=memberings+1
             online=online+1
     
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='th for help'),status=discord.Status.do_not_disturb)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='th for help'),status=discord.Status.do_not_disturb) # ändert den Status des Bots
     
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name)
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name)   # reine consolen/terminal ausgabe 
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
@@ -116,6 +116,7 @@ async def on_ready():
     #if onlchncheck is None:
     #    await guild.create_voice_channel(f"🟢 𝙊𝙣𝙡𝙞𝙣𝙚: {online}", overwrites=None, reason=None)
 
+
     
 
 
@@ -123,10 +124,14 @@ async def on_ready():
 #################################################### 
 
 @bot.command() #tdc disconnects the bot
-@commands.has_permissions(administrator=True)
-async def dc(ctx):
+@commands.has_permissions(administrator=True) # nur admins können ihn ausführen
+async def dc(ctx): # disconnect bot
 
-    await ctx.send("Bot shutdown")
+    #await ctx.send("Bot shutdown")
+    embed = discord.Embed(title="Bot Shutdown",
+    description= "The Bot got Shutdowned by an admin/mod",
+    color=0xff0000)
+    await ctx.send(embed=embed)
     guild = bot.get_guild(718926812033581108)
 
     #existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
@@ -139,7 +144,7 @@ async def dc(ctx):
     await bot.change_presence(status=discord.Status.invisible)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
-    await ctx.bot.close()
+    await ctx.bot.close() #abmeldung
  
 @bot.command()  #bsay "smth with unlimited args"
 async def say(ctx,*, arg):  
@@ -290,6 +295,7 @@ async def play( ctx, *, url):
         embed = discord.Embed(title="Now playing", description=f"[{player.title}]({player.url}) [{ctx.author.mention}]")
         await ctx.send(embed=embed)
 
+
 @bot.command(description="pauses music")
 async def pause( ctx):
         ctx.voice_client.pause()
@@ -326,6 +332,29 @@ async def skip( ctx):
   #              await P.queue(url, search=True)
  #               song = await P.play()
  #               await ctx.send(f'I have started playing `{song.name}`')
+
+@bot.command()
+async def play(ctx, *, url):
+    voicetrue=ctx.author.voice
+    if voicetrue is None:
+        return await ctx.send('You are not currently in a voice channel')
+    if ctx.voice_client == None:
+     await ctx.author.voice.channel.connect()
+    await ctx.send('Joined your voice channel')
+    guild = bot.get_guild(718926812033581108)
+    P = music.get_player(guild_id = guild.id)
+    if not P:
+                P = music.create_player(ctx)
+    if not ctx.voice_client.is_playing():
+                await P.queue(url, search=True)
+                song = await P.play()
+                #await ctx.send(f'I have started playing `{song.name}`')
+                embed = discord.Embed(title="Music started",
+                description= f"started playing `{song.name}`",
+                color=0xff0000)
+                await ctx.send(embed=embed)
+    
+
                 #
                 #while ctx.voice_client.is_playing():            # Das soll eig den bot, wenn er nichts mehr spielt
                 #    await sleep(1)                              # kicken aber er kickt ihn einfach random zwischendurch
@@ -379,7 +408,7 @@ async def on_voice_state_update(member, before, after):
             bitrate=256000
         )
         await member.move_to(channel)
-    if not before.channel.members and before.channel != ch and before.channel != None:
+    if not before.channel.members and before.channel != ch and before.channel != None and before != None:
         await before.channel.delete()
 
 @bot.event
@@ -397,6 +426,7 @@ async def on_member_unban(guild, user):
 @bot.event
 async def on_invite_create(invite):
     print("an invite was created "+(invite))
+
 
 @bot.command(pass_context=True)
 async def memes(ctx):
