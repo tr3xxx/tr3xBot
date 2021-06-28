@@ -28,6 +28,57 @@ bot = commands.Bot(command_prefix="w", intents=intents)
 token = "ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.tlR6Ko8z_UNIFz9piYeuuZb0TYI"
 guild = bot.get_guild(718926812033581108)
 music = DiscordUtils.Music()
+import youtube_dl
+
+youtube_dl.utils.bug_reports_message = lambda: ''
+
+
+ytdl_format_options = {
+    'format': 'bestaudio/best',
+    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+    'restrictfilenames': True,
+    'noplaylist': True,
+    'nocheckcertificate': True,
+    'ignoreerrors': False,
+    'logtostderr': False,
+    'quiet': True,
+    'no_warnings': True,
+    'default_search': 'auto',
+    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+}
+
+ffmpeg_options = {
+    'options': '-vn',
+    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+}
+
+ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+
+
+class YTDLSource(discord.PCMVolumeTransformer):
+    def __init__(self, source, *, data, volume=0.5):
+        super().__init__(source, volume)
+
+        self.data = data
+
+        self.title = data.get('title')
+        self.url = data.get('url')
+
+    @classmethod
+    async def from_url(cls, url, *, loop=None, stream=False):
+        loop = loop or asyncio.get_event_loop()
+        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+
+        if 'entries' in data:
+            # take first item from a playlist
+            data = data['entries'][0]
+
+        filename = data['url'] if stream else ytdl.prepare_filename(data)
+        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+
+class Music(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
 
 
@@ -217,71 +268,99 @@ async def join(ctx):
     await ctx.author.voice.channel.connect()
     await ctx.send('Joined your voice channel')
 
-@bot.command()
-async def leave(ctx):
-    voicetrue=ctx.author.voice
-    mevoicetrue=ctx.guild.me.voice
-    if voicetrue is None:
-        return await ctx.send('You are not currently in a voice channel')
-    if mevoicetrue is None:
-        return await ctx.send('I am not currently in a voice channel')
-    guild = bot.get_guild(718926812033581108)
-    P = music.get_player(guild_id = guild.id)
-    await P.stop()
-    await ctx.voice_client.disconnect()
-    await ctx.send('Left your voice channel')
+#@bot.command()
+#async def leave(ctx):
+ #   voicetrue=ctx.author.voice
+  #  mevoicetrue=ctx.guild.me.voice
+  #  if voicetrue is None:
+ #       return await ctx.send('You are not currently in a voice channel')
+ #   if mevoicetrue is None:
+ #       return await ctx.send('I am not currently in a voice channel')
+ #   guild = bot.get_guild(718926812033581108)
+  #  P = music.get_player(guild_id = guild.id)
+ #   await P.stop()
+ #   await ctx.voice_client.disconnect()
+ #   await ctx.send('Left your voice channel')
 
-@bot.command()
-async def play(ctx, *, url):
-    voicetrue=ctx.author.voice
-    if voicetrue is None:
-        return await ctx.send('You are not currently in a voice channel')
-    if ctx.voice_client == None:
-     await ctx.author.voice.channel.connect()
-    await ctx.send('Joined your voice channel')
-    guild = bot.get_guild(718926812033581108)
-    P = music.get_player(guild_id = guild.id)
-    if not P:
-                P = music.create_player(ctx)
-    if not ctx.voice_client.is_playing():
-                await P.queue(url, search=True)
-                song = await P.play()
-                await ctx.send(f'I have started playing `{song.name}`')
+@bot.command(description="streams music")
+async def play( ctx, *, url):
+        async with ctx.typing():
+            player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
+            ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+        embed = discord.Embed(title="Now playing", description=f"[{player.title}]({player.url}) [{ctx.author.mention}]")
+        await ctx.send(embed=embed)
+
+@bot.command(description="pauses music")
+async def pause( ctx):
+        ctx.voice_client.pause()
+        await ctx.send("Paused ⏸️")
+    
+@bot.command(description="resumes music")
+async def resume( ctx):
+        ctx.voice_client.resume()
+        await ctx.send("Resuming ⏯️")
+
+@bot.command(description="stops and disconnects the bot from voice")
+async def leave( ctx):
+        await ctx.voice_client.disconnect()
+
+@bot.command(description="skipped music")
+async def skip( ctx):
+        ctx.voice_client.skip()
+        await ctx.send("Skipped :track_next:")
+
+
+#@bot.command()
+#async def play(ctx, *, url):
+  #  voicetrue=ctx.author.voice
+  #  if voicetrue is None:
+  #      return await ctx.send('You are not currently in a voice channel')
+  #  if ctx.voice_client == None:
+  #   await ctx.author.voice.channel.connect()
+  #  await ctx.send('Joined your voice channel')
+  #  guild = bot.get_guild(718926812033581108)
+  #  P = music.get_player(guild_id = guild.id)
+  #  if not P:
+  #              P = music.create_player(ctx)
+  #  if not ctx.voice_client.is_playing():
+  #              await P.queue(url, search=True)
+ #               song = await P.play()
+ #               await ctx.send(f'I have started playing `{song.name}`')
                 #
                 #while ctx.voice_client.is_playing():            # Das soll eig den bot, wenn er nichts mehr spielt
                 #    await sleep(1)                              # kicken aber er kickt ihn einfach random zwischendurch
                 #await ctx.voice_client.disconnect()             
                 
-    else:
-                song = await P.queue(url, search=True)
-                await ctx.send(f'`{song.name}` has been added to queue')
+ #   else:
+#                song = await P.queue(url, search=True)
+#                await ctx.send(f'`{song.name}` has been added to queue')
     
 
-@bot.command()
-async def skip(ctx):
-    guild = bot.get_guild(718926812033581108)
-    P = music.get_player(guild_id = guild.id)
-    await P.skip()
-    if P.queue is EmptyQueue:                                              # funktioniert noch nicht, ka wie man checkt ob die queue leer ist 
-        await ctx.send("There are no new Songs in the queue")              # also ob sie dann 0 oder None oder EmptyQueue ist.
+#@bot.command()
+#async def skip(ctx):
+ #   guild = bot.get_guild(718926812033581108)
+ #   P = music.get_player(guild_id = guild.id)
+ #   await P.skip()
+ #   if P.queue is EmptyQueue:                                              # funktioniert noch nicht, ka wie man checkt ob die queue leer ist 
+ #       await ctx.send("There are no new Songs in the queue")              # also ob sie dann 0 oder None oder EmptyQueue ist.
 
-@bot.command()
-async def pause(ctx):
-    guild = bot.get_guild(718926812033581108)
-    P = music.get_player(guild_id = guild.id)
-    await P.pause()
+#@bot.command()
+#async def pause(ctx):
+ #   guild = bot.get_guild(718926812033581108)
+ #   P = music.get_player(guild_id = guild.id)
+ #   await P.pause()
 
-@bot.command()
-async def resume(ctx):
-    guild = bot.get_guild(718926812033581108)
-    P = music.get_player(guild_id = guild.id)
-    await P.resume()
+#@bot.command()
+#async def resume(ctx):
+ #   guild = bot.get_guild(718926812033581108)
+ #   P = music.get_player(guild_id = guild.id)
+ #   await P.resume()
 
-@bot.command()
-async def stop(ctx):
-    guild = bot.get_guild(718926812033581108)
-    P = music.get_player(guild_id = guild.id)
-    await P.stop()
+#@bot.command()
+#async def stop(ctx):
+ #   guild = bot.get_guild(718926812033581108)
+  #  P = music.get_player(guild_id = guild.id)
+ #   await P.stop()
       
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -325,6 +404,16 @@ async def memes(ctx):
 
     async with aiohttp.ClientSession() as cs:
         async with cs.get('https://www.reddit.com/r/memes/new.json?sort=hot') as r:
+            res = await r.json()
+            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
+            await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
+async def darkmemes(ctx):
+    embed = discord.Embed(title="", description="")
+
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get('https://www.reddit.com/r/darkmemers/new.json?sort=hot') as r:
             res = await r.json()
             embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
             await ctx.send(embed=embed)
@@ -380,7 +469,7 @@ async def pussy(ctx):
             await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
-async def ofleak(ctx):
+async def jofleak(ctx):
     embed = discord.Embed(title="", description="")
 
     async with aiohttp.ClientSession() as cs:
@@ -400,14 +489,22 @@ async def hentai(ctx):
             await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
-async def dildo(ctx):
+async def ofleak(ctx):
     embed = discord.Embed(title="", description="")
 
     async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/Dildo_Gifs/new.json?sort=hot') as r:
+     async with cs.get('https://www.reddit.com/r/OFLeaksNSFW/new.json?sort=hot') as r:
+        res = await r.json()
+        embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url_overridden_by_dest'])
+        await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
+async def gif(ctx):
+    embed = discord.Embed(title="", description="")
+
+    async with aiohttp.ClientSession() as cs:
+        async with cs.get('https://www.reddit.com/r/milf/new.json?sort=hot') as r:
             res = await r.json()
             embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
             await ctx.send(embed=embed)
-
-
 bot.run(token)
