@@ -137,8 +137,8 @@ async def dc(ctx): # disconnect bot
     #existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
     #existing_channel.delete()
     
-   # if ctx.voice_client.is_playing():                  #soll dafür sorgen, wenn der bot tdced wird auch alle vcs leavt: geht aber akt nicht
-   #     await ctx.voice_client.disconnect()
+    if ctx.voice_client.is_connected():                  #soll dafür sorgen, wenn der bot tdced wird auch alle vcs leavt: geht aber akt nicht
+     await ctx.voice_client.disconnect()
        
 
     await bot.change_presence(status=discord.Status.invisible)
