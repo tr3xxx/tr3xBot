@@ -432,7 +432,7 @@ async def on_voice_state_update(member, before, after):
     username = str(member.name)
     ch = guild.get_channel(858272905108258816)
     schoolch = guild.get_channel(859670479551725578)
-    afkch = guild.get_channel()
+    afkch = guild.get_channel(859718892334350356)
     category = guild.get_channel(858020017822892092)
 
 
