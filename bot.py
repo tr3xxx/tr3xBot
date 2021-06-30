@@ -1,41 +1,20 @@
 
 import asyncio
-from DiscordUtils.Music import EmptyQueue
 import discord
 import time
-from discord import message
-from discord import client
-from discord.ext.commands.bot import Bot
-from discord.ext.commands.converter import ColourConverter
 import requests
-import sys
-import traceback
 import random
 from discord.ext import commands
-from requests.api import get
-from discord.utils import get
-from time import sleep
-import threading
 from discord.ext import commands
 import DiscordUtils
-import os
-from asyncio import sleep
 import aiohttp
-import schedule
-import sys
 from discord.ext import tasks
+import youtube_dl
 
-
-#from gevent.libev.corecext import async
-intents = discord.Intents().all()
-bot = commands.Bot(command_prefix="t",help_command=None, intents=intents)
+bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
 token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.8X6Rtyc5mfEdvJBdAk5JNZ0wijk"
 guild = bot.get_guild(718926812033581108)
 music = DiscordUtils.Music()
-import youtube_dl
-
-youtube_dl.utils.bug_reports_message = lambda: ''
-
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
@@ -48,7 +27,7 @@ ytdl_format_options = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+    'source_address': '0.0.0.0'
 }
 
 ffmpeg_options = {
@@ -74,7 +53,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
 
         if 'entries' in data:
-            # take first item from a playlist
             data = data['entries'][0]
 
         filename = data['url'] if stream else ytdl.prepare_filename(data)
@@ -84,23 +62,18 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+@bot.event
+async def on_ready():
 
-
-
-@bot.event #login
-async def on_ready(): #wird beim start ausgeführt
-
-    guild = bot.get_guild(718926812033581108) #guild id des servers
+    guild = bot.get_guild(718926812033581108) 
  
-    
-    #print(members)
-    ip = requests.get('http://api.ipify.org').text #hier her kriegt man die ip
+    ip = requests.get('http://api.ipify.org').text 
     memberings=0
     online=0
-    members = bot.guilds[0].members #array mit allen members des servers
+    members = bot.guilds[0].members 
     for i in members:
-        if i.status == discord.Status.offline:                         # brechenung der members ings 
-            memberings=memberings+1                                    # und der online members
+        if i.status == discord.Status.offline:                         
+            memberings=memberings+1                                    
         elif i.status != discord.Status.offline:                        
             memberings=memberings+1
             online=online+1
@@ -114,25 +87,6 @@ async def on_ready(): #wird beim start ausgeführt
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
   
-    #memchncheck = get(guild.voice_channels, name='⚫ 𝙈𝙚𝙢𝙗𝙚𝙧:')
-    #if memchncheck is None:
-     #   await guild.create_voice_channel(f"⚫ 𝙈𝙚𝙢𝙗𝙚𝙧: {memberings}", overwrites=None, reason=None)
-    #onlchncheck = get(guild.voice_channels, name='🟢 𝙊𝙣𝙡𝙞𝙣𝙚:')
-    #if onlchncheck is None:
-    #    await guild.create_voice_channel(f"🟢 𝙊𝙣𝙡𝙞𝙣𝙚: {online}", overwrites=None, reason=None)
-
-#@bot.event
-#async def on_member_join(member):
-   # guild = member.guild
-   # channel = guild.get_channel(858711678316052500)
-   # await channel.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
-
-
-#@bot.event
-#async def on_member_remove(member):
-   # guild = member.guild
-   # channel = guild.get_channel(858711678316052500)
-   # await channel.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
 
 @tasks.loop(seconds=10.0)
 async def status_1():
@@ -149,10 +103,10 @@ async def member_counter():
     guild = bot.get_guild(718926812033581108)
     memberings=0
     online=0
-    members = bot.guilds[0].members #array mit allen members des servers
+    members = bot.guilds[0].members 
     for i in members:
-        if i.status == discord.Status.offline:                         # brechenung der members ings 
-            memberings=memberings+1                                    # und der online members
+        if i.status == discord.Status.offline:                         
+            memberings=memberings+1                                   
         elif i.status != discord.Status.offline:                        
             memberings=memberings+1
             online=online+1
@@ -165,12 +119,10 @@ async def member_counter():
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Updated Online Counter")
     
     
-#################################################### 
 
-@bot.command() #tdc disconnects the bot
-@commands.has_permissions(administrator=True) # nur admins können ihn ausführen
-async def dc(ctx): # disconnect bot
-    #await ctx.send("Bot shutdown")
+@bot.command()
+@commands.has_permissions(administrator=True) 
+async def dc(ctx): 
     
     embed = discord.Embed(title="Bot Shutdown",
     description= "The Bot got Shutdowned by an admin/mod",
@@ -178,30 +130,18 @@ async def dc(ctx): # disconnect bot
     await ctx.send(embed=embed)
     guild = bot.get_guild(718926812033581108)
 
-    #existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
-    #existing_channel.delete()
-    
-   # if ctx.voice_client.is_connected():                
-    # await ctx.voice_client.disconnect()
-        
-
     await bot.change_presence(status=discord.Status.invisible)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
-    #auto.terminate()
-    #auto().close
-    #await ctx.bot.close() #abmeldung
     await ctx.bot.logout()
     
-   
- 
-@bot.command()  #bsay "smth with unlimited args"
+@bot.command() 
 async def say(ctx,*, arg): 
     await ctx.channel.purge(limit=1) 
     await ctx.send(arg)
             
            
-@bot.command() #bh help 
+@bot.command() 
 async def h(ctx):
     
     embed = discord.Embed(title="tr3xBot Help",
@@ -220,15 +160,11 @@ async def h(ctx):
 
 
     
-@bot.command() #bembed fach, aufgabe, datum 
+@bot.command() #tembed titel, desc, footer
 async def embed(ctx, *, arg): 
                               
-    #print(arg)
-    args = arg.split(',') #bembed, fach, aufgabe, datum
-    #print(args[0],args[1],args[2])
-    #print(len(args))
+    args = arg.split(',') 
     if len(args) == 3:
-        #print(args[1],args[2],args[3])
         embed = discord.Embed(title = args[0],
                                 description = args[1],
                                 color=0x22a7f0)
@@ -237,12 +173,10 @@ async def embed(ctx, *, arg):
     
     
             
-@bot.command() #bclear 34 
+@bot.command()
 async def clear(ctx,arg):
         
     if ctx.author.permissions_in(ctx.channel).manage_messages:
-        #args = arg
-        #print(len(args))
         args = arg.split(' ')
         if len(args) == 1:
             if args[0].isdigit():
@@ -254,11 +188,10 @@ async def clear(ctx,arg):
         
         
 
-@bot.command() #broulette BID 
+@bot.command()
 async def roulette(ctx,arg):
        
     bid = arg
-    #print(bid)
     result = random.randint(0,36)
     bid_param = -3
     if bid.lower() == "black":
@@ -287,13 +220,11 @@ async def roulette(ctx,arg):
         
           
                 
-@bot.command()  #bhug t hugurself
+@bot.command()
 async def hug(ctx):
     await ctx.send("{} hugs himself :smiling_face_with_tear:".format(ctx.message.author.mention))
-        
-   
                    
-@bot.command()  #bkill name/@name to kill someone 
+@bot.command()
 async def kill(ctx,arg):
 
     if arg != None:
@@ -301,18 +232,10 @@ async def kill(ctx,arg):
          
     else:
          await ctx.send("tell me who... tkill @example")
-    #await ctx.channel.purge(limit=1)
-    
-#@bot.command()   
-#async def dm(ctx, user: discord.User, *, message=None):
- #   message = message or ""
-  #  await user.send(user, message)
 
 @bot.command()
 async def dm(ctx):
     await ctx.author.send("Hello, this is a DM! "+ "{}".format(ctx.message.author.mention))
-
-    #await ctx.channel.purge(limit=1) 
 
 
 @bot.command()
@@ -322,20 +245,6 @@ async def join(ctx):
         return await ctx.send('You are not currently in a voice channel')
     await ctx.author.voice.channel.connect()
     await ctx.send('Joined your voice channel')
-
-#@bot.command()
-#async def leave(ctx):
- #   voicetrue=ctx.author.voice
-  #  mevoicetrue=ctx.guild.me.voice
-  #  if voicetrue is None:
- #       return await ctx.send('You are not currently in a voice channel')
- #   if mevoicetrue is None:
- #       return await ctx.send('I am not currently in a voice channel')
- #   guild = bot.get_guild(718926812033581108)
-  #  P = music.get_player(guild_id = guild.id)
- #   await P.stop()
- #   await ctx.voice_client.disconnect()
- #   await ctx.send('Left your voice channel')
 
 @bot.command(description="streams music")
 async def play( ctx, *, url):
@@ -370,62 +279,6 @@ async def skip( ctx):
         ctx.voice_client.skip()
         await ctx.send("Skipped :track_next:")
 
-
-#@bot.command()
-#async def play(ctx, *, url):
-  #  voicetrue=ctx.author.voice
-  #  if voicetrue is None:
-  #      return await ctx.send('You are not currently in a voice channel')
-  #  if ctx.voice_client == None:
-  #   await ctx.author.voice.channel.connect()
-  #  await ctx.send('Joined your voice channel')
-  #  guild = bot.get_guild(718926812033581108)
-  #  P = music.get_player(guild_id = guild.id)
-  #  if not P:
-  #              P = music.create_player(ctx)
-  #  if not ctx.voice_client.is_playing():
-  #              await P.queue(url, search=True)
- #               song = await P.play()
- #               await ctx.send(f'I have started playing `{song.name}`')
-
-    
-
-                #
-                #while ctx.voice_client.is_playing():            # Das soll eig den bot, wenn er nichts mehr spielt
-                #    await sleep(1)                              # kicken aber er kickt ihn einfach random zwischendurch
-                #await ctx.voice_client.disconnect()             
-                
- #   else:
-#                song = await P.queue(url, search=True)
-#                await ctx.send(f'`{song.name}` has been added to queue')
-    
-
-#@bot.command()
-#async def skip(ctx):
- #   guild = bot.get_guild(718926812033581108)
- #   P = music.get_player(guild_id = guild.id)
- #   await P.skip()
- #   if P.queue is EmptyQueue:                                              # funktioniert noch nicht, ka wie man checkt ob die queue leer ist 
- #       await ctx.send("There are no new Songs in the queue")              # also ob sie dann 0 oder None oder EmptyQueue ist.
-
-#@bot.command()
-#async def pause(ctx):
- #   guild = bot.get_guild(718926812033581108)
- #   P = music.get_player(guild_id = guild.id)
- #   await P.pause()
-
-#@bot.command()
-#async def resume(ctx):
- #   guild = bot.get_guild(718926812033581108)
- #   P = music.get_player(guild_id = guild.id)
- #   await P.resume()
-
-#@bot.command()
-#async def stop(ctx):
- #   guild = bot.get_guild(718926812033581108)
-  #  P = music.get_player(guild_id = guild.id)
- #   await P.stop()
-
 @bot.event
 async def on_voice_state_update(member, before, after):
     guild = bot.get_guild(718926812033581108)
@@ -448,23 +301,6 @@ async def on_voice_state_update(member, before, after):
         await member.move_to(channel)
     if not before.channel.members and before.channel != ch and before.channel != None and before != None and before.channel != schoolch and before.channel != afkch:
         await before.channel.delete()
-
-@bot.event
-async def on_member_join(member):
-    print(member+" joined the server")
-@bot.event
-async def on_member_remove(member):
-    print(member+" left the server")
-@bot.event
-async def on_member_ban(guild, user):
-    print(user+" got banned")
-@bot.event
-async def on_member_unban(guild, user):
-    print(user+" got unbanned")
-@bot.event
-async def on_invite_create(invite):
-    print("an invite was created "+(invite))
-
 
 @bot.command(pass_context=True)
 async def memes(ctx):
@@ -576,11 +412,20 @@ async def gif(ctx):
             embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
             await ctx.send(embed=embed)
 
-
+#@bot.event
+#async def on_reaction_add(reaction, user):
+    
+   # print ("test")
+  #  channel = bot.get_channel(803240539578302524)
+  #  msg = await channel.fetch_message(859736550575964220)
+  #  if reaction.message.channel.id != 803240539578302524:
+  #      return
+  #  if reaction.emoji == "✅":
+ #           Role = discord.utils.get(user.server.roles, name="Member")
+ #           await user.add_roles(Role,reason=None, atomic=True)
+ #           print("User got rule")
+#    else:
+ #       return  
 
 
 bot.run(token)
-
-
-# Leon Notizbuch lol
-# https://github.com/BoobBot/Yes-Daddy/blob/master/commands/autorole.py
