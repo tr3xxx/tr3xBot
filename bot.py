@@ -21,6 +21,10 @@ import DiscordUtils
 import os
 from asyncio import sleep
 import aiohttp
+import schedule
+import sys
+from discord.ext import tasks
+
 
 #from gevent.libev.corecext import async
 intents = discord.Intents().all()
@@ -85,24 +89,25 @@ class Music(commands.Cog):
 
 @bot.event #login
 async def on_ready(): #wird beim start ausgeführt
-    
+
     guild = bot.get_guild(718926812033581108) #guild id des servers
  
-    members = bot.guilds[0].members #array mit allen members des servers
+    
     #print(members)
     ip = requests.get('http://api.ipify.org').text #hier her kriegt man die ip
-    
     memberings=0
     online=0
-    
+    members = bot.guilds[0].members #array mit allen members des servers
     for i in members:
         if i.status == discord.Status.offline:                         # brechenung der members ings 
             memberings=memberings+1                                    # und der online members
         elif i.status != discord.Status.offline:                        
             memberings=memberings+1
             online=online+1
+    member_counter.start()
+    status_1.start()
+    status_2.start()
     
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='th for help'),status=discord.Status.do_not_disturb) # ändert den Status des Bots
     
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name)   # reine consolen/terminal ausgabe 
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
@@ -116,18 +121,57 @@ async def on_ready(): #wird beim start ausgeführt
     #if onlchncheck is None:
     #    await guild.create_voice_channel(f"🟢 𝙊𝙣𝙡𝙞𝙣𝙚: {online}", overwrites=None, reason=None)
 
+#@bot.event
+#async def on_member_join(member):
+   # guild = member.guild
+   # channel = guild.get_channel(858711678316052500)
+   # await channel.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
 
+
+#@bot.event
+#async def on_member_remove(member):
+   # guild = member.guild
+   # channel = guild.get_channel(858711678316052500)
+   # await channel.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
+
+@tasks.loop(seconds=10.0)
+async def status_1():
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='BETA'),status=discord.Status.do_not_disturb)
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Changed Status to status 1")
+@tasks.loop(seconds=5.0)
+async def status_2():    
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=' with code'),status=discord.Status.do_not_disturb)  
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Changed Status to status 2")
+
+@tasks.loop(seconds=10.0)
+async def member_counter():
+    #guild = member.guild
+    guild = bot.get_guild(718926812033581108)
+    memberings=0
+    online=0
+    members = bot.guilds[0].members #array mit allen members des servers
+    for i in members:
+        if i.status == discord.Status.offline:                         # brechenung der members ings 
+            memberings=memberings+1                                    # und der online members
+        elif i.status != discord.Status.offline:                        
+            memberings=memberings+1
+            online=online+1
+    channelmember = guild.get_channel(858711678316052500)
+    channelonline = guild.get_channel(858711812736548884)
+    await channelmember.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
+    await channelonline.edit(name = f'🟢 𝙊𝙣𝙡𝙞𝙣𝙚 : {online}')
+
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Updated Member Counter")
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Updated Online Counter")
     
-
-
     
 #################################################### 
 
 @bot.command() #tdc disconnects the bot
 @commands.has_permissions(administrator=True) # nur admins können ihn ausführen
 async def dc(ctx): # disconnect bot
-
     #await ctx.send("Bot shutdown")
+    
     embed = discord.Embed(title="Bot Shutdown",
     description= "The Bot got Shutdowned by an admin/mod",
     color=0xff0000)
@@ -137,17 +181,23 @@ async def dc(ctx): # disconnect bot
     #existing_channel = discord.utils.get(guild.channels, name="tr3xBot ONLINE")
     #existing_channel.delete()
     
-    if ctx.voice_client.is_connected():                  #soll dafür sorgen, wenn der bot tdced wird auch alle vcs leavt: geht aber akt nicht
-     await ctx.voice_client.disconnect()
-       
+   # if ctx.voice_client.is_connected():                
+    # await ctx.voice_client.disconnect()
+        
 
     await bot.change_presence(status=discord.Status.invisible)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
-    await ctx.bot.close() #abmeldung
+    #auto.terminate()
+    #auto().close
+    #await ctx.bot.close() #abmeldung
+    await ctx.bot.logout()
+    
+   
  
 @bot.command()  #bsay "smth with unlimited args"
-async def say(ctx,*, arg):  
+async def say(ctx,*, arg): 
+    await ctx.channel.purge(limit=1) 
     await ctx.send(arg)
             
            
@@ -375,7 +425,7 @@ async def skip( ctx):
  #   guild = bot.get_guild(718926812033581108)
   #  P = music.get_player(guild_id = guild.id)
  #   await P.stop()
-      
+
 @bot.event
 async def on_voice_state_update(member, before, after):
     guild = bot.get_guild(718926812033581108)
@@ -383,13 +433,14 @@ async def on_voice_state_update(member, before, after):
     ch = guild.get_channel(858272905108258816)
     category = guild.get_channel(858020017822892092)
 
+
     if after.channel == ch:
         channel = await guild.create_voice_channel(
             name=username+"`s channel",
             category=category,
             overwrites=None,
             reason=None,
-            user_limit=10,
+            user_limit=69,
             bitrate=256000
         )
         await member.move_to(channel)
@@ -518,8 +569,16 @@ async def gif(ctx):
     embed = discord.Embed(title="", description="")
 
     async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/milf/new.json?sort=hot') as r:
+        async with cs.get('https://www.reddit.com/r/gifs/new.json?sort=hot') as r:
             res = await r.json()
             embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
             await ctx.send(embed=embed)
+
+
+
+
 bot.run(token)
+
+
+# Leon Notizbuch lol
+# https://github.com/BoobBot/Yes-Daddy/blob/master/commands/autorole.py
