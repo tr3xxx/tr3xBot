@@ -431,6 +431,8 @@ async def on_voice_state_update(member, before, after):
     guild = bot.get_guild(718926812033581108)
     username = str(member.name)
     ch = guild.get_channel(858272905108258816)
+    schoolch = guild.get_channel(859670479551725578)
+    afkch = guild.get_channel()
     category = guild.get_channel(858020017822892092)
 
 
@@ -444,7 +446,7 @@ async def on_voice_state_update(member, before, after):
             bitrate=256000
         )
         await member.move_to(channel)
-    if not before.channel.members and before.channel != ch and before.channel != None and before != None:
+    if not before.channel.members and before.channel != ch and before.channel != None and before != None and before.channel != schoolch and before.channel != afkch:
         await before.channel.delete()
 
 @bot.event
