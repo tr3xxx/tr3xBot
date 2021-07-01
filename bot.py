@@ -12,7 +12,7 @@ from discord.ext import tasks
 import youtube_dl
 
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
-token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.8X6Rtyc5mfEdvJBdAk5JNZ0wijk"
+token = "token"
 guild = bot.get_guild(718926812033581108)
 music = DiscordUtils.Music()
 
