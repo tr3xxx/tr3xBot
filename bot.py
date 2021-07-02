@@ -1,4 +1,3 @@
-
 import asyncio
 import discord
 import time
@@ -12,7 +11,7 @@ from discord.ext import tasks
 import youtube_dl
 
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
-token = "token"
+token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.dpS5uYAO3xLRW3JHQue4yDzp75g"
 guild = bot.get_guild(718926812033581108)
 music = DiscordUtils.Music()
 
@@ -80,27 +79,36 @@ async def on_ready():
     member_counter.start()
     status_1.start()
     status_2.start()
+
+    channel = bot.get_channel(803240539578302524)
+    msg = await channel.fetch_message(860636421047320627)
+    await msg.add_reaction("✅")
+
+    statuschannel = bot.get_channel(860642601098280970)
+    statusmsg = await statuschannel.fetch_message(860645008168058880)
+    botonline = discord.Embed(title="**tr3xBot Status**",
+                              description= 'I am currently online ✅',
+                              color=0x0CFF00)
+    botonline.set_footer(text="presents by tr3xBot")
+    await statusmsg.edit(embed=botonline)
     
-    
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name)   # reine consolen/terminal ausgabe 
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name) 
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
-  
 
 @tasks.loop(seconds=10.0)
 async def status_1():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='BETA'),status=discord.Status.do_not_disturb)
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Changed Status to status 1")
 @tasks.loop(seconds=5.0)
 async def status_2():    
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=' with code'),status=discord.Status.do_not_disturb)  
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Changed Status to status 2")
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=' with code'),status=discord.Status.do_not_disturb) 
 
 @tasks.loop(seconds=10.0)
 async def member_counter():
-    #guild = member.guild
     guild = bot.get_guild(718926812033581108)
+    channelmember = guild.get_channel(858711678316052500)
+    channelonline = guild.get_channel(858711812736548884)
     memberings=0
     online=0
     members = bot.guilds[0].members 
@@ -110,36 +118,61 @@ async def member_counter():
         elif i.status != discord.Status.offline:                        
             memberings=memberings+1
             online=online+1
-    channelmember = guild.get_channel(858711678316052500)
-    channelonline = guild.get_channel(858711812736548884)
     await channelmember.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
     await channelonline.edit(name = f'🟢 𝙊𝙣𝙡𝙞𝙣𝙚 : {online}')
-
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Updated Member Counter")
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Updated Online Counter")
     
     
 
 @bot.command()
 @commands.has_permissions(administrator=True) 
 async def dc(ctx): 
+
     
     embed = discord.Embed(title="Bot Shutdown",
     description= "The Bot got Shutdowned by an admin/mod",
     color=0xff0000)
-    await ctx.send(embed=embed)
+    await ctx.send(embed=embed, delete_after=3.0)
     guild = bot.get_guild(718926812033581108)
+
+    statuschannel = bot.get_channel(860642601098280970)
+    statusmsg = await statuschannel.fetch_message(860645008168058880)
+    botoffline = discord.Embed(title="**tr3xBot Status**",
+                              description= 'I am currently offline :no_entry:',
+                              color=0xff0000)
+    botoffline.add_field(name="**What does this mean for you?**",value="All features like commands or the member/online count wont update until i am back online",inline=False)
+    botoffline.add_field(name="**Why i am offline?**",value="Most likely i am offline cause an maintenance break or an server crash",inline=False)
+    botoffline.set_footer(text="presents by tr3xBot")
+    await statusmsg.edit(embed=botoffline)
 
     await bot.change_presence(status=discord.Status.invisible)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
+    await ctx.channel.purge(limit=2)
     await ctx.bot.logout()
+    
     
 @bot.command() 
 async def say(ctx,*, arg): 
     await ctx.channel.purge(limit=1) 
     await ctx.send(arg)
-            
+
+#@bot.event
+#async def on_message(message):
+#
+#    if message.channel.id == 803764491988107334:
+#        if message.content.startswith("t"):
+#            return
+#        else:
+#            await message.channel.purge(limit=1)
+#            embed = discord.Embed(title="**Your Message got deleted**",
+#                                description= "Your message got deleted cause you havent used an command of me.\nIf you wanna know my commands, use th.",
+#                                color=0xff0000)
+#            await message.author.send(embed=embed)
+#    else:
+#        return
+#
+# Funktioniert zwar aber, warum auch immer crashed das den kompletten Bot also es funktioniert kein command mehr, da ehr scheinbar nur noch den channel "bewacht" lol
+
            
 @bot.command() 
 async def h(ctx):
@@ -258,6 +291,7 @@ async def play( ctx, *, url):
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
     embed = discord.Embed(title="Now playing", description=f"[{player.title}]({player.url}) [{ctx.author.mention}]")
     await ctx.send(embed=embed)
+    print(player.queue)
 
 
 @bot.command(description="pauses music")
@@ -412,20 +446,25 @@ async def gif(ctx):
             embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
             await ctx.send(embed=embed)
 
-#@bot.event
-#async def on_reaction_add(reaction, user):
-    
-   # print ("test")
-  #  channel = bot.get_channel(803240539578302524)
-  #  msg = await channel.fetch_message(859736550575964220)
-  #  if reaction.message.channel.id != 803240539578302524:
-  #      return
-  #  if reaction.emoji == "✅":
- #           Role = discord.utils.get(user.server.roles, name="Member")
- #           await user.add_roles(Role,reason=None, atomic=True)
- #           print("User got rule")
-#    else:
- #       return  
+@bot.event
+async def on_raw_reaction_add(payload):
+    guild = bot.get_guild(718926812033581108)
+    if payload.message_id != 860636421047320627:
+        return
+    if payload.emoji.name == "✅":
+            Role = discord.utils.get(guild.roles, name="Member")
+            await payload.member.add_roles(Role,reason=None)
+            print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member,"accepted the rules and got the member role.") 
 
+@bot.event
+async def on_raw_reaction_remove(payload):
+    guild = bot.get_guild(718926812033581108)
+    if payload.message_id != 860636421047320627:
+        return
+    else:
+            Role = discord.utils.get(guild.roles, name="Member")
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            await member.remove_roles(Role,reason=None)
+            print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member," unaccepted the rules and lost the member role.") 
 
 bot.run(token)
