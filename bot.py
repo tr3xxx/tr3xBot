@@ -1,7 +1,7 @@
-import asyncio, time, requests, random, discord, DiscordUtils, aiohttp, youtube_dl, aioconsole 
+import asyncio, time, requests, random, discord, DiscordUtils, aiohttp, youtube_dl, aioconsole
 from discord.ext import commands, tasks
 
-#py -3 -m pip install -U aioconsole
+#py -3 -m pip install -U aioconsole  @Waldemar
 
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
@@ -136,17 +136,44 @@ async def say(ctx,*, arg):
 @bot.command() 
 async def h(ctx):
     
-    embed = discord.Embed(title="tr3xBot Help",
-    description= 'Commands:\n\n**broulette BID** -> BID can be: black,red or a number between 0-36\n**bclear x** -> deletes x msgs\n**bsay x** -> says x\n**bkill name** -> kills someone\n**bhug** -> hug urself',
-    color=0x22a7f0)
-    embed.add_field(name="troulette BID",value="-> BID can be: black,red or a number between 0-36",inline=False)
-    embed.add_field(name="tclear x",value="-> deletes x msgs",inline=False)
-    embed.add_field(name="tsay x",value="-> says whatever you want",inline=False)
-    embed.add_field(name="tkill name",value="-> kill these foes",inline=False)
-    embed.add_field(name="thug",value="-> hug urself",inline=False)
-    embed.add_field(name="tdm",value="-> sends a nice dm to you",inline=False)
-    embed.add_field(name="tdc",value="-> disconnect bot",inline=False)
-    embed.set_footer(text="by tr3xGaming")
+    embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
+    embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
+    embed.add_field(name=" ⠀ ", value="My Commands:", inline=False)
+    embed.add_field(name="th", value="U should know this already", inline=True)
+    embed.add_field(name="troulette", value="Play some roulette ex: troulette black/red/0-36", inline=True)
+    embed.add_field(name="tembed", value="Will create an Message in an Embed ex: tembed title,desc,footer", inline=True)
+    embed.add_field(name="tclear", value="This will clear X Messages (only available for admins/mods )", inline=True)
+    embed.add_field(name="thug", value=" Need a hug after an hard day ? I gotchu", inline=True)
+    embed.add_field(name=" ⠀ ", value="Music Commands:", inline=False)
+    embed.add_field(name="tjoin", value="Its self-explanatory isnt it?", inline=True)
+    embed.add_field(name="tplay ", value="U can play either an url or give the keyword to search for. me an ", inline=True)
+    embed.add_field(name="tpause", value="This will create an new universum, nah just kidding its just a pause command", inline=True)
+    embed.add_field(name="tresume", value="Will hard to understand what this may do ", inline=True)
+    embed.add_field(name="tleave", value="The Bot will leave and stop playing obviously", inline=True)
+    embed.add_field(name=" ⠀ ", value="Meme/ NSFW Commands:", inline=False)
+    embed.add_field(name="tmemes / tdarkmemes / dankmemes / boobs / ass", value="Just try them out ", inline=True)
+    await ctx.channel.purge(limit=1)
+    await ctx.author.send(embed=embed)
+
+@bot.command() 
+async def help(ctx):
+    
+    embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
+    embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
+    embed.add_field(name=" ⠀ ", value="My Commands:", inline=False)
+    embed.add_field(name="th", value="U should know this already", inline=True)
+    embed.add_field(name="troulette", value="Play some roulette ex: troulette black/red/0-36", inline=True)
+    embed.add_field(name="tembed", value="Will create an Message in an Embed ex: tembed title,desc,footer", inline=True)
+    embed.add_field(name="tclear", value="This will clear X Messages (only available for admins/mods )", inline=True)
+    embed.add_field(name="thug", value=" Need a hug after an hard day ? I gotchu", inline=True)
+    embed.add_field(name=" ⠀ ", value="Music Commands:", inline=False)
+    embed.add_field(name="tjoin", value="Its self-explanatory isnt it?", inline=True)
+    embed.add_field(name="tplay ", value="U can play either an url or give the keyword to search for. me an ", inline=True)
+    embed.add_field(name="tpause", value="This will create an new universum, nah just kidding its just a pause command", inline=True)
+    embed.add_field(name="tresume", value="Will hard to understand what this may do ", inline=True)
+    embed.add_field(name="tleave", value="The Bot will leave and stop playing obviously", inline=True)
+    embed.add_field(name=" ⠀ ", value="Meme/ NSFW Commands:", inline=False)
+    embed.add_field(name="tmemes / tdarkmemes / dankmemes / boobs / ass", value="Just try them out ", inline=True)
     await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
 
@@ -158,11 +185,14 @@ async def embed(ctx, *, arg):
     if len(args) == 3:
         embed = discord.Embed(title = args[0],
                                 description = args[1],
-                                color=0x22a7f0)
+                                color=0x00ffcc)
         embed.set_footer(text=args[2])
+        await ctx.channel.purge(limit=1)
         await ctx.send(embed=embed)
+        
          
 @bot.command()
+@commands.has_permissions(administrator=True)
 async def clear(ctx,arg):
         
     if ctx.author.permissions_in(ctx.channel).manage_messages:
@@ -172,8 +202,9 @@ async def clear(ctx,arg):
                 count = int(args[0])+1
                 deleted = await ctx.channel.purge(limit=count)
                 embed = discord.Embed(title = '{} Messages deleted.'.format(len(deleted)-1),
-                                color=0x22a7f0)
-                await ctx.channel.send(embed=embed)
+                                color=0x00ffcc)
+                await ctx.channel.purge(limit=1)
+                await ctx.send(embed=embed, delete_after= 10.0)
         
 @bot.command()
 async def roulette(ctx,arg):
@@ -212,15 +243,12 @@ async def hug(ctx):
 @bot.command()
 async def kill(ctx,arg):
 
+    await ctx.channel.purge(limit=1)
     if arg != None:
          await ctx.send("{}".format(ctx.message.author.mention)+" killed "+arg)
          
     else:
          await ctx.send("tell me who... tkill @example")
-
-@bot.command()
-async def dm(ctx):
-    await ctx.author.send("Hello, this is a DM! "+ "{}".format(ctx.message.author.mention))
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
@@ -286,29 +314,29 @@ async def play( ctx, *, url):
     async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
-    embed = discord.Embed(title="Now playing", description=f"[{player.title}]({player.url}) [{ctx.author.mention}]")
+    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
     await ctx.send(embed=embed)
-    print(player.queue)
 
 
 @bot.command()
 async def pause( ctx):
         ctx.voice_client.pause()
-        await ctx.send("Paused ⏸️")
+        embed = discord.Embed(title="Paused ⏸️")
+        await ctx.send(embed=embed)
     
 @bot.command()
 async def resume( ctx):
         ctx.voice_client.resume()
-        await ctx.send("Resuming ⏯️")
+        embed = discord.Embed(title="Resuming ⏯️")
+        await ctx.send(embed=embed)
 
 @bot.command()
 async def leave( ctx):
         await ctx.voice_client.disconnect()
 
 @bot.command()
-async def skip( ctx):
-        ctx.voice_client.skip()
-        await ctx.send("Skipped :track_next:")
+async def stop( ctx):
+        await ctx.voice_client.stop()
 
 @bot.event
 async def on_voice_state_update(member, before, after):
