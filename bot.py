@@ -320,12 +320,22 @@ async def play( ctx, *, url):
 
 @bot.command()
 async def pause( ctx):
+    voicetrue=ctx.author.voice
+    if voicetrue is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to pause me")
+        await ctx.send(embed=embed)
+    else:
         ctx.voice_client.pause()
         embed = discord.Embed(title="Paused ⏸️")
         await ctx.send(embed=embed)
     
 @bot.command()
 async def resume( ctx):
+    voicetrue=ctx.author.voice
+    if voicetrue is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to resume my audio")
+        await ctx.send(embed=embed)
+    else:
         ctx.voice_client.resume()
         embed = discord.Embed(title="Resuming ⏯️")
         await ctx.send(embed=embed)
@@ -336,6 +346,11 @@ async def leave( ctx):
 
 @bot.command()
 async def stop( ctx):
+    voicetrue=ctx.author.voice
+    if voicetrue is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to stop me")
+        await ctx.send(embed=embed)
+    else:
         await ctx.voice_client.stop()
 
 @bot.event
