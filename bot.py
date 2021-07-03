@@ -1,88 +1,32 @@
-import asyncio
-import discord
-import time
-import requests
-import random
-from discord.ext import commands
-from discord.ext import commands
-import DiscordUtils
-import aiohttp
-from discord.ext import tasks
-import youtube_dl
+import asyncio, time, requests, random, discord, DiscordUtils, aiohttp, youtube_dl, aioconsole 
+from discord.ext import commands, tasks
 
+#py -3 -m pip install -U aioconsole
+
+print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
-token = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.dpS5uYAO3xLRW3JHQue4yDzp75g"
-guild = bot.get_guild(718926812033581108)
-music = DiscordUtils.Music()
-
-ytdl_format_options = {
-    'format': 'bestaudio/best',
-    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-    'restrictfilenames': True,
-    'noplaylist': True,
-    'nocheckcertificate': True,
-    'ignoreerrors': False,
-    'logtostderr': False,
-    'quiet': True,
-    'no_warnings': True,
-    'default_search': 'auto',
-    'source_address': '0.0.0.0'
-}
-
-ffmpeg_options = {
-    'options': '-vn',
-    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
-}
-
-ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
-
-
-class YTDLSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume=0.5):
-        super().__init__(source, volume)
-
-        self.data = data
-
-        self.title = data.get('title')
-        self.url = data.get('url')
-
-    @classmethod
-    async def from_url(cls, url, *, loop=None, stream=False):
-        loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
-
-        if 'entries' in data:
-            data = data['entries'][0]
-
-        filename = data['url'] if stream else ytdl.prepare_filename(data)
-        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
-
-class Music(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
 
 @bot.event
 async def on_ready():
-
     guild = bot.get_guild(718926812033581108) 
- 
-    ip = requests.get('http://api.ipify.org').text 
-    memberings=0
-    online=0
     members = bot.guilds[0].members 
+    memberings=0
+    online =0
     for i in members:
-        if i.status == discord.Status.offline:                         
+        if i.status == discord.Status.offline:                        
             memberings=memberings+1                                    
-        elif i.status != discord.Status.offline:                        
+        elif i.status != discord.Status.offline:
+
             memberings=memberings+1
             online=online+1
+
     member_counter.start()
     status_1.start()
     status_2.start()
 
-    channel = bot.get_channel(803240539578302524)
-    msg = await channel.fetch_message(860636421047320627)
-    await msg.add_reaction("✅")
+    ruleschannel = bot.get_channel(803240539578302524)
+    rulemsg = await ruleschannel.fetch_message(860636421047320627)
+    await rulemsg.add_reaction("✅")
 
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(860645008168058880)
@@ -93,9 +37,55 @@ async def on_ready():
     await statusmsg.edit(embed=botonline)
     
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name) 
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms / IP:",ip)
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms")
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"IP:",requests.get('http://api.ipify.org').text)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
+    print(" ")
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
+
+async def background_task():
+    await bot.wait_until_ready()
+    while not bot.is_closed():
+        console_input = await aioconsole.ainput()
+        if console_input == "exit" or console_input == "tdc" or console_input == "update":
+            if console_input == "exit" or console_input =="tdc":
+                guild = bot.get_guild(718926812033581108)
+
+                statuschannel = bot.get_channel(860642601098280970)
+                statusmsg = await statuschannel.fetch_message(860645008168058880)
+                botoffline = discord.Embed(title="**tr3xBot Status**",
+                                        description= 'I am currently offline :no_entry:',
+                                        color=0xff0000)
+                botoffline.add_field(name="**What does this mean for you?**",value="All features like commands or the member/online count wont update until i am back online",inline=False)
+                botoffline.add_field(name="**Why i am offline?**",value="Most likely i am offline cause an maintenance break or an server crash",inline=False)
+                botoffline.set_footer(text="presents by tr3xBot")
+                await statusmsg.edit(embed=botoffline)
+
+                await bot.change_presence(status=discord.Status.invisible)
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot was shutdowned via console")
+                await bot.logout()
+            if console_input == "update":
+                guild = bot.get_guild(718926812033581108) 
+                memberings=0
+                online=0
+                members = bot.guilds[0].members 
+                for i in members:
+                    if i.status == discord.Status.offline:                         
+                        memberings=memberings+1                                    
+                    elif i.status != discord.Status.offline:                        
+                        memberings=memberings+1
+                        online=online+1
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"The latest data is being loaded...")
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name) 
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"IP:",requests.get('http://api.ipify.org').text)
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")  
+        else: 
+            print(time.strftime('[%H:%M:%S]:', time.localtime()),"unexcepted or wrong input")
+            print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
 
 @tasks.loop(seconds=10.0)
 async def status_1():
@@ -103,7 +93,6 @@ async def status_1():
 @tasks.loop(seconds=5.0)
 async def status_2():    
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=' with code'),status=discord.Status.do_not_disturb) 
-
 @tasks.loop(seconds=10.0)
 async def member_counter():
     guild = bot.get_guild(718926812033581108)
@@ -120,36 +109,6 @@ async def member_counter():
             online=online+1
     await channelmember.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
     await channelonline.edit(name = f'🟢 𝙊𝙣𝙡𝙞𝙣𝙚 : {online}')
-    
-    
-
-@bot.command()
-@commands.has_permissions(administrator=True) 
-async def dc(ctx): 
-
-    
-    embed = discord.Embed(title="Bot Shutdown",
-    description= "The Bot got Shutdowned by an admin/mod",
-    color=0xff0000)
-    await ctx.send(embed=embed, delete_after=3.0)
-    guild = bot.get_guild(718926812033581108)
-
-    statuschannel = bot.get_channel(860642601098280970)
-    statusmsg = await statuschannel.fetch_message(860645008168058880)
-    botoffline = discord.Embed(title="**tr3xBot Status**",
-                              description= 'I am currently offline :no_entry:',
-                              color=0xff0000)
-    botoffline.add_field(name="**What does this mean for you?**",value="All features like commands or the member/online count wont update until i am back online",inline=False)
-    botoffline.add_field(name="**Why i am offline?**",value="Most likely i am offline cause an maintenance break or an server crash",inline=False)
-    botoffline.set_footer(text="presents by tr3xBot")
-    await statusmsg.edit(embed=botoffline)
-
-    await bot.change_presence(status=discord.Status.invisible)
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
-    await ctx.channel.purge(limit=2)
-    await ctx.bot.logout()
-    
     
 @bot.command() 
 async def say(ctx,*, arg): 
@@ -192,7 +151,6 @@ async def h(ctx):
     await ctx.author.send(embed=embed)
 
 
-    
 @bot.command() #tembed titel, desc, footer
 async def embed(ctx, *, arg): 
                               
@@ -203,9 +161,7 @@ async def embed(ctx, *, arg):
                                 color=0x22a7f0)
         embed.set_footer(text=args[2])
         await ctx.send(embed=embed)
-    
-    
-            
+         
 @bot.command()
 async def clear(ctx,arg):
         
@@ -219,8 +175,6 @@ async def clear(ctx,arg):
                                 color=0x22a7f0)
                 await ctx.channel.send(embed=embed)
         
-        
-
 @bot.command()
 async def roulette(ctx,arg):
        
@@ -250,8 +204,6 @@ async def roulette(ctx,arg):
         await ctx.send("Congrats, you won.")
     else:
         await ctx.send("Im sorry, you lost")
-        
-          
                 
 @bot.command()
 async def hug(ctx):
@@ -270,6 +222,51 @@ async def kill(ctx,arg):
 async def dm(ctx):
     await ctx.author.send("Hello, this is a DM! "+ "{}".format(ctx.message.author.mention))
 
+ytdl_format_options = {
+    'format': 'bestaudio/best',
+    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+    'restrictfilenames': True,
+    'noplaylist': True,
+    'nocheckcertificate': True,
+    'ignoreerrors': False,
+    'logtostderr': False,
+    'quiet': True,
+    'no_warnings': True,
+    'default_search': 'auto',
+    'source_address': '0.0.0.0'
+}
+
+music = DiscordUtils.Music()
+ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+
+ffmpeg_options = {
+    'options': '-vn',
+    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+}
+
+class YTDLSource(discord.PCMVolumeTransformer):
+    def __init__(self, source, *, data, volume=0.5):
+        super().__init__(source, volume)
+
+        self.data = data
+
+        self.title = data.get('title')
+        self.url = data.get('url')
+
+    @classmethod
+    async def from_url(cls, url, *, loop=None, stream=False):
+        loop = loop or asyncio.get_event_loop()
+        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+
+        if 'entries' in data:
+            data = data['entries'][0]
+
+        filename = data['url'] if stream else ytdl.prepare_filename(data)
+        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+
+class Music(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
 @bot.command()
 async def join(ctx):
@@ -279,7 +276,7 @@ async def join(ctx):
     await ctx.author.voice.channel.connect()
     await ctx.send('Joined your voice channel')
 
-@bot.command(description="streams music")
+@bot.command()
 async def play( ctx, *, url):
     voicetrue=ctx.author.voice
     if voicetrue is None:
@@ -294,21 +291,21 @@ async def play( ctx, *, url):
     print(player.queue)
 
 
-@bot.command(description="pauses music")
+@bot.command()
 async def pause( ctx):
         ctx.voice_client.pause()
         await ctx.send("Paused ⏸️")
     
-@bot.command(description="resumes music")
+@bot.command()
 async def resume( ctx):
         ctx.voice_client.resume()
         await ctx.send("Resuming ⏯️")
 
-@bot.command(description="stops and disconnects the bot from voice")
+@bot.command()
 async def leave( ctx):
         await ctx.voice_client.disconnect()
 
-@bot.command(description="skipped music")
+@bot.command()
 async def skip( ctx):
         ctx.voice_client.skip()
         await ctx.send("Skipped :track_next:")
@@ -321,7 +318,6 @@ async def on_voice_state_update(member, before, after):
     schoolch = guild.get_channel(859670479551725578)
     afkch = guild.get_channel(859718892334350356)
     category = guild.get_channel(858020017822892092)
-
 
     if after.channel == ch:
         channel = await guild.create_voice_channel(
@@ -467,4 +463,5 @@ async def on_raw_reaction_remove(payload):
             await member.remove_roles(Role,reason=None)
             print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member," unaccepted the rules and lost the member role.") 
 
-bot.run(token)
+bot.loop.create_task(background_task())
+bot.run("ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.dpS5uYAO3xLRW3JHQue4yDzp75g")
