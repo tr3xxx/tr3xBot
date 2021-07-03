@@ -304,6 +304,7 @@ async def join(ctx):
     await ctx.author.voice.channel.connect()
     await ctx.send('Joined your voice channel')
 
+
 @bot.command()
 async def play( ctx, *, url):
     voicetrue=ctx.author.voice
@@ -312,10 +313,43 @@ async def play( ctx, *, url):
     if ctx.voice_client == None:
         await ctx.author.voice.channel.connect()
     async with ctx.typing():
+
             player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
     embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
     await ctx.send(embed=embed)
+
+
+
+@bot.command()
+async def p(ctx):
+    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+
+    global q
+
+    if len(q) >=1:
+        if voice != None:
+                async with ctx.typing():
+                    player = await YTDLSource.from_url(q[0], loop=bot.loop, stream=True)
+                    voice.play(player,after=lambda e: print('Player error: %s' % e) if e else None)
+                    del q[0]
+
+                await ctx.send(f"**Now Playing** {player.title}")
+        else:
+            await ctx.send("Please connect Bot to Voice Channel First using -join")
+
+    else:
+        await ctx.send("Please add a song using '-queue' command")
+
+@bot.command(name="queue",help="Adds a song to Queue")
+async def queue(ctx,url,*args):
+    global q
+    a = '_'.join(args)
+    c = url+'_'+a
+    x = ' '.join(args)
+    y= url + ' '+ x
+    q.append(c)
+    await ctx.send(f"Added To Queue :**{y}**")
 
 
 @bot.command()
