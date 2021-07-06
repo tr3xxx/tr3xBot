@@ -335,7 +335,7 @@ q = []
 @bot.command()
 async def p(ctx):
     voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-    
+
     global q
 
     if len(q) >=1:
@@ -346,12 +346,11 @@ async def p(ctx):
                     del q[0]
 
             await ctx.send(f"**Now Playing** {player.title}")
-        else:
-            await ctx.send("Please connect Bot to Voice Channel First using -join")
+    
+    else:       
+        pass
 
-    else:
-        await ctx.send("Please add a song using '-queue' command")
-
+        
 @bot.command()
 async def add(ctx,url,*args):
     global q
@@ -361,16 +360,7 @@ async def add(ctx,url,*args):
     y= url + ' '+ x
     q.append(c)
     await ctx.send(f"Added To Queue :**{y}**")
-
-@bot.command()
-async def remove(ctx,number):
-    global q
-    try:
-        del(q[int(number)])
-        await ctx.send(f'Your queue is now {q}')
-
-    except:
-        await ctx.send(f"Your queue is empty")
+    
 
 @bot.command()
 async def view(ctx):
@@ -379,6 +369,9 @@ async def view(ctx):
         x = i.replace('_'," ")
         await ctx.send(f'``{x}``')
 
+@bot.command()
+async def skip(ctx):
+    ctx.voice_client.skip()
 
 @bot.command()
 async def pause( ctx):
