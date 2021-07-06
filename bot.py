@@ -330,48 +330,50 @@ async def play( ctx, *, url):
     embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
     await ctx.send(embed=embed)
 
-q = []
+# GUCK DIR DAS AN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! und les was unten drunter steht
+#
+#q = []
+#@bot.command()
+#async def play( ctx, url,*args):
+#    voicetrue=ctx.author.voice
+#    global q
+#    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
 
-@bot.command()
-async def p(ctx):
-    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+#    if voicetrue is None:
+#       return await ctx.send('You are not currently in a voice channel')
+#    if ctx.voice_client == None:
+#        await ctx.author.voice.channel.connect()
+#    async with ctx.typing():
+#     if len(q) >=1:
+#                async with ctx.typing():
+#                    player = await YTDLSource.from_url(q[0], loop=bot.loop, stream=True)
+#                    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+#                    voice.play(player,after=lambda e: print('Player error: %s' % e) if e else None)
+#                    del q[0]
+#                    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+#                    await ctx.send(embed=embed)
+#
+#     else:
+#                    
+#                    a = '_'.join(args)
+#                    c = url+'_'+a
+#                    x = ' '.join(args)
+#                    y= url + ' '+ x
+#                    q.append(c)
+#                    
+#                    async with ctx.typing():
+#                       player = await YTDLSource.from_url(q[0], loop=bot.loop, stream=True)
+#                        voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+#                        voice.play(player,after=lambda e: print('Player error: %s' % e) if e else None)
+#                        del q[0]
+#                        embed = discord.Embed(title="Queued", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+#                        await ctx.send(embed=embed)
+#
+# https://stackoverflow.com/questions/65561394/want-to-automatically-play-next-song-from-queue
+#
+# Hab mal ein bisschen was ausprobiert, die verlinkte queue geht 100%, sie muss nur richtig bei uns eigebaut werden was ich irgendwie verkackt habe @Waldemar 
+#
 
-    global q
-
-    if len(q) >=1:
-        if voice != None:
-            async with ctx.typing():
-                    player = await YTDLSource.from_url(q[0],loop=bot.loop, stream=True)
-                    voice.play(player,after=lambda e: print('Player error: %s' % e) if e else None)
-                    del q[0]
-
-            await ctx.send(f"**Now Playing** {player.title}")
-    
-    else:       
-        pass
-
-        
-@bot.command()
-async def add(ctx,url,*args):
-    global q
-    a = '_'.join(args)
-    c = url+'_'+a
-    x = ' '.join(args)
-    y= url + ' '+ x
-    q.append(c)
-    await ctx.send(f"Added To Queue :**{y}**")
-    
-
-@bot.command()
-async def view(ctx):
-    await ctx.send(f'Your queue is : ')
-    for i in q:
-        x = i.replace('_'," ")
-        await ctx.send(f'``{x}``')
-
-@bot.command()
-async def skip(ctx):
-    ctx.voice_client.skip()
 
 @bot.command()
 async def pause( ctx):
@@ -412,7 +414,7 @@ async def stop( ctx):
 async def on_voice_state_update(member, before, after):
     guild = bot.get_guild(718926812033581108)
     username = str(member.name)
-    ch = guild.get_channel(861939430389973032)
+    ch = guild.get_channel(861037564903686174)
     schoolch = guild.get_channel(859670479551725578)
     afkch = guild.get_channel(859718892334350356)
     mem = guild.get_channel(858711678316052500)
