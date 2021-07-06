@@ -1,4 +1,5 @@
-import asyncio, time, requests, random, discord, DiscordUtils, aiohttp, youtube_dl, aioconsole
+import asyncio, time, requests, random, discord, DiscordUtils, aiohttp, youtube_dl, aioconsole, os , sys
+from asyncio.windows_events import NULL
 from discord.ext import commands, tasks
 
 #py -3 -m pip install -U aioconsole  @Waldemar
@@ -23,6 +24,7 @@ async def on_ready():
     member_counter.start()
     status_1.start()
     status_2.start()
+    boost.start()
 
     ruleschannel = bot.get_channel(803240539578302524)
     rulemsg = await ruleschannel.fetch_message(860636421047320627)
@@ -35,6 +37,7 @@ async def on_ready():
                               color=0x0CFF00)
     botonline.set_footer(text="presents by tr3xBot")
     await statusmsg.edit(embed=botonline)
+    
     
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name) 
     print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms")
@@ -90,19 +93,26 @@ async def background_task():
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")  
         else: 
             print(time.strftime('[%H:%M:%S]:', time.localtime()),"unexcepted or wrong input")
-            print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
+            print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data and «restart» for restart")
 
-@tasks.loop(seconds=10.0)
+@tasks.loop(seconds=5.0)
 async def status_1():
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='BETA'),status=discord.Status.do_not_disturb)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=' you'),status=discord.Status.do_not_disturb)
 @tasks.loop(seconds=5.0)
 async def status_2():    
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=' with code'),status=discord.Status.do_not_disturb) 
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=' with code'),status=discord.Status.do_not_disturb)
+    
+@tasks.loop(seconds=5.0)
+async def boost(seconds= 10.0):
+    guild = bot.get_guild(718926812033581108)
+    boostschannel = guild.get_channel(861753968890871839)
+    boosts = guild.premium_subscription_count
+    await boostschannel.edit(name = f"🌐 𝘽𝙤𝙤𝙨𝙩𝙨 : {boosts}")
 @tasks.loop(seconds=10.0)
 async def member_counter():
     guild = bot.get_guild(718926812033581108)
     channelmember = guild.get_channel(858711678316052500)
-    channelonline = guild.get_channel(858711812736548884)
+    channelonline = guild.get_channel(861365241413107732)
     memberings=0
     online=0
     members = bot.guilds[0].members 
@@ -404,10 +414,14 @@ async def stop( ctx):
 async def on_voice_state_update(member, before, after):
     guild = bot.get_guild(718926812033581108)
     username = str(member.name)
-    ch = guild.get_channel(861030716887924746)
+    ch = guild.get_channel(861939430389973032)
     schoolch = guild.get_channel(859670479551725578)
     afkch = guild.get_channel(859718892334350356)
+    mem = guild.get_channel(858711678316052500)
+    onl = guild.get_channel(861365241413107732)
+    boost = guild.get_channel(859718892334350356)
     category = guild.get_channel(858020017822892092)
+    maxbitrate = guild.bitrate_limit
 
     if after.channel == ch:
         channel = await guild.create_voice_channel(
@@ -416,10 +430,10 @@ async def on_voice_state_update(member, before, after):
             overwrites=None,
             reason=None,
             user_limit=69,
-            bitrate=256000
+            bitrate=maxbitrate
         )
         await member.move_to(channel)
-    if not before.channel.members and before.channel != ch and before.channel != None and before != None and before.channel != schoolch and before.channel != afkch: 
+    if not before.channel.members and before.channel != ch and before.channel != schoolch and before.channel != afkch and before.channel != mem and before.channel != onl and before.channel != boost: 
         await before.channel.delete()
 
 @bot.command(pass_context=True)
@@ -552,6 +566,11 @@ async def on_raw_reaction_remove(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             await member.remove_roles(Role,reason=None)
             print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member," unaccepted the rules and lost the member role.") 
+
+@bot.event
+async def on_member_join(member):
+    welcomechannel = bot.get_channel(828410713294372885)
+    await welcomechannel.send(f"Welcome {member.mention} on the tr3xGaming Discord Server !" )
 
 bot.loop.create_task(background_task())
 bot.run("ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.dpS5uYAO3xLRW3JHQue4yDzp75g")
