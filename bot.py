@@ -34,7 +34,7 @@ async def on_ready():
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(860645008168058880)
     botonline = discord.Embed(title="**tr3xBot Status**",
-                              description= 'I am currently online âœ…',
+                              description= 'I am currently online ✅',
                               color=0x0CFF00)
     botonline.set_footer(text="presents by tr3xBot")
     await statusmsg.edit(embed=botonline)
@@ -60,7 +60,7 @@ async def background_task():
                 statuschannel = bot.get_channel(860642601098280970)
                 statusmsg = await statuschannel.fetch_message(860645008168058880)
                 botoffline = discord.Embed(title="**tr3xBot Status**",
-                                        description= 'I am currently offline :no_entry:',
+                                        description= 'I am currently offline ⛔',
                                         color=0xff0000)
                 botoffline.add_field(name="**What does this mean for you?**",value="All features like commands or the member/online count wont update until i am back online",inline=False)
                 botoffline.add_field(name="**Why i am offline?**",value="Most likely i am offline cause an maintenance break or an server crash",inline=False)
