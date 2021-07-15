@@ -1,11 +1,12 @@
-import asyncio, time, requests, random, discord, DiscordUtils, aiohttp, youtube_dl, aioconsole, os , sys
-from asyncio.windows_events import NULL
+import asyncio, time, requests, random, discord,aiohttp, youtube_dl, aioconsole,re,time
 from discord.ext import commands, tasks
+from random import choice
 
 #py -3 -m pip install -U aioconsole  @Waldemar
 
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
+queue = []
 
 @bot.event
 async def on_ready():
@@ -28,12 +29,12 @@ async def on_ready():
 
     ruleschannel = bot.get_channel(803240539578302524)
     rulemsg = await ruleschannel.fetch_message(860636421047320627)
-    await rulemsg.add_reaction("✅")
+    await rulemsg.add_reaction(" ")
 
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(860645008168058880)
     botonline = discord.Embed(title="**tr3xBot Status**",
-                              description= 'I am currently online ✅',
+                              description= 'I am currently online âœ…',
                               color=0x0CFF00)
     botonline.set_footer(text="presents by tr3xBot")
     await statusmsg.edit(embed=botonline)
@@ -46,6 +47,7 @@ async def on_ready():
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
     print(" ")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
+    bot.loop.create_task(task())
 
 async def background_task():
     await bot.wait_until_ready()
@@ -153,19 +155,19 @@ async def h(ctx):
     
     embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
     embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
-    embed.add_field(name=" ⠀ ", value="My Commands:", inline=False)
+    embed.add_field(name=" â € ", value="My Commands:", inline=False)
     embed.add_field(name="th", value="U should know this already", inline=True)
     embed.add_field(name="troulette", value="Play some roulette ex: troulette black/red/0-36", inline=True)
     embed.add_field(name="tembed", value="Will create an Message in an Embed ex: tembed title,desc,footer", inline=True)
     embed.add_field(name="tclear", value="This will clear X Messages (only available for admins/mods )", inline=True)
     embed.add_field(name="thug", value=" Need a hug after an hard day ? I gotchu", inline=True)
-    embed.add_field(name=" ⠀ ", value="Music Commands:", inline=False)
+    embed.add_field(name=" â € ", value="Music Commands:", inline=False)
     embed.add_field(name="tjoin", value="Its self-explanatory isnt it?", inline=True)
     embed.add_field(name="tplay ", value="U can play either an url or give the keyword to search for. me an ", inline=True)
     embed.add_field(name="tpause", value="This will create an new universum, nah just kidding its just a pause command", inline=True)
     embed.add_field(name="tresume", value="Will hard to understand what this may do ", inline=True)
     embed.add_field(name="tleave", value="The Bot will leave and stop playing obviously", inline=True)
-    embed.add_field(name=" ⠀ ", value="Meme/ NSFW Commands:", inline=False)
+    embed.add_field(name=" â € ", value="Meme/ NSFW Commands:", inline=False)
     embed.add_field(name="tmemes / tdarkmemes / dankmemes / boobs / ass", value="Just try them out ", inline=True)
     await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
@@ -175,19 +177,19 @@ async def help(ctx):
     
     embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
     embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
-    embed.add_field(name=" ⠀ ", value="My Commands:", inline=False)
+    embed.add_field(name=" â € ", value="My Commands:", inline=False)
     embed.add_field(name="th", value="U should know this already", inline=True)
     embed.add_field(name="troulette", value="Play some roulette ex: troulette black/red/0-36", inline=True)
     embed.add_field(name="tembed", value="Will create an Message in an Embed ex: tembed title,desc,footer", inline=True)
     embed.add_field(name="tclear", value="This will clear X Messages (only available for admins/mods )", inline=True)
     embed.add_field(name="thug", value=" Need a hug after an hard day ? I gotchu", inline=True)
-    embed.add_field(name=" ⠀ ", value="Music Commands:", inline=False)
+    embed.add_field(name=" â € ", value="Music Commands:", inline=False)
     embed.add_field(name="tjoin", value="Its self-explanatory isnt it?", inline=True)
     embed.add_field(name="tplay ", value="U can play either an url or give the keyword to search for. me an ", inline=True)
     embed.add_field(name="tpause", value="This will create an new universum, nah just kidding its just a pause command", inline=True)
     embed.add_field(name="tresume", value="Will hard to understand what this may do ", inline=True)
     embed.add_field(name="tleave", value="The Bot will leave and stop playing obviously", inline=True)
-    embed.add_field(name=" ⠀ ", value="Meme/ NSFW Commands:", inline=False)
+    embed.add_field(name=" â € ", value="Meme/ NSFW Commands:", inline=False)
     embed.add_field(name="tmemes / tdarkmemes / dankmemes / boobs / ass", value="Just try them out ", inline=True)
     await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
@@ -265,6 +267,13 @@ async def kill(ctx,arg):
     else:
          await ctx.send("tell me who... tkill @example")
 
+@bot.command()
+async def die(ctx):
+    responses = ['why have you brought my short life to an end', 'i could have done so much more', 'i have a family, kill them instead']
+    await ctx.send(choice(responses))
+
+youtube_dl.utils.bug_reports_message = lambda: ''
+
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
@@ -276,16 +285,14 @@ ytdl_format_options = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0'
+    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
-
-music = DiscordUtils.Music()
-ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 ffmpeg_options = {
-    'options': '-vn',
-    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
+    'options': '-vn'
 }
+
+ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
@@ -302,14 +309,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
 
         if 'entries' in data:
+            # take first item from a playlist
             data = data['entries'][0]
 
         filename = data['url'] if stream else ytdl.prepare_filename(data)
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
-
-class Music(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
 
 @bot.command()
 async def join(ctx):
@@ -320,59 +324,54 @@ async def join(ctx):
     await ctx.send('Joined your voice channel')
 
 @bot.command()
-async def play( ctx, *, url):
-    voicetrue=ctx.author.voice
+async def remove(ctx, number):
+    global queue
+
+    try:
+        del(queue[int(number)])
+        await ctx.send(f'Your queue is now `{queue}!`')
+    
+    except:
+        await ctx.send('Your queue is either **empty** or the index is **out of range**')
+
+@bot.command()
+async def play(ctx, *, arg):
+    url = arg
     if ctx.voice_client == None:
-        await ctx.author.voice.channel.connect()
+            await ctx.author.voice.channel.connect()
     async with ctx.typing():
-            player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
-            ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+                if ctx.voice_client.is_playing() == True:
+                    global queue
+                    queue.append(url)
+                    await ctx.send(f'`{url}` added to queue!')
+                else:
+                    player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
+                    ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+                    #ctx.voice_client.play(player, after=lambda e: play_next(ctx))
+                    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+                    await ctx.send(embed=embed)
+
+#def play_next(ctx):
+#    if len(queue) >= 1:
+#        del queue[0]
+#        player = discord.utils.get(bot.voice_clients, guild=ctx.guild)
+#        ctx.voice_client.play(discord.FFmpegPCMAudio(player, after=lambda e: play_next(ctx)))
+    
+        
+@bot.command()
+async def next(ctx):
+    global queue
+
+    server = ctx.message.guild
+    voice_channel = server.voice_client
+
+    async with ctx.typing():
+        player = await YTDLSource.from_url(queue[0], loop=bot.loop)
+        voice_channel.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+
     embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
     await ctx.send(embed=embed)
-
-# GUCK DIR DAS AN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! und les was unten drunter steht
-#
-#q = []
-#@bot.command()
-#async def play( ctx, url,*args):
-#    voicetrue=ctx.author.voice
-#    global q
-#    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-
-#    if voicetrue is None:
-#       return await ctx.send('You are not currently in a voice channel')
-#    if ctx.voice_client == None:
-#        await ctx.author.voice.channel.connect()
-#    async with ctx.typing():
-#     if len(q) >=1:
-#                async with ctx.typing():
-#                    player = await YTDLSource.from_url(q[0], loop=bot.loop, stream=True)
-#                    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-#                    voice.play(player,after=lambda e: print('Player error: %s' % e) if e else None)
-#                    del q[0]
-#                    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
-#                    await ctx.send(embed=embed)
-#
-#     else:
-#                    
-#                    a = '_'.join(args)
-#                    c = url+'_'+a
-#                    x = ' '.join(args)
-#                    y= url + ' '+ x
-#                    q.append(c)
-#                    
-#                    async with ctx.typing():
-#                       player = await YTDLSource.from_url(q[0], loop=bot.loop, stream=True)
-#                        voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-#                        voice.play(player,after=lambda e: print('Player error: %s' % e) if e else None)
-#                        del q[0]
-#                        embed = discord.Embed(title="Queued", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
-#                        await ctx.send(embed=embed)
-#
-# https://stackoverflow.com/questions/65561394/want-to-automatically-play-next-song-from-queue
-#
-# Hab mal ein bisschen was ausprobiert, die verlinkte queue geht 100%, sie muss nur richtig bei uns eigebaut werden was ich irgendwie verkackt habe @Waldemar 
-#
+    del(queue[0])
 
 
 @bot.command()
@@ -383,7 +382,7 @@ async def pause( ctx):
         await ctx.send(embed=embed)
     else:
         ctx.voice_client.pause()
-        embed = discord.Embed(title="Paused ⏸️")
+        embed = discord.Embed(title="Paused â¸ï¸")
         await ctx.send(embed=embed)
     
 @bot.command()
@@ -394,7 +393,7 @@ async def resume( ctx):
         await ctx.send(embed=embed)
     else:
         ctx.voice_client.resume()
-        embed = discord.Embed(title="Resuming ⏯️")
+        embed = discord.Embed(title="Resuming â¯ï¸")
         await ctx.send(embed=embed)
 
 @bot.command()
@@ -410,11 +409,15 @@ async def stop( ctx):
     else:
         await ctx.voice_client.stop()
 
+@bot.command()
+async def view(ctx):
+    await ctx.send(f'Your queue is now `{queue}!`')
+
 @bot.event
 async def on_voice_state_update(member, before, after):
     guild = bot.get_guild(718926812033581108)
     username = str(member.name)
-    ch = guild.get_channel(861037564903686174)
+    ch = guild.get_channel(862036817363599380)
     schoolch = guild.get_channel(859670479551725578)
     afkch = guild.get_channel(859718892334350356)
     mem = guild.get_channel(858711678316052500)
@@ -551,7 +554,7 @@ async def on_raw_reaction_add(payload):
     guild = bot.get_guild(718926812033581108)
     if payload.message_id != 860636421047320627:
         return
-    if payload.emoji.name == "✅":
+    if payload.emoji.name == "âœ…":
             Role = discord.utils.get(guild.roles, name="Member")
             await payload.member.add_roles(Role,reason=None)
             print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member,"accepted the rules and got the member role.") 
@@ -572,5 +575,69 @@ async def on_member_join(member):
     welcomechannel = bot.get_channel(828410713294372885)
     await welcomechannel.send(f"Welcome {member.mention} on the tr3xGaming Discord Server !" )
 
+@bot.event
+async def on_guild_join(guild):
+    for channel in guild.text_channels:
+        if channel.permissions_for(guild.me).send_messages:
+            await channel.send("Hey there! Thank you for inviting me to your server. You can see my commands by typing 'th'")
+        break
+
+async def task():
+    while True:
+                if len(channels_to_update) != 0:
+                    game_title, game_link, submission_id = await retrieve_subreddit()
+                    await check_history(game_title, game_link, submission_id)
+
+                await asyncio.sleep(60) # task runs every 60 seconds
+
+channels_to_update = {}
+processed_submission = []
+channels_to_update[1] = "864283268353228820" 
+
+def process_link(link):
+    url = re.findall(r'\((http.*?)\)', link)
+    
+    if len(url) > 0:
+        return '\n'.join(url)
+    else:
+        return ""
+
+def process_title(title):
+    p = re.compile(process_link(title)) 
+    return p.sub('', title)
+    
+async def retrieve_subreddit():
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://www.reddit.com/r/Freegamestuff/new/.json?raw_json=1&limit=1') as r:
+            if r.status == 200:
+                js = await r.json()
+                    
+                submission_id = js['data']['children'][0]['data']['id']
+                game_title = process_title(js['data']['children'][0]['data']['title'])
+                game_link = process_link(js['data']['children'][0]['data']['selftext']) if js['data']['children'][0]['data']['selftext'] != "" else js['data']['children'][0]['data']['url']
+                
+                return game_title, game_link, submission_id
+
+async def check_history(title, link, submission_id):
+    for channel in channels_to_update:
+        if submission_id in processed_submission:
+            return
+        else:
+            await post_freegame(title, link)
+    processed_submission.append(submission_id)
+
+
+async def post_freegame(title, link):
+    channel = bot.get_channel(864283268353228820)
+    embed = discord.Embed(title= "**NEW FREE GAME 🎁**",
+                          description= f'{str(title)}: '+f'{str(link)}',
+                          color=0x00ffcc)
+    await channel.send(embed=embed)
+   
+
 bot.loop.create_task(background_task())
 bot.run("ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.dpS5uYAO3xLRW3JHQue4yDzp75g")
+
+# ODI2NDY0MTc3MTQzOTM5MTAz.YGM2vg.F2zixDkCOwunmQSK5uEhPEbshC0 -> ich
+# ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.oVY-p9bauDSWHukzwZjfbcRJi7U -> W
+# ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.dpS5uYAO3xLRW3JHQue4yDzp75g -> Main Bot 
