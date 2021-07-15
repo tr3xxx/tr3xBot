@@ -1,3 +1,11 @@
 discord.py
 python-dotenv
 requests
+random
+discord
+aiohttp
+youtube_dl
+aioconsole
+re
+time
+ffmpeg-python
