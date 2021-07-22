@@ -636,8 +636,5 @@ async def post_freegame(title, link):
    
 
 bot.loop.create_task(background_task())
-bot.run("ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.dpS5uYAO3xLRW3JHQue4yDzp75g")
+bot.run("ODI2NDY0MTc3MTQzOTM5MTAz.YGM2vg.1dT-oIfgACNGoDQwyrV91SQeiJc")
 
-# ODI2NDY0MTc3MTQzOTM5MTAz.YGM2vg.F2zixDkCOwunmQSK5uEhPEbshC0 -> ich
-# ODU3OTM0NDE2NDU0MDkwNzcy.YNWzsA.oVY-p9bauDSWHukzwZjfbcRJi7U -> W
-# ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.dpS5uYAO3xLRW3JHQue4yDzp75g -> Main Bot 
