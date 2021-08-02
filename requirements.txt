@@ -6,3 +6,4 @@ youtube_dl
 aioconsole
 ffmpeg-python
 PyNaCl
+praw
