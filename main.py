@@ -27,12 +27,8 @@ async def on_ready():
     status_2.start()
     boost.start()
 
-    ruleschannel = bot.get_channel(803240539578302524)
-    rulemsg = await ruleschannel.fetch_message(860636421047320627)
-    await rulemsg.add_reaction(" ")
-
     statuschannel = bot.get_channel(860642601098280970)
-    statusmsg = await statuschannel.fetch_message(860645008168058880)
+    statusmsg = await statuschannel.fetch_message(871558788388360223)
     botonline = discord.Embed(title="**tr3xBot Status**",
                               description= 'I am currently online ✅',
                               color=0x0CFF00)
@@ -47,7 +43,6 @@ async def on_ready():
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
     print(" ")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
-    bot.loop.create_task(task())
 
 async def background_task():
     await bot.wait_until_ready()
@@ -58,7 +53,7 @@ async def background_task():
                 guild = bot.get_guild(718926812033581108)
 
                 statuschannel = bot.get_channel(860642601098280970)
-                statusmsg = await statuschannel.fetch_message(860645008168058880)
+                statusmsg = await statuschannel.fetch_message(871558788388360223)
                 botoffline = discord.Embed(title="**tr3xBot Status**",
                                         description= 'I am currently offline ⛔',
                                         color=0xff0000)
@@ -552,88 +547,31 @@ async def gif(ctx):
 @bot.event
 async def on_raw_reaction_add(payload):
     guild = bot.get_guild(718926812033581108)
-    if payload.message_id != 860636421047320627:
+    if payload.message_id !=860636421047320627:
         return
-    if payload.emoji.name == "âœ…":
+    if payload.emoji.name == "✅":
             Role = discord.utils.get(guild.roles, name="Member")
+            print(1)
             await payload.member.add_roles(Role,reason=None)
             print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member,"accepted the rules and got the member role.") 
 
 @bot.event
 async def on_raw_reaction_remove(payload):
     guild = bot.get_guild(718926812033581108)
-    if payload.message_id != 860636421047320627:
+    if payload.message_id !=860636421047320627:
         return
     else:
-            Role = discord.utils.get(guild.roles, name="Member")
-            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
-            await member.remove_roles(Role,reason=None)
-            print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member," unaccepted the rules and lost the member role.") 
+        Role = discord.utils.get(guild.roles, name="Member")
+        member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+        await member.remove_roles(Role,reason=None)
+        print(time.strftime('[%H:%M:%S]:', time.localtime()),member," unaccepted the rules and lost the member role.") 
 
 @bot.event
 async def on_member_join(member):
     welcomechannel = bot.get_channel(828410713294372885)
-    await welcomechannel.send(f"Welcome {member.mention} on the tr3xGaming Discord Server !" )
+    guild = bot.get_guild(718926812033581108)
+    await welcomechannel.send(f"Welcome {member.mention} on the",guild.name,"Discord Server !" )
 
-@bot.event
-async def on_guild_join(guild):
-    for channel in guild.text_channels:
-        if channel.permissions_for(guild.me).send_messages:
-            await channel.send("Hey there! Thank you for inviting me to your server. You can see my commands by typing 'th'")
-        break
-
-async def task():
-    while True:
-                if len(channels_to_update) != 0:
-                    game_title, game_link, submission_id = await retrieve_subreddit()
-                    await check_history(game_title, game_link, submission_id)
-
-                await asyncio.sleep(60) # task runs every 60 seconds
-
-channels_to_update = {}
-processed_submission = []
-channels_to_update[1] = "864283268353228820" 
-
-def process_link(link):
-    url = re.findall(r'\((http.*?)\)', link)
-    
-    if len(url) > 0:
-        return '\n'.join(url)
-    else:
-        return ""
-
-def process_title(title):
-    p = re.compile(process_link(title)) 
-    return p.sub('', title)
-    
-async def retrieve_subreddit():
-    async with aiohttp.ClientSession() as session:
-        async with session.get('https://www.reddit.com/r/Freegamestuff/new/.json?raw_json=1&limit=1') as r:
-            if r.status == 200:
-                js = await r.json()
-                    
-                submission_id = js['data']['children'][0]['data']['id']
-                game_title = process_title(js['data']['children'][0]['data']['title'])
-                game_link = process_link(js['data']['children'][0]['data']['selftext']) if js['data']['children'][0]['data']['selftext'] != "" else js['data']['children'][0]['data']['url']
-                
-                return game_title, game_link, submission_id
-
-async def check_history(title, link, submission_id):
-    for channel in channels_to_update:
-        if submission_id in processed_submission:
-            return
-        else:
-            await post_freegame(title, link)
-    processed_submission.append(submission_id)
-
-
-async def post_freegame(title, link):
-    channel = bot.get_channel(864283268353228820)
-    embed = discord.Embed(title= "**NEW FREE GAME 🎁**",
-                          description= f'{str(title)}: '+f'{str(link)}',
-                          color=0x00ffcc)
-    await channel.send(embed=embed)
-   
 
 bot.loop.create_task(background_task())
 bot.run("ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.kfT7gSJUokKHamktiHR8SgvpXrg")
