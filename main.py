@@ -1,4 +1,5 @@
-import asyncio, time, requests, random, discord,aiohttp, youtube_dl, aioconsole,re,time
+import asyncio, time, requests, random, discord,aiohttp, youtube_dl, aioconsole,time,praw
+from discord.embeds import Embed
 from discord.ext import commands, tasks
 from random import choice
 
@@ -7,6 +8,9 @@ from random import choice
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
 queue = []
+reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',
+                     client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',
+                     user_agent='tr3xBot')
 
 @bot.event
 async def on_ready():
@@ -26,6 +30,7 @@ async def on_ready():
     status_1.start()
     status_2.start()
     boost.start()
+    fg.start()
 
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(871558788388360223)
@@ -302,7 +307,7 @@ async def play(ctx, *, arg):
     
         
 @bot.command()
-async def next(ctx):
+async def n(ctx):  ##########################################################################
     global queue
 
     server = ctx.message.guild
@@ -382,115 +387,73 @@ async def on_voice_state_update(member, before, after):
     if not before.channel.members and before.channel != ch and before.channel != schoolch and before.channel != afkch and before.channel != mem and before.channel != onl and before.channel != boost: 
         await before.channel.delete()
 
-@bot.command(pass_context=True)
-async def memes(ctx):
+
+@bot.command()
+async def meme(ctx):
+    memes_submissions = reddit.subreddit('memes').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
     embed = discord.Embed(title="", description="")
-
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/memes/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
-
-@bot.command(pass_context=True)
-async def darkmemes(ctx):
-    embed = discord.Embed(title="", description="")
-
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/darkmemers/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def dankmemes(ctx):
-    embed = discord.Embed(title="", description="")
+    memes_submissions = reddit.subreddit('dankmemes').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
 
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/dankmemes/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def boobs(ctx):
-    embed = discord.Embed(title="", description="")
+    memes_submissions = reddit.subreddit('boobs').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
 
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/boobs/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def ass(ctx):
+    memes_submissions = reddit.subreddit('ass').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
     embed = discord.Embed(title="", description="")
-
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/ass/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
-
-@bot.command(pass_context=True)
-async def lesbian(ctx):
-    embed = discord.Embed(title="", description="")
-
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/Lesbian_gifs/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def pussy(ctx):
+    memes_submissions = reddit.subreddit('pussy').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
     embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
 
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/pussy/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
-
-@bot.command(pass_context=True)
-async def jofleak(ctx):
-    embed = discord.Embed(title="", description="")
-
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/OFLeaksNSFW/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
-
-@bot.command(pass_context=True)
-async def hentai(ctx):
-    embed = discord.Embed(title="", description="")
-
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/hentai/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
-
-@bot.command(pass_context=True)
-async def ofleak(ctx):
-    embed = discord.Embed(title="", description="")
-
-    async with aiohttp.ClientSession() as cs:
-     async with cs.get('https://www.reddit.com/r/OFLeaksNSFW/new.json?sort=hot') as r:
-        res = await r.json()
-        embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url_overridden_by_dest'])
-        await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def gif(ctx):
-    embed = discord.Embed(title="", description="")
+    memes_submissions = reddit.subreddit('gifs').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
 
-    async with aiohttp.ClientSession() as cs:
-        async with cs.get('https://www.reddit.com/r/gifs/new.json?sort=hot') as r:
-            res = await r.json()
-            embed.set_image(url=res['data']['children'] [random.randint(0, 25)]['data']['url'])
-            await ctx.send(embed=embed)
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
 
 @bot.event
 async def on_raw_reaction_add(payload):
@@ -519,6 +482,17 @@ async def on_member_join(member):
     welcomechannel = bot.get_channel(828410713294372885)
     guild = bot.get_guild(718926812033581108)
     await welcomechannel.send(f"Welcome {member.mention} on the",guild.name,"Discord Server !" )
+
+@tasks.loop(hours=24.0)
+async def fg():
+    memes_submissions = reddit.subreddit('freegames').new()
+    post_to_pick = 1
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+    embed = discord.Embed(title="Todays Free Game :gift:", description=submission.title)
+    embed.add_field(name="Get it here:",value=submission.url,inline=True)
+    channel = bot.get_channel(871595543468601404)
+    await channel.send(embed=embed)
 
 
 bot.loop.create_task(background_task())
