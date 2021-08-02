@@ -2,7 +2,7 @@ import asyncio, time, requests, random, discord,aiohttp, youtube_dl, aioconsole,
 from discord.ext import commands, tasks
 from random import choice
 
-#py -3 -m pip install -U aioconsole  @Waldemar
+#py -3 -m pip install -U "package"
 
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
@@ -126,66 +126,14 @@ async def member_counter():
 async def say(ctx,*, arg): 
     await ctx.channel.purge(limit=1) 
     await ctx.send(arg)
-
-#@bot.event
-#async def on_message(message):
-#
-#    if message.channel.id == 803764491988107334:
-#        if message.content.startswith("t"):
-#            return
-#        else:
-#            await message.channel.purge(limit=1)
-#            embed = discord.Embed(title="**Your Message got deleted**",
-#                                description= "Your message got deleted cause you havent used an command of me.\nIf you wanna know my commands, use th.",
-#                                color=0xff0000)
-#            await message.author.send(embed=embed)
-#    else:
-#        return
-#
-# Funktioniert zwar aber, warum auch immer crashed das den kompletten Bot also es funktioniert kein command mehr, da ehr scheinbar nur noch den channel "bewacht" lol
-
            
 @bot.command() 
 async def h(ctx):
     
     embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
     embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
-    embed.add_field(name=" â € ", value="My Commands:", inline=False)
-    embed.add_field(name="th", value="U should know this already", inline=True)
-    embed.add_field(name="troulette", value="Play some roulette ex: troulette black/red/0-36", inline=True)
-    embed.add_field(name="tembed", value="Will create an Message in an Embed ex: tembed title,desc,footer", inline=True)
-    embed.add_field(name="tclear", value="This will clear X Messages (only available for admins/mods )", inline=True)
-    embed.add_field(name="thug", value=" Need a hug after an hard day ? I gotchu", inline=True)
-    embed.add_field(name=" â € ", value="Music Commands:", inline=False)
-    embed.add_field(name="tjoin", value="Its self-explanatory isnt it?", inline=True)
-    embed.add_field(name="tplay ", value="U can play either an url or give the keyword to search for. me an ", inline=True)
-    embed.add_field(name="tpause", value="This will create an new universum, nah just kidding its just a pause command", inline=True)
-    embed.add_field(name="tresume", value="Will hard to understand what this may do ", inline=True)
-    embed.add_field(name="tleave", value="The Bot will leave and stop playing obviously", inline=True)
-    embed.add_field(name=" â € ", value="Meme/ NSFW Commands:", inline=False)
-    embed.add_field(name="tmemes / tdarkmemes / dankmemes / boobs / ass", value="Just try them out ", inline=True)
-    await ctx.channel.purge(limit=1)
-    await ctx.author.send(embed=embed)
-
-@bot.command() 
-async def help(ctx):
+    embed.add_field(name="You can find my Commands here:", value="https://tr3xgaming.herokuapp.com/html/tr3xbot/commands.html", inline=False)
     
-    embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
-    embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
-    embed.add_field(name=" â € ", value="My Commands:", inline=False)
-    embed.add_field(name="th", value="U should know this already", inline=True)
-    embed.add_field(name="troulette", value="Play some roulette ex: troulette black/red/0-36", inline=True)
-    embed.add_field(name="tembed", value="Will create an Message in an Embed ex: tembed title,desc,footer", inline=True)
-    embed.add_field(name="tclear", value="This will clear X Messages (only available for admins/mods )", inline=True)
-    embed.add_field(name="thug", value=" Need a hug after an hard day ? I gotchu", inline=True)
-    embed.add_field(name=" â € ", value="Music Commands:", inline=False)
-    embed.add_field(name="tjoin", value="Its self-explanatory isnt it?", inline=True)
-    embed.add_field(name="tplay ", value="U can play either an url or give the keyword to search for. me an ", inline=True)
-    embed.add_field(name="tpause", value="This will create an new universum, nah just kidding its just a pause command", inline=True)
-    embed.add_field(name="tresume", value="Will hard to understand what this may do ", inline=True)
-    embed.add_field(name="tleave", value="The Bot will leave and stop playing obviously", inline=True)
-    embed.add_field(name=" â € ", value="Meme/ NSFW Commands:", inline=False)
-    embed.add_field(name="tmemes / tdarkmemes / dankmemes / boobs / ass", value="Just try them out ", inline=True)
     await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
 
