@@ -1,4 +1,5 @@
 import asyncio, time, requests, random, discord,aiohttp, youtube_dl, aioconsole,time,praw
+from ctypes.wintypes import BOOLEAN
 from discord.embeds import Embed
 from discord.ext import commands, tasks
 from random import choice
@@ -99,7 +100,7 @@ async def background_task():
 
 @tasks.loop(seconds=5.0)
 async def status_1():
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=' you'),status=discord.Status.online)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=' at GitHub'),status=discord.Status.online)
 @tasks.loop(seconds=5.0)
 async def status_2():    
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=' with code'),status=discord.Status.online)
@@ -483,16 +484,56 @@ async def on_member_join(member):
     guild = bot.get_guild(718926812033581108)
     await welcomechannel.send(f"Welcome {member.mention} on the",guild.name,"Discord Server !" )
 
-@tasks.loop(hours=48.0)
+@tasks.loop(hours=2)
 async def fg():
+    channel = bot.get_channel(871595543468601404)
+    messages = await channel.history(limit=200).flatten()
+        
     memes_submissions = reddit.subreddit('freegames').new()
     post_to_pick = 1
     for i in range(0, post_to_pick):
         submission = next(x for x in memes_submissions if not x.stickied)
-    embed = discord.Embed(title="Todays Free Game :gift:", description=submission.title)
-    embed.add_field(name="Get it here:",value=submission.url,inline=True)
-    channel = bot.get_channel(871595543468601404)
-    await channel.send(embed=embed)
+    embedFG = discord.Embed(title="New Free Game :gift:", description=submission.title)
+    embedFG.add_field(name="Get it here:",value=submission.url,inline=True)
+
+    alreadysended = False
+    for msg in messages:
+            embeds = msg.embeds
+            for embed in embeds:
+                if embed.description == submission.title:
+                    alreadysended = True
+                    break
+
+            if alreadysended == False:
+                await channel.send(embed=embedFG)
+                break
+            else:
+                break
+@tasks.loop(hours=2)
+async def news():
+    channel = bot.get_channel(872948474264555530)
+    messages = await channel.history(limit=200).flatten()
+        
+    memes_submissions = reddit.subreddit('Nachrichten').new()
+    post_to_pick = 1
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+    embedN = discord.Embed(title="News :newspaper:", description=submission.title)
+    embedN.add_field(name="Source: ",value=submission.url,inline=True)
+
+    alreadysended = False
+    for msg in messages:
+            embeds = msg.embeds
+            for embed in embeds:
+                if embed.description == submission.title:
+                    alreadysended = True
+                    break
+
+            if alreadysended == False:
+                await channel.send(embed=embedN)
+                break
+            else:
+                break
 
 
 bot.loop.create_task(background_task())
