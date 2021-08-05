@@ -32,6 +32,7 @@ async def on_ready():
     status_2.start()
     boost.start()
     fg.start()
+    news.start()
 
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(871558788388360223)
