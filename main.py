@@ -483,7 +483,7 @@ async def on_member_join(member):
     guild = bot.get_guild(718926812033581108)
     await welcomechannel.send(f"Welcome {member.mention} on the",guild.name,"Discord Server !" )
 
-@tasks.loop(hours=24.0)
+@tasks.loop(hours=48.0)
 async def fg():
     memes_submissions = reddit.subreddit('freegames').new()
     post_to_pick = 1
