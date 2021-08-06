@@ -8,3 +8,4 @@ ffmpeg-python
 PyNaCl
 praw
 coc
+coc.py
