@@ -607,7 +607,6 @@ async def news():
         submission = next(x for x in memes_submissions if not x.stickied)
     embedN = discord.Embed(title="News :newspaper:", description=submission.title)
     embedN.add_field(name="Source: ",value=submission.url,inline=True)
-    embedN.thumbnail(url=submission.url)
 
     alreadysended = False
     for msg in messages:
