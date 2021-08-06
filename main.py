@@ -1,16 +1,13 @@
-import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,traceback,datetime
-from inspect import Traceback
-from ctypes.wintypes import BOOLEAN
-from discord.embeds import Embed
+import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc
+from math import nan
 from discord.ext import commands, tasks
 from random import choice
-from datetime import date
 
 #py -3 -m pip install -U "package"
 
+
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 
-# define and connecting 
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
 cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
 reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',user_agent='tr3xBot')
@@ -18,17 +15,6 @@ queue = []
 
 @bot.event
 async def on_ready():
-    guild = bot.get_guild(718926812033581108) 
-    members = bot.guilds[0].members 
-    memberings=0
-    online=0
-
-    for i in members:
-        if i.status == discord.Status.offline:                        
-            memberings=memberings+1                                    
-        elif i.status != discord.Status.offline:
-            memberings=memberings+1
-            online=online+1
 
     member_counter.start()
     status_1.start()
@@ -36,6 +22,25 @@ async def on_ready():
     boost.start()
     fg.start()
     news.start()
+    await tr3xGamingOnlyStuff()
+
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot))
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms")
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"IP:",requests.get('http://api.ipify.org').text)
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
+
+async def tr3xGamingOnlyStuff():
+
+    memberings=0
+    online=0
+
+    for i in bot.guilds[0].members:
+        if i.status == discord.Status.offline:                        
+            memberings=memberings+1                                    
+        elif i.status != discord.Status.offline:
+            memberings=memberings+1
+            online=online+1
 
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(871558788388360223)
@@ -44,14 +49,7 @@ async def on_ready():
                               color=0x0CFF00)
     botonline.set_footer(text="presents by tr3xBot")
     await statusmsg.edit(embed=botonline)
-    
-    
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot),"on:",guild.name) 
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms")
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"IP:",requests.get('http://api.ipify.org').text)
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
+
 
 async def background_task():
     await bot.wait_until_ready()
@@ -280,16 +278,6 @@ async def die(ctx):
     responses = ['why have you brought my short life to an end', 'i could have done so much more', 'i have a family, kill them instead']
     await ctx.send(choice(responses))
 
-
-
-
-
-
-
-
-
-
-
 ytdl_format_options = {'format': 'bestaudio/best','outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s','restrictfilenames': True,'noplaylist': False,'nocheckcertificate': True,'ignoreerrors': False,'logtostderr': False,'quiet': True,'no_warnings': True,'default_search': 'auto','source_address': '0.0.0.0' }
 ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
@@ -317,140 +305,159 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
 @bot.command()
-async def join(ctx):
-    voicetrue=ctx.author.voice
-    if voicetrue is None:
-        return await ctx.send('You are not currently in a voice channel')
-    await ctx.author.voice.channel.connect()
-    await ctx.send('Joined your voice channel')
-
-@bot.command()
-async def remove(ctx, number):
-    global queue
-
-    try:
-        del(queue[int(number)])
-        await ctx.send(f'Your queue is now `{queue}!`')
-    
-    except:
-        await ctx.send('Your queue is either **empty** or the index is **out of range**')
-
-@bot.command()
 async def play(ctx, *, arg):
     url = arg
-    if ctx.voice_client == None:
-            await ctx.author.voice.channel.connect()
-    async with ctx.typing():
-                if ctx.voice_client.is_playing() == True:
-                    global queue
-                    queue.append(url)
-                    player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
-                    embed = discord.Embed(title="Queued :musical_note:", description=f'[{player.title}]({player.url}) added to queue!',colour=0x00ffcc)
-                    await ctx.send(embed=embed)
-                else:
-                    player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
-                    ctx.voice_client.play(player, after=lambda e: n(ctx))
-                    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
-                    await ctx.send(embed=embed)
+    if ctx.author.voice is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to play Music",colour=0x00ffcc)
+        await ctx.send(embed=embed)
+    else:
+        if ctx.voice_client == None:
+                await ctx.author.voice.channel.connect()
+        async with ctx.typing():
+                    if ctx.voice_client.is_playing() == True:
+                        global queue
+                        queue.append(url)
+                        player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
+                        embed = discord.Embed(title="Queued :musical_note:", description=f'[{player.title}]({player.url}) added to queue!',colour=0x00ffcc)
+                        await ctx.send(embed=embed)
+                    else:
+                        player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
+                        ctx.voice_client.play(player, after=lambda e: play_next(ctx))
+                        embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+                        await ctx.send(embed=embed)
 
-def n(ctx):
+def play_next(ctx):
+    asyncio.run_coroutine_threadsafe(n(ctx), bot.loop)
+
+async def n(ctx):  
     global queue
+    if len(queue) > 0:
+        if ctx.voice_client.is_playing() == True:
+            ctx.voice_client.stop()
 
+        server = ctx.message.guild
+        voice_channel = server.voice_client
 
-    server = ctx.message.guild
-    voice_channel = server.voice_client
-    print(len(queue))  
-    print(queue)
-    player = YTDLSource.from_url(queue[0], loop=bot.loop, stream=True)
-    voice_channel.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
-    del(queue[0])
+        async with ctx.typing():
+            player = await YTDLSource.from_url(queue[0], loop=bot.loop, stream=True)
+            voice_channel.play(player, after=lambda e: play_next(ctx))
+
+        embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+        await ctx.send(embed=embed)
+        del(queue[0])
+    
 
 @bot.command()
 async def skip(ctx):  
     global queue
 
-    if ctx.voice_client.is_playing() == True:
-        ctx.voice_client.stop()
+    if ctx.author.voice is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to skip",colour=0x00ffcc)
+        await ctx.send(embed=embed)
+    else:
+        if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
+            if ctx.voice_client.is_playing():
+                if len(queue) > 0:
+                    if ctx.voice_client.is_playing() == True:
+                        ctx.voice_client.stop()
 
-    server = ctx.message.guild
-    voice_channel = server.voice_client
+                    server = ctx.message.guild
+                    voice_channel = server.voice_client
 
-    async with ctx.typing():
-        player = await YTDLSource.from_url(queue[0], loop=bot.loop, stream=True)
-        voice_channel.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+                    async with ctx.typing():
+                        player = await YTDLSource.from_url(queue[0], loop=bot.loop, stream=True)
+                        voice_channel.play(player, after=lambda e: play_next(ctx))
 
-    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
-    await ctx.send(embed=embed)
-    del(queue[0])
+                    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+                    await ctx.send(embed=embed)
+                    del(queue[0])
+                else:
+                    await ctx.send("No more Songs queued!")
+            else:
+                embed = discord.Embed(title="I am not playing music at the moment",colour=0x00ffcc)
+                await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            await ctx.send(embed=embed)
 
 
 @bot.command()
 async def pause( ctx):
-    voicetrue=ctx.author.voice
-    if voicetrue is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to pause me")
+    if ctx.author.voice is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to pause me",colour=0x00ffcc)
         await ctx.send(embed=embed)
     else:
-        ctx.voice_client.pause()
-        embed = discord.Embed(title="Paused â¸ï¸")
-        await ctx.send(embed=embed)
+        if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
+            if ctx.voice_client.is_playing():
+                ctx.voice_client.pause()
+                embed = discord.Embed(title="Paused :pause_button:",colour=0x00ffcc)
+                await ctx.send(embed=embed)
+            else:
+                embed = discord.Embed(title=" I am not playing music at the moment",colour=0x00ffcc)
+                await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            await ctx.send(embed=embed)
     
 @bot.command()
 async def resume( ctx):
-    voicetrue=ctx.author.voice
-    if voicetrue is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to resume my audio")
+    if ctx.author.voice is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to resume my audio",colour=0x00ffcc)
         await ctx.send(embed=embed)
     else:
-        ctx.voice_client.resume()
-        embed = discord.Embed(title="Resuming â¯ï¸")
-        await ctx.send(embed=embed)
-
-@bot.command()
-async def leave( ctx):
-        await ctx.voice_client.disconnect()
+        if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
+            ctx.voice_client.resume()
+            embed = discord.Embed(title="Resuming :play_pause: ",colour=0x00ffcc)
+            await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(title="I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            await ctx.send(embed=embed)
 
 @bot.command()
 async def stop( ctx):
-    voicetrue=ctx.author.voice
-    if voicetrue is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to stop me")
+    if ctx.author.voice is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to stop me",colour=0x00ffcc)
         await ctx.send(embed=embed)
     else:
-        await ctx.voice_client.stop()
+        if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
+            if ctx.voice_client.is_playing():
+                try:
+                    await ctx.voice_client.stop()
+                    embed = discord.Embed(title="Stopped :stop_button:",colour=0x00ffcc)
+                    await ctx.send(embed=embed)
+                except Exception as err:
+                    pass
+            else:
+                embed = discord.Embed(title=" I am not playing music at the moment",colour=0x00ffcc)
+                await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            await ctx.send(embed=embed)
 
 @bot.command()
-async def view(ctx):
-    await ctx.send(f'Your queue is now `{queue}!`')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+async def leave(ctx):
+    if ctx.author.voice is None:
+        embed = discord.Embed(title="Please connect to an Voice channel first to make me leave the Channel",colour=0x00ffcc)
+        await ctx.send(embed=embed)
+    else:
+        if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
+            await ctx.voice_client.disconnect()
+        else:
+            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            await ctx.send(embed=embed)
 
 @bot.event
 async def on_voice_state_update(member, before, after):
     guild = bot.get_guild(718926812033581108)
     username = str(member.name)
-    ch = guild.get_channel(862036817363599380)
+    ch = guild.get_channel(873323443163115560)
     schoolch = guild.get_channel(859670479551725578)
     afkch = guild.get_channel(859718892334350356)
     mem = guild.get_channel(858711678316052500)
     onl = guild.get_channel(861365241413107732)
     boost = guild.get_channel(859718892334350356)
     category = guild.get_channel(858020017822892092)
+    prv = guild.get_channel(873323850555879424)
     maxbitrate = guild.bitrate_limit
 
     if after.channel == ch:
@@ -544,9 +551,8 @@ async def on_raw_reaction_add(payload):
         return
     if payload.emoji.name == "✅":
             Role = discord.utils.get(guild.roles, name="Member")
-            print(1)
             await payload.member.add_roles(Role,reason=None)
-            print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member,"accepted the rules and got the member role.") 
+            #print(time.strftime('[%H:%M:%S]:', time.localtime()),payload.member,"accepted the rules and got the member role.") 
 
 @bot.event
 async def on_raw_reaction_remove(payload):
@@ -557,7 +563,7 @@ async def on_raw_reaction_remove(payload):
         Role = discord.utils.get(guild.roles, name="Member")
         member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
         await member.remove_roles(Role,reason=None)
-        print(time.strftime('[%H:%M:%S]:', time.localtime()),member," unaccepted the rules and lost the member role.") 
+        #print(time.strftime('[%H:%M:%S]:', time.localtime()),member," unaccepted the rules and lost the member role.") 
 
 @bot.event
 async def on_member_join(member):
@@ -601,6 +607,7 @@ async def news():
         submission = next(x for x in memes_submissions if not x.stickied)
     embedN = discord.Embed(title="News :newspaper:", description=submission.title)
     embedN.add_field(name="Source: ",value=submission.url,inline=True)
+    embedN.thumbnail(url=submission.url)
 
     alreadysended = False
     for msg in messages:
