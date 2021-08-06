@@ -1,4 +1,4 @@
-import asyncio, time, requests, random, discord,aiohttp, youtube_dl, aioconsole,time,praw
+import asyncio, time, requests, random, discord,aiohttp, youtube_dl, aioconsole,time,praw,coc
 from ctypes.wintypes import BOOLEAN
 from discord.embeds import Embed
 from discord.ext import commands, tasks
@@ -9,6 +9,7 @@ from random import choice
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
 queue = []
+cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
 reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',
                      client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',
                      user_agent='tr3xBot')
@@ -206,7 +207,58 @@ async def roulette(ctx,arg):
 @bot.command()
 async def hug(ctx):
     await ctx.send("{} hugs himself :smiling_face_with_tear:".format(ctx.message.author.mention))
-                   
+
+@bot.command()
+async def coc(ctx, arg):
+    playerInput = arg
+    
+    if playerInput.startswith("#"):
+        player = await cocclient.get_player(playerInput)
+        clan = await cocclient.get_clan(player.clan.tag)
+        if clan.type == "open":
+                joinable = "Yes"
+        else:
+                joinable = "No (",clan.type,")"
+
+        if player.town_hall < 9:
+            url = "https://static.wikia.nocookie.net/clashofclans/images/5/52/Town_Hall6.png/revision/latest/scale-to-width-down/100?cb=20170827050220"
+        if player.town_hall == 9:
+            url = "https://static.wikia.nocookie.net/clashofclans/images/e/e0/Town_Hall9.png/revision/latest/scale-to-width-down/100?cb=20170827045259"
+        if player.town_hall == 10:
+            url = "https://static.wikia.nocookie.net/clashofclans/images/5/5c/Town_Hall10.png/revision/latest/scale-to-width-down/115?cb=20170827040043"
+        if player.town_hall == 11:
+            url = "https://static.wikia.nocookie.net/clashofclans/images/9/96/Town_Hall11.png/revision/latest/scale-to-width-down/110?cb=20210410001514"
+        if player.town_hall == 12:
+            url = "https://static.wikia.nocookie.net/clashofclans/images/c/c7/Town_Hall12-1.png/revision/latest/scale-to-width-down/120?cb=20180603203226"
+        if player.town_hall == 13:
+            url = "https://static.wikia.nocookie.net/clashofclans/images/9/98/Town_Hall13-1.png/revision/latest/scale-to-width-down/120?cb=20200831024426"
+        if player.town_hall == 14:
+            url = "https://static.wikia.nocookie.net/clashofclans/images/e/e0/Town_Hall14-1.png/revision/latest/scale-to-width-down/110?cb=20210413000722"
+        
+        
+        embed=discord.Embed(title="Clash of Clans Stats", color=0xf0d005)
+        embed.add_field(name="Player", value=player.name, inline=True)
+        embed.add_field(name="Level", value=player.exp_level, inline=True)
+        embed.add_field(name="Townhall", value=player.town_hall, inline=True)
+        embed.add_field(name="Builderhall", value=player.builder_hall, inline=True)
+        embed.add_field(name="Multiplayer trophies ", value=player.trophies, inline=True)
+        embed.add_field(name="Builderbase trophies ", value=player.versus_trophies, inline=True)
+        embed.add_field(name="Clan", value=str(player.clan)+player.clan.tag, inline=True)
+        embed.add_field(name="Clan-Level", value=clan.level, inline=True)
+        embed.add_field(name="Role", value=player.role, inline=True)
+        embed.add_field(name="Clanmember", value=clan.member_count, inline=True)
+        embed.add_field(name="Joinable", value=joinable, inline=True)
+        embed.add_field(name="Language", value=clan.chat_language, inline=True)
+        embed.add_field(name="Discription", value=clan.description, inline=True)
+        embed.add_field(name="War-frequency", value=clan.war_frequency, inline=True)
+        embed.add_field(name="Rank", value=clan.war_league, inline=True)
+        embed.add_field(name="Link", value=clan.share_link, inline=True)
+        embed.set_thumbnail(url=url)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send("Sorry",playerInput,"is not a Valid Playertag, try again")
+        
+                    
 @bot.command()
 async def kill(ctx,arg):
 
@@ -485,7 +537,7 @@ async def on_member_join(member):
     guild = bot.get_guild(718926812033581108)
     await welcomechannel.send(f"Welcome {member.mention} on the",guild.name,"Discord Server !" )
 
-@tasks.loop(hours=2)
+@tasks.loop(hours=1)
 async def fg():
     channel = bot.get_channel(871595543468601404)
     messages = await channel.history(limit=200).flatten()
@@ -510,7 +562,7 @@ async def fg():
                 break
             else:
                 break
-@tasks.loop(hours=2)
+@tasks.loop(hours=1)
 async def news():
     channel = bot.get_channel(872948474264555530)
     messages = await channel.history(limit=200).flatten()

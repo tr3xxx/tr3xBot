@@ -7,3 +7,4 @@ aioconsole
 ffmpeg-python
 PyNaCl
 praw
+coc
