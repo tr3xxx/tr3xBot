@@ -208,7 +208,7 @@ async def hug(ctx):
     await ctx.send("{} hugs himself :smiling_face_with_tear:".format(ctx.message.author.mention))
 
 @bot.command()
-async def coc(ctx, arg):
+async def cs(ctx, arg):
     playerInput = arg
     cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
     
