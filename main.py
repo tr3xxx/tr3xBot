@@ -8,6 +8,8 @@ from random import choice
 
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
+cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
+
 queue = []
 reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',
                      client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',
@@ -208,9 +210,10 @@ async def hug(ctx):
     await ctx.send("{} hugs himself :smiling_face_with_tear:".format(ctx.message.author.mention))
 
 @bot.command()
-async def cs(ctx, arg):
+async def coc(ctx, arg):
     playerInput = arg
-    cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
+    
+   
     
     if playerInput.startswith("#"):
         player = await cocclient.get_player(playerInput)
