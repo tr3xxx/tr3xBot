@@ -1,4 +1,4 @@
-import asyncio, time, requests, random, discord,aiohttp, youtube_dl, aioconsole,time,praw,coc
+import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc
 from ctypes.wintypes import BOOLEAN
 from discord.embeds import Embed
 from discord.ext import commands, tasks
@@ -9,7 +9,6 @@ from random import choice
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
 queue = []
-cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
 reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',
                      client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',
                      user_agent='tr3xBot')
@@ -211,6 +210,7 @@ async def hug(ctx):
 @bot.command()
 async def coc(ctx, arg):
     playerInput = arg
+    cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
     
     if playerInput.startswith("#"):
         player = await cocclient.get_player(playerInput)
