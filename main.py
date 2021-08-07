@@ -448,30 +448,21 @@ async def leave(ctx):
 
 @bot.event
 async def on_voice_state_update(member, before, after):
-    guild = bot.get_guild(718926812033581108)
-    username = str(member.name)
-    ch = guild.get_channel(873323443163115560)
-    schoolch = guild.get_channel(859670479551725578)
-    afkch = guild.get_channel(859718892334350356)
-    mem = guild.get_channel(858711678316052500)
-    onl = guild.get_channel(861365241413107732)
-    boost = guild.get_channel(859718892334350356)
-    category = guild.get_channel(858020017822892092)
-    prv = guild.get_channel(873323850555879424)
-    maxbitrate = guild.bitrate_limit
+    guild = member.guild
+    voicehub = guild.get_channel(873323443163115560)
+    Talkcategory = guild.get_channel(858020017822892092)
 
-    if after.channel == ch:
+    if after.channel == voicehub:
         channel = await guild.create_voice_channel(
-            name=username+"`s channel",
-            category=category,
-            overwrites=None,
+            name=str(member.name)+"`s channel",
+            category=Talkcategory,
             reason=None,
             user_limit=69,
-            bitrate=maxbitrate
+            bitrate= guild.bitrate_limit
         )
         await member.move_to(channel)
     try:
-        if not before.channel.members and before.channel != ch and before.channel != schoolch and before.channel != afkch and before.channel != mem and before.channel != onl and before.channel != boost: 
+        if not before.channel.members and before.channel.category == Talkcategory and before.channel != voicehub:
             await before.channel.delete()
     except Exception as err:
         pass
