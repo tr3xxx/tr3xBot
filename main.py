@@ -1,5 +1,4 @@
 import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc
-from math import nan
 from discord.ext import commands, tasks
 from random import choice
 
@@ -22,12 +21,13 @@ async def on_ready():
     boost.start()
     fg.start()
     news.start()
+    await LoginOutput()
     await tr3xGamingOnlyStuff()
 
+async def LoginOutput():
+
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot))
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),f"Ping: {int(bot.latency * 1000)} ms")
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"IP:",requests.get('http://api.ipify.org').text)
-    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")
+    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Successfully started")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
 
 async def tr3xGamingOnlyStuff():
@@ -137,8 +137,8 @@ async def say(ctx,*, arg):
     await ctx.channel.purge(limit=1) 
     await ctx.send(arg)
 
-@bot.command() 
-async def h(ctx):
+@bot.command(aliases=["h"]) 
+async def help(ctx):
     
     embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
     embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
@@ -560,7 +560,13 @@ async def on_raw_reaction_remove(payload):
 async def on_member_join(member):
     welcomechannel = bot.get_channel(828410713294372885)
     guild = bot.get_guild(718926812033581108)
-    await welcomechannel.send(f"Welcome {member.mention} on the",guild.name,"Discord Server !" )
+    await welcomechannel.send(f"Welcome {member.mention} on the tr3xGaming Discord Server !" )
+
+    embed=discord.Embed(title=" Welcome on the tr3xGaming Server again, i am the tr3xBot", color=0x00ffcc)
+    embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
+    embed.add_field(name="You can find my Commands here:", value="https://tr3xgaming.herokuapp.com/html/tr3xbot/commands.html", inline=False)
+    await member.send(embed=embed)
+    
 
 @tasks.loop(hours=1)
 async def fg():
