@@ -601,7 +601,7 @@ async def news():
     channel = bot.get_channel(872948474264555530)
     messages = await channel.history(limit=200).flatten()
         
-    memes_submissions = reddit.subreddit('Nachrichten').new()
+    memes_submissions = reddit.subreddit('NachrichtenDE').new()
     post_to_pick = 1
     for i in range(0, post_to_pick):
         submission = next(x for x in memes_submissions if not x.stickied)
