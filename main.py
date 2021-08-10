@@ -4,12 +4,13 @@ from random import choice
 
 #py -3 -m pip install -U "package"
 
-
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
 cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
 reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',user_agent='tr3xBot')
+owner = 633412273641095188
+botid = 830842260462632992
 queue = []
 
 @bot.event
@@ -20,7 +21,8 @@ async def on_ready():
     status_2.start()
     boost.start()
     fg.start()
-    news.start()
+    newsGER.start()
+    newsENG.start()
     await LoginOutput()
     await tr3xGamingOnlyStuff()
 
@@ -131,11 +133,34 @@ async def member_counter():
             online=online+1
     await channelmember.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
     await channelonline.edit(name = f'🟢 𝙊𝙣𝙡𝙞𝙣𝙚 : {online}')
+
+@bot.event
+async def on_message(message):
+    if message.channel.id == 803764491988107334:
+        if str(message.content).startswith(bot.command_prefix):
+            pass
+        else:
+            if message.author.id == botid or owner:
+                pass
+            else:
+                await message.channel.purge(limit=1)
+                await message.author.send("You are not allowed to send messages which aren't commands to the '"+str(message.channel)+"' channel")
+    if message.channel.id == 803909189990088725:
+        if str(message.content).startswith(bot.command_prefix):
+            await message.channel.purge(limit=1)
+            await message.author.send("You are not allowed to send commands to the '"+str(message.channel)+"' channel, Please use the '"+str(message.guild.get_channel(803764491988107334))+"' channel")
+        else:
+            pass
+
+    await bot.process_commands(message)
     
 @bot.command() 
-async def say(ctx,*, arg): 
+async def say(ctx,*, arg: str = None): 
     await ctx.channel.purge(limit=1) 
-    await ctx.send(arg)
+    if arg is None:
+        await ctx.send("What should i say ?")
+    else:
+        await ctx.send(arg)
 
 @bot.command(aliases=["h"]) 
 async def help(ctx):
@@ -148,130 +173,143 @@ async def help(ctx):
     await ctx.author.send(embed=embed)
 
 
-@bot.command() #tembed titel, desc, footer
-async def embed(ctx, *, arg): 
-                              
-    args = arg.split(',') 
-    if len(args) == 3:
-        embed = discord.Embed(title = args[0],
-                                description = args[1],
-                                color=0x00ffcc)
-        embed.set_footer(text=args[2])
-        await ctx.channel.purge(limit=1)
-        await ctx.send(embed=embed)
+@bot.command()
+async def embed(ctx, *, arg: str = None): 
+    if arg is None:
+        await ctx.send("To create an Embed use the following template (Title,Describtion,Footer)")
+    else:            
+        args = arg.split(',') 
+        if len(args) == 3:
+            embed = discord.Embed(title = args[0],
+                                    description = args[1],
+                                    color=0x00ffcc)
+            embed.set_footer(text=args[2])
+            await ctx.channel.purge(limit=1)
+            await ctx.send(embed=embed)
         
          
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def clear(ctx,arg):
-        
-    if ctx.author.permissions_in(ctx.channel).manage_messages:
-        args = arg.split(' ')
-        if len(args) == 1:
-            if args[0].isdigit():
-                count = int(args[0])+1
-                deleted = await ctx.channel.purge(limit=count)
-                embed = discord.Embed(title = '{} Messages deleted.'.format(len(deleted)-1),
-                                color=0x00ffcc)
-                await ctx.channel.purge(limit=1)
-                await ctx.send(embed=embed, delete_after= 10.0)
+async def clear(ctx,arg: str = None):
+
+    if arg is None:
+        await ctx.channel.purge(limit=1)
+        await ctx.author.send("How many Messaages should i delete? (tclear x)")
+    else:
+        if ctx.author.permissions_in(ctx.channel).manage_messages:
+            args = arg.split(' ')
+            if len(args) == 1:
+                if args[0].isdigit():
+                    count = int(args[0])+1
+                    deleted = await ctx.channel.purge(limit=count)
+                    embed = discord.Embed(title = '{} Messages deleted.'.format(len(deleted)-1),
+                                    color=0x00ffcc)
+                    await ctx.channel.purge(limit=1)
+                    await ctx.send(embed=embed, delete_after= 10.0)
         
 @bot.command()
-async def roulette(ctx,arg):
-       
-    bid = arg
-    result = random.randint(0,36)
-    bid_param = -3
-    if bid.lower() == "black":
-                bid_param = -1
-    elif bid.lower() == "red":
-            bid_param = -2
-    else: 
-        try:
-            bid_param = int(bid)
-        except:
-                bid_param = -3
-    if bid_param == -3:
-        await ctx.send("unexpected input")
-        return
-    if bid_param == -1:
-        won = result%2 == 0 and not result == 0 
-    elif bid_param == -2:
-        won = result%2 == 1 
+async def roulette(ctx,arg: str = None):
+    if arg is None:
+        await ctx.send("Use the following template to play roulette (troulette [red]/[black]/[0-36])")
     else:
-        won = result == bid_param
-                
-    if won:
-        await ctx.send("Congrats, you won.")
-    else:
-        await ctx.send("Im sorry, you lost")
+        bid = arg
+        result = random.randint(0,36)
+        bid_param = -3
+        if bid.lower() == "black":
+                    bid_param = -1
+        elif bid.lower() == "red":
+                bid_param = -2
+        else: 
+            try:
+                bid_param = int(bid)
+            except:
+                    bid_param = -3
+        if bid_param == -3:
+            await ctx.send("unexpected input")
+            return
+        if bid_param == -1:
+            won = result%2 == 0 and not result == 0 
+        elif bid_param == -2:
+            won = result%2 == 1 
+        else:
+            won = result == bid_param
+                    
+        if won:
+            await ctx.send("Congrats, you won.")
+        else:
+            await ctx.send("Im sorry, you lost")
                 
 @bot.command()
 async def hug(ctx):
     await ctx.send("{} hugs himself :smiling_face_with_tear:".format(ctx.message.author.mention))
 
 @bot.command()
-async def coc(ctx, arg):
-    playerInput = arg
-    
-   
-    
-    if playerInput.startswith("#"):
-        player = await cocclient.get_player(playerInput)
-        clan = await cocclient.get_clan(player.clan.tag)
-        if clan.type == "open":
-                joinable = "Yes"
+async def coc(ctx, arg: str = None):
+    if arg is None:
+        await ctx.send("Please use the following template to searching a coc account (tcoc #XXXXXXXX)")
+    else:
+        playerInput = arg
+        if playerInput.startswith("#"):
+            player = await cocclient.get_player(playerInput)
+            clan = await cocclient.get_clan(player.clan.tag)
+            if clan.type == "open":
+                    joinable = "Yes"
+            else:
+                    joinable = "No (",clan.type,")"
+
+            if player.town_hall < 9:
+                url = "https://static.wikia.nocookie.net/clashofclans/images/5/52/Town_Hall6.png/revision/latest/scale-to-width-down/100?cb=20170827050220"
+            if player.town_hall == 9:
+                url = "https://static.wikia.nocookie.net/clashofclans/images/e/e0/Town_Hall9.png/revision/latest/scale-to-width-down/100?cb=20170827045259"
+            if player.town_hall == 10:
+                url = "https://static.wikia.nocookie.net/clashofclans/images/5/5c/Town_Hall10.png/revision/latest/scale-to-width-down/115?cb=20170827040043"
+            if player.town_hall == 11:
+                url = "https://static.wikia.nocookie.net/clashofclans/images/9/96/Town_Hall11.png/revision/latest/scale-to-width-down/110?cb=20210410001514"
+            if player.town_hall == 12:
+                url = "https://static.wikia.nocookie.net/clashofclans/images/c/c7/Town_Hall12-1.png/revision/latest/scale-to-width-down/120?cb=20180603203226"
+            if player.town_hall == 13:
+                url = "https://static.wikia.nocookie.net/clashofclans/images/9/98/Town_Hall13-1.png/revision/latest/scale-to-width-down/120?cb=20200831024426"
+            if player.town_hall == 14:
+                url = "https://static.wikia.nocookie.net/clashofclans/images/e/e0/Town_Hall14-1.png/revision/latest/scale-to-width-down/110?cb=20210413000722"
+            
+            
+            embed=discord.Embed(title="Clash of Clans Stats", color=0xf0d005)
+            embed.add_field(name="Player", value=player.name, inline=True)
+            embed.add_field(name="Level", value=player.exp_level, inline=True)
+            embed.add_field(name="Townhall", value=player.town_hall, inline=True)
+            embed.add_field(name="Builderhall", value=player.builder_hall, inline=True)
+            embed.add_field(name="Multiplayer trophies ", value=player.trophies, inline=True)
+            embed.add_field(name="Builderbase trophies ", value=player.versus_trophies, inline=True)
+            embed.add_field(name="Clan", value=str(player.clan)+player.clan.tag, inline=True)
+            embed.add_field(name="Clan-Level", value=clan.level, inline=True)
+            embed.add_field(name="Role", value=player.role, inline=True)
+            embed.add_field(name="Clanmember", value=clan.member_count, inline=True)
+            embed.add_field(name="Joinable", value=joinable, inline=True)
+            embed.add_field(name="Language", value=clan.chat_language, inline=True)
+            embed.add_field(name="Discription", value=clan.description, inline=True)
+            embed.add_field(name="War-frequency", value=clan.war_frequency, inline=True)
+            embed.add_field(name="Rank", value=clan.war_league, inline=True)
+            embed.add_field(name="Link", value=clan.share_link, inline=True)
+            embed.set_thumbnail(url=url)
+            await ctx.send(embed=embed)
         else:
-                joinable = "No (",clan.type,")"
+            await ctx.send("Sorry ",playerInput," is not a Valid Playertag, try again")
+        
+api_key = "abbc964449ba2ad5a22facf4dd51fcaf"
+base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
-        if player.town_hall < 9:
-            url = "https://static.wikia.nocookie.net/clashofclans/images/5/52/Town_Hall6.png/revision/latest/scale-to-width-down/100?cb=20170827050220"
-        if player.town_hall == 9:
-            url = "https://static.wikia.nocookie.net/clashofclans/images/e/e0/Town_Hall9.png/revision/latest/scale-to-width-down/100?cb=20170827045259"
-        if player.town_hall == 10:
-            url = "https://static.wikia.nocookie.net/clashofclans/images/5/5c/Town_Hall10.png/revision/latest/scale-to-width-down/115?cb=20170827040043"
-        if player.town_hall == 11:
-            url = "https://static.wikia.nocookie.net/clashofclans/images/9/96/Town_Hall11.png/revision/latest/scale-to-width-down/110?cb=20210410001514"
-        if player.town_hall == 12:
-            url = "https://static.wikia.nocookie.net/clashofclans/images/c/c7/Town_Hall12-1.png/revision/latest/scale-to-width-down/120?cb=20180603203226"
-        if player.town_hall == 13:
-            url = "https://static.wikia.nocookie.net/clashofclans/images/9/98/Town_Hall13-1.png/revision/latest/scale-to-width-down/120?cb=20200831024426"
-        if player.town_hall == 14:
-            url = "https://static.wikia.nocookie.net/clashofclans/images/e/e0/Town_Hall14-1.png/revision/latest/scale-to-width-down/110?cb=20210413000722"
-        
-        
-        embed=discord.Embed(title="Clash of Clans Stats", color=0xf0d005)
-        embed.add_field(name="Player", value=player.name, inline=True)
-        embed.add_field(name="Level", value=player.exp_level, inline=True)
-        embed.add_field(name="Townhall", value=player.town_hall, inline=True)
-        embed.add_field(name="Builderhall", value=player.builder_hall, inline=True)
-        embed.add_field(name="Multiplayer trophies ", value=player.trophies, inline=True)
-        embed.add_field(name="Builderbase trophies ", value=player.versus_trophies, inline=True)
-        embed.add_field(name="Clan", value=str(player.clan)+player.clan.tag, inline=True)
-        embed.add_field(name="Clan-Level", value=clan.level, inline=True)
-        embed.add_field(name="Role", value=player.role, inline=True)
-        embed.add_field(name="Clanmember", value=clan.member_count, inline=True)
-        embed.add_field(name="Joinable", value=joinable, inline=True)
-        embed.add_field(name="Language", value=clan.chat_language, inline=True)
-        embed.add_field(name="Discription", value=clan.description, inline=True)
-        embed.add_field(name="War-frequency", value=clan.war_frequency, inline=True)
-        embed.add_field(name="Rank", value=clan.war_league, inline=True)
-        embed.add_field(name="Link", value=clan.share_link, inline=True)
-        embed.set_thumbnail(url=url)
-        await ctx.send(embed=embed)
-    else:
-        await ctx.send("Sorry ",playerInput," is not a Valid Playertag, try again")
-        
-                    
+
 @bot.command()
-async def kill(ctx,arg):
-
-    await ctx.channel.purge(limit=1)
-    if arg != None:
-         await ctx.send("{}".format(ctx.message.author.mention)+" killed "+arg)
-         
+async def kill(ctx,arg: str = None):
+    if arg is None:
+        await ctx.channel.purge(limit=1)
+        await ctx.send("{}".format(ctx.message.author.mention)+" killed himself")
     else:
-         await ctx.send("tell me who... tkill @example")
+        if arg != None:
+            await ctx.send("{}".format(ctx.message.author.mention)+" killed "+arg)
+            
+        else:
+            await ctx.send("tell me who... tkill @example")
 
 @bot.command()
 async def die(ctx):
@@ -305,26 +343,31 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
 @bot.command()
-async def play(ctx, *, arg):
-    url = arg
-    if ctx.author.voice is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to play Music",colour=0x00ffcc)
-        await ctx.send(embed=embed)
+async def play(ctx, *, arg: str = None):
+
+    if arg is None:
+        embedER = discord.Embed(title="Please tell what i should play (ex. tplay lalala or tplay <yt url>)",color=0x00ffcc)
+        await ctx.send(embed=embedER)
     else:
-        if ctx.voice_client == None:
-                await ctx.author.voice.channel.connect()
-        async with ctx.typing():
-                    if ctx.voice_client.is_playing() == True:
-                        global queue
-                        queue.append(url)
-                        player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
-                        embed = discord.Embed(title="Queued :musical_note:", description=f'[{player.title}]({player.url}) added to queue!',colour=0x00ffcc)
-                        await ctx.send(embed=embed)
-                    else:
-                        player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
-                        ctx.voice_client.play(player, after=lambda e: play_next(ctx))
-                        embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
-                        await ctx.send(embed=embed)
+        url = arg
+        if ctx.author.voice is None:
+            embed = discord.Embed(title="Please connect to an Voice channel first to play Music",colour=0x00ffcc)
+            await ctx.send(embed=embed)
+        else:
+            if ctx.voice_client == None:
+                    await ctx.author.voice.channel.connect()
+            async with ctx.typing():
+                        if ctx.voice_client.is_playing() == True:
+                            global queue
+                            queue.append(url)
+                            player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
+                            embed = discord.Embed(title="Queued :musical_note:", description=f'[{player.title}]({player.url}) added to queue!',colour=0x00ffcc)
+                            await ctx.send(embed=embed)
+                        else:
+                            player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
+                            ctx.voice_client.play(player, after=lambda e: play_next(ctx))
+                            embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+                            await ctx.send(embed=embed)
 
 def play_next(ctx):
     asyncio.run_coroutine_threadsafe(n(ctx), bot.loop)
@@ -446,6 +489,53 @@ async def leave(ctx):
             embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
             await ctx.send(embed=embed)
 
+@bot.command()
+async def userlimit(ctx,arg: str = None):
+    if arg is None:
+        await ctx.send("To give a channel a userlimit use the followning template (ex. tuserlimit x )")
+    else:
+        if ctx.author.voice is None:
+            await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
+        else:
+            if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
+                if int(arg) >= 99:
+                    await ctx.send("Value should be less than or equal to 99")
+                else:
+                    await ctx.send("Userlimit of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" from "+str(ctx.author.voice.channel.user_limit)+" to "+arg)
+                    await ctx.author.voice.channel.edit(user_limit=int(arg))
+                    
+            else:
+                await ctx.send("You dont have the permission to edit channels outside the Talks Category")
+
+@bot.command()
+async def talkname(ctx,*,arg: str = None):
+    if arg is None:
+        await ctx.send("To give a channel a custom name use the followning template (ex. ttalkname x x x x x x )")
+    else:
+        if ctx.author.voice is None:
+            await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
+        else:
+            if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
+                await ctx.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+arg+"'")
+                await ctx.author.voice.channel.edit(name=str(arg))
+                
+            else:
+                await ctx.send('You dont have the permission to edit channels outside the Talks Category')
+
+@bot.command()
+async def end(ctx):
+    if ctx.author.voice is None:
+        await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
+    else:
+        if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
+            await ctx.send("Talk '"+str(ctx.author.voice.channel)+"' got deleted by "+str(ctx.author))
+            await ctx.author.voice.channel.delete()
+            
+            
+        else:
+            await ctx.send('You dont have the permission to edit channels outside the Talks Category')
+
+
 @bot.event
 async def on_voice_state_update(member, before, after):
     guild = member.guild
@@ -457,7 +547,6 @@ async def on_voice_state_update(member, before, after):
             name=str(member.name)+"`s channel",
             category=Talkcategory,
             reason=None,
-            user_limit=69,
             bitrate= guild.bitrate_limit
         )
         await member.move_to(channel)
@@ -491,6 +580,17 @@ async def dankmemes(ctx):
     await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
+async def cats(ctx):
+    memes_submissions = reddit.subreddit('cats').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
 async def boobs(ctx):
     memes_submissions = reddit.subreddit('boobs').hot()
     post_to_pick = random.randint(1, 100)
@@ -513,8 +613,63 @@ async def ass(ctx):
     await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
+async def teen(ctx):
+    memes_submissions = reddit.subreddit('LegalTeens').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
 async def pussy(ctx):
     memes_submissions = reddit.subreddit('pussy').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
+async def dick(ctx):
+    memes_submissions = reddit.subreddit('dicks').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
+async def cum(ctx):
+    memes_submissions = reddit.subreddit('cum').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
+async def milf(ctx):
+    memes_submissions = reddit.subreddit('MILFs').hot()
+    post_to_pick = random.randint(1, 100)
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+
+    embed = discord.Embed(title="", description="")
+    embed.set_image(url=submission.url)
+    await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
+async def lesbian(ctx):
+    memes_submissions = reddit.subreddit('lesbians').hot()
     post_to_pick = random.randint(1, 100)
     for i in range(0, post_to_pick):
         submission = next(x for x in memes_submissions if not x.stickied)
@@ -594,11 +749,37 @@ async def fg():
             else:
                 break
 @tasks.loop(hours=1)
-async def news():
+async def newsGER():
     channel = bot.get_channel(872948474264555530)
     messages = await channel.history(limit=200).flatten()
         
     memes_submissions = reddit.subreddit('NachrichtenDE').new()
+    post_to_pick = 1
+    for i in range(0, post_to_pick):
+        submission = next(x for x in memes_submissions if not x.stickied)
+    embedN = discord.Embed(title="News :newspaper:", description=submission.title)
+    embedN.add_field(name="Source: ",value=submission.url,inline=True)
+
+    alreadysended = False
+    for msg in messages:
+            embeds = msg.embeds
+            for embed in embeds:
+                if embed.description == submission.title:
+                    alreadysended = True
+                    break
+
+            if alreadysended == False:
+                await channel.send(embed=embedN)
+                break
+            else:
+                break
+
+@tasks.loop(hours=1)
+async def newsENG():
+    channel = bot.get_channel(874616666921795594)
+    messages = await channel.history(limit=200).flatten()
+        
+    memes_submissions = reddit.subreddit('news').new()
     post_to_pick = 1
     for i in range(0, post_to_pick):
         submission = next(x for x in memes_submissions if not x.stickied)
