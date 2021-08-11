@@ -1,4 +1,4 @@
-import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc
+import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,urllib
 from discord.ext import commands, tasks
 from random import choice
 
@@ -23,8 +23,10 @@ async def on_ready():
     fg.start()
     newsGER.start()
     newsENG.start()
+    tr3xGamingWebsiteStatus.start()
     await LoginOutput()
-    await tr3xGamingOnlyStuff()
+    await tr3xBotStatusOnline()
+    
 
 async def LoginOutput():
 
@@ -32,26 +34,36 @@ async def LoginOutput():
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Successfully started")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
 
-async def tr3xGamingOnlyStuff():
-
-    memberings=0
-    online=0
-
-    for i in bot.guilds[0].members:
-        if i.status == discord.Status.offline:                        
-            memberings=memberings+1                                    
-        elif i.status != discord.Status.offline:
-            memberings=memberings+1
-            online=online+1
+async def tr3xBotStatusOnline():
 
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(871558788388360223)
+    tr3x = bot.get_user(633412273641095188)
     botonline = discord.Embed(title="**tr3xBot Status**",
-                              description= 'I am currently online ✅',
+                              description= '`tr3xBot` is currently online ✅ \n \n If you experience problems please get in contact with {} asap'.format(tr3x.mention),
                               color=0x0CFF00)
     botonline.set_footer(text="presents by tr3xBot")
     await statusmsg.edit(embed=botonline)
 
+@tasks.loop(hours=1)
+async def tr3xGamingWebsiteStatus():
+
+    statuschannel = bot.get_channel(860642601098280970)
+    statusmsg = await statuschannel.fetch_message(873324711650672640)
+    tr3x = bot.get_user(633412273641095188)
+
+    if urllib.request.urlopen("https://tr3xgaming.herokuapp.com/").getcode() != 200:
+        Websiteoff = discord.Embed(title="**tr3xGaming Website Status**",
+                                        description= '`tr3xgaming.herokuapp.com` is currently offline ⛔\n'+urllib.request.urlopen("https://tr3xgaming.herokuapp.com/").getcode()+' \n \n Please get in contact with {} asap'.format(tr3x.mention),
+                                        color=0xff0000)
+        Websiteoff.set_footer(text="presents by tr3xBot")
+        await statusmsg.edit(embed=Websiteoff)
+    else:
+        Websiteon = discord.Embed(title="**tr3xGaming Website Status**", url='https://tr3xgaming.herokuapp.com/',
+                              description= '`tr3xgaming.herokuapp.com` is currently online ✅ \n \n If you experience problems please get in contact with {} asap'.format(tr3x.mention),
+                              color=0x0CFF00)
+        Websiteon.set_footer(text="presents by tr3xBot")
+        await statusmsg.edit(embed=Websiteon)
 
 async def background_task():
     await bot.wait_until_ready()
@@ -64,7 +76,7 @@ async def background_task():
                 statuschannel = bot.get_channel(860642601098280970)
                 statusmsg = await statuschannel.fetch_message(871558788388360223)
                 botoffline = discord.Embed(title="**tr3xBot Status**",
-                                        description= 'I am currently offline ⛔',
+                                        description= '`tr3xBot` is currently offline ⛔',
                                         color=0xff0000)
                 botoffline.add_field(name="**What does this mean for you?**",value="All features like commands or the member/online count wont update until i am back online",inline=False)
                 botoffline.add_field(name="**Why i am offline?**",value="Most likely i am offline cause an maintenance break or an server crash",inline=False)
@@ -516,8 +528,11 @@ async def talkname(ctx,*,arg: str = None):
             await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
         else:
             if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
-                await ctx.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+arg+"'")
-                await ctx.author.voice.channel.edit(name=str(arg))
+                if len(arg) > 15:
+                    await ctx.send("Please choose a shorter Talkname")
+                else:
+                    await ctx.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+arg+"'")
+                    await ctx.author.voice.channel.edit(name=str(arg))
                 
             else:
                 await ctx.send('You dont have the permission to edit channels outside the Talks Category')
@@ -534,6 +549,8 @@ async def end(ctx):
             
         else:
             await ctx.send('You dont have the permission to edit channels outside the Talks Category')
+
+
 
 
 @bot.event
@@ -559,136 +576,193 @@ async def on_voice_state_update(member, before, after):
 
 @bot.command()
 async def meme(ctx):
-    memes_submissions = reddit.subreddit('memes').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        memes_submissions = reddit.subreddit('memes').hot()
+        post_to_pick = random.randint(1, 100)
+        for i in range(0, post_to_pick):
+            submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+        embed = discord.Embed(title="", description="")
+        embed.set_image(url=submission.url)
+        await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def dankmemes(ctx):
-    memes_submissions = reddit.subreddit('dankmemes').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        memes_submissions = reddit.subreddit('dankmemes').hot()
+        post_to_pick = random.randint(1, 100)
+        for i in range(0, post_to_pick):
+            submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+        embed = discord.Embed(title="", description="")
+        embed.set_image(url=submission.url)
+        await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def cats(ctx):
-    memes_submissions = reddit.subreddit('cats').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        memes_submissions = reddit.subreddit('cats').hot()
+        post_to_pick = random.randint(1, 100)
+        for i in range(0, post_to_pick):
+            submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+        embed = discord.Embed(title="", description="")
+        embed.set_image(url=submission.url)
+        await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def boobs(ctx):
-    memes_submissions = reddit.subreddit('boobs').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('boobs').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 @bot.command(pass_context=True)
 async def ass(ctx):
-    memes_submissions = reddit.subreddit('ass').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('ass').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 @bot.command(pass_context=True)
 async def teen(ctx):
-    memes_submissions = reddit.subreddit('LegalTeens').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('LegalTeens').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 @bot.command(pass_context=True)
 async def pussy(ctx):
-    memes_submissions = reddit.subreddit('pussy').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('pussy').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 @bot.command(pass_context=True)
 async def dick(ctx):
-    memes_submissions = reddit.subreddit('dicks').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('dicks').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 @bot.command(pass_context=True)
 async def cum(ctx):
-    memes_submissions = reddit.subreddit('cum').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('cum').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 @bot.command(pass_context=True)
 async def milf(ctx):
-    memes_submissions = reddit.subreddit('MILFs').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('MILFs').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 @bot.command(pass_context=True)
 async def lesbian(ctx):
-    memes_submissions = reddit.subreddit('lesbians').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('lesbians').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 
 @bot.command(pass_context=True)
 async def gif(ctx):
-    memes_submissions = reddit.subreddit('gifs').hot()
-    post_to_pick = random.randint(1, 100)
-    for i in range(0, post_to_pick):
-        submission = next(x for x in memes_submissions if not x.stickied)
+    async with ctx.typing():
+        memes_submissions = reddit.subreddit('gifs').hot()
+        post_to_pick = random.randint(1, 100)
+        for i in range(0, post_to_pick):
+            submission = next(x for x in memes_submissions if not x.stickied)
 
-    embed = discord.Embed(title="", description="")
-    embed.set_image(url=submission.url)
-    await ctx.send(embed=embed)
+        embed = discord.Embed(title="", description="")
+        embed.set_image(url=submission.url)
+        await ctx.send(embed=embed)
+
+
+@bot.command(pass_context=True)
+async def anime(ctx):
+    async with ctx.typing():
+        memes_submissions = reddit.subreddit('Animemes').hot()
+        post_to_pick = random.randint(1, 100)
+        for i in range(0, post_to_pick):
+            submission = next(x for x in memes_submissions if not x.stickied)
+
+        embed = discord.Embed(title="", description="")
+        embed.set_image(url=submission.url)
+        await ctx.send(embed=embed)
 
 @bot.event
 async def on_raw_reaction_add(payload):
@@ -717,11 +791,10 @@ async def on_member_join(member):
     guild = bot.get_guild(718926812033581108)
     await welcomechannel.send(f"Welcome {member.mention} on the tr3xGaming Discord Server !" )
 
-    embed=discord.Embed(title=" Welcome on the tr3xGaming Server again, i am the tr3xBot", color=0x00ffcc)
+    embed=discord.Embed(title=" Welcome on the tr3xGaming Server, i am the tr3xBot", color=0x00ffcc)
     embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
     embed.add_field(name="You can find my Commands here:", value="https://tr3xgaming.herokuapp.com/html/tr3xbot/commands.html", inline=False)
     await member.send(embed=embed)
-    
 
 @tasks.loop(hours=1)
 async def fg():
@@ -748,6 +821,7 @@ async def fg():
                 break
             else:
                 break
+
 @tasks.loop(hours=1)
 async def newsGER():
     channel = bot.get_channel(872948474264555530)
