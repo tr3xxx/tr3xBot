@@ -750,6 +750,22 @@ async def cum(ctx):
             await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
 
 @bot.command(pass_context=True)
+async def hentai(ctx):
+    async with ctx.typing():
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('hentai').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
+
+            embed = discord.Embed(title="", description="")
+            embed.set_image(url=submission.url)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
+
+@bot.command(pass_context=True)
 async def milf(ctx):
     async with ctx.typing():
         nsfw = ctx.guild.get_channel(800715988794081281)
@@ -798,14 +814,28 @@ async def gif(ctx):
 @bot.command(pass_context=True)
 async def waifu(ctx):
     async with ctx.typing():
-        memes_submissions = reddit.subreddit('waifusfortr3x').new()
-        post_to_pick = random.randint(1, 10)
+        memes_submissions = reddit.subreddit('waifusfortr3x').hot()
+        post_to_pick = random.randint(1, 40)
         for i in range(0, post_to_pick):
             submission = next(x for x in memes_submissions if not x.stickied)
 
         embed = discord.Embed(title="", description="")
         embed.set_image(url=submission.url)
-        await ctx.send(embed=embed)
+
+        alreadysended = False
+        messages = await ctx.history(limit=200).flatten()
+        for msg in messages:
+            embeds = msg.embeds
+            for embed in embeds:
+                if embed.image_url == submission.url:
+                    alreadysended = True
+                    break
+            if alreadysended == False:
+                await ctx.send(embed=embed)
+                break
+            else:
+                break
+        #await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def anime(ctx):
