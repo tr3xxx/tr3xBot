@@ -1,6 +1,9 @@
 import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,urllib
+from typing import Text
+from os import name
 from discord.ext import commands, tasks
 from random import choice
+
 
 #py -3 -m pip install -U "package"
 
@@ -16,6 +19,7 @@ queue = []
 @bot.event
 async def on_ready():
 
+    
     member_counter.start()
     status_1.start()
     status_2.start()
@@ -26,7 +30,24 @@ async def on_ready():
     tr3xGamingWebsiteStatus.start()
     await LoginOutput()
     await tr3xBotStatusOnline()
-    
+    #await rulesedit()
+
+
+async def rulesedit():  # edit to update rules message
+    channel = bot.get_channel(803240539578302524)
+    message = await channel.fetch_message(860636421047320627)
+    tr3x = bot.get_user(633412273641095188)
+    embed = discord.Embed(title="",description= "",color=0x075FB2)                        
+    embed.add_field(name="To get access to the complete server and to use all functions react to this message but take in mind:\n\n**If you react to the message you accept all rules below as well as the general Discord TOS ( https://discord.com/terms )**\n\n",value="\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",inline=False)
+    embed.add_field(name=" Languages",value="\n>>> *English and German are the only allowed languages on this server*",inline=False)
+    embed.add_field(name=" Rasism/Discrimination",value="\n>>> *Rasism and any sort of Discrimination is of course not allowed and will be punished with a permanent ban*",inline=False)
+    embed.add_field(name=" Advertising",value="\n>>> *To promote something on this server it has to be agreed by* {}".format(tr3x.mention),inline=False)
+    embed.add_field(name=" Trolling",value="\n>>> *If you annoy or troll someone all the time you can expect a timeout/ban*",inline=False)
+    embed.add_field(name=" Bot sabutage",value="\n>>> *If you execute the tr3xBot's commands unnecessarily often or with the intention of provoking an error youll get banned asap (meme/nsfw commands can of course be used as often as you want, this rule means for example spamming play and stop commands unnecessarily)*",inline=True)
+    embed.add_field(name=" Be friendly and respectful",value="\n>>> *Treat everyone, not only on this server, in a friendly and respectful way and accept everyone, even if you may have a different view of certain things than this person, as he/she/... is*",inline=False)
+    embed.set_image(url="https://cdn.discordapp.com/attachments/695384979495977011/788086281846390804/Rules.png")
+    embed.set_footer(text="Only reaction on ✅ will count as accepted ")
+    await message.edit(embed=embed)
 
 async def LoginOutput():
 
@@ -180,6 +201,7 @@ async def help(ctx):
     embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
     embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
     embed.add_field(name="You can find my Commands here:", value="https://tr3xgaming.herokuapp.com/html/tr3xbot/commands.html", inline=False)
+    embed.set_thumbnail(url=ctx.guild.icon_url)
     
     await ctx.channel.purge(limit=1)
     await ctx.author.send(embed=embed)
