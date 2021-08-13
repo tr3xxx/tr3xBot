@@ -1,4 +1,5 @@
-import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,urllib
+import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,urllib,json
+from discord import message
 from typing import Text
 from os import name
 from discord.ext import commands, tasks
@@ -17,6 +18,7 @@ botid = 830842260462632992
 queue = []
 slash = InteractionClient(bot)
 
+
 @bot.event
 async def on_ready():
 
@@ -29,18 +31,23 @@ async def on_ready():
     newsGER.start()
     newsENG.start()
     tr3xGamingWebsiteStatus.start()
+    rulesedit.start()
+    createticket.start()
     await LoginOutput()
     await tr3xBotStatusOnline()
-    await rulesedit()
+    
 
 async def LoginOutput():
-
+    log = bot.get_channel(875700881360846899)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot))
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Successfully started")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
-
+    
+    
+    await log.send("Bot started")
 async def tr3xBotStatusOnline():
 
+    log = bot.get_channel(875700881360846899)
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(871558788388360223)
     tr3x = bot.get_user(633412273641095188)
@@ -49,10 +56,11 @@ async def tr3xBotStatusOnline():
                               color=0x0CFF00)
     botonline.set_footer(text="presents by tr3xBot")
     await statusmsg.edit(embed=botonline)
+    await log.send("Changed Bot-Status in {} to Online".format(statuschannel.mention))
 
 @tasks.loop(hours=1)
 async def tr3xGamingWebsiteStatus():
-
+    log = bot.get_channel(875700881360846899)
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(873324711650672640)
     tr3x = bot.get_user(633412273641095188)
@@ -63,14 +71,18 @@ async def tr3xGamingWebsiteStatus():
                                         color=0xff0000)
         Websiteoff.set_footer(text="presents by tr3xBot")
         await statusmsg.edit(embed=Websiteoff)
+        await log.send("Changed Website-Status in {} to Offline".format(statuschannel.mention))
     else:
         Websiteon = discord.Embed(title="**tr3xGaming Website Status**", url='https://tr3xgaming.herokuapp.com/',
                               description= '`tr3xgaming.herokuapp.com` is currently online ✅ \n \n If you experience problems please get in contact with {} asap'.format(tr3x.mention),
                               color=0x0CFF00)
         Websiteon.set_footer(text="presents by tr3xBot")
         await statusmsg.edit(embed=Websiteon)
+        await log.send("Changed Website-Status in {} to Online".format(statuschannel.mention))
 
+@tasks.loop(hours=1)
 async def rulesedit(): 
+    log = bot.get_channel(875700881360846899)
     channel = bot.get_channel(803240539578302524)
     Rulemessage = await channel.fetch_message(860636421047320627)
     tr3x = bot.get_user(633412273641095188)
@@ -95,16 +107,71 @@ async def rulesedit():
     msg = await Rulemessage.edit(embed=embed,
         components=[button]
     )
+    await log.send("Rule-Button Listener active")
     while True:
-        
         inter = await Rulemessage.wait_for_button_click()
         if discord.utils.get(inter.author.roles, name="Member") is None:
             Role = discord.utils.get(Rulemessage.guild.roles, name="Member")
             await inter.author.add_roles(Role,reason=None)
             await inter.reply("{} accepted the Rules".format(inter.author.mention), delete_after= 5.0)   
+            await log.send("{} accepted the Rules".format(inter.author))
         else:
             await inter.author.send("You already accepted the Rules.")
-    
+            await log.send("{} failed to accept the Rules - Already accepted".format(inter.author))
+
+@tasks.loop(hours=1)
+async def createticket(): 
+    log = bot.get_channel(875700881360846899)
+    guild = bot.get_guild(718926812033581108)
+    ticketchannel = bot.get_channel(875681346666774578)
+    ticketmessage = await ticketchannel.fetch_message(875681774527725588)
+
+    embed = discord.Embed(title="Ticket-Support",description="If you need Help, have an Server certain Question or wanna give Feedback, create an Ticket and an Mod will take care of your business",color=0x075FB2)  
+    embed.set_thumbnail(url="https://cdn.iconscout.com/icon/premium/png-512-thumb/contact-support-2452176-2029802.png") 
+
+       
+    button = ActionRow(
+        Button(
+            style=ButtonStyle.green,
+            label="Create Ticket",
+            custom_id="green"
+        ),
+    )
+    msg = await ticketmessage.edit(embed=embed,
+        components=[button]
+    )
+    await log.send("Ticket-Button Listener active")
+    while True:
+        inter = await ticketmessage.wait_for_button_click()
+        category =  bot.get_channel(875681228303532032)
+        Modrole = discord.utils.get(guild.roles, name="Mods")
+        overwrites = {
+            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            inter.author: discord.PermissionOverwrite(read_messages=True),
+            Modrole: discord.PermissionOverwrite(read_messages=True)
+        }
+        ticket = await guild.create_text_channel(category=category,name="ticket "+str(random.randint(2000,9999)), overwrites=overwrites)
+        await inter.reply("{} your ticket {} has been created!".format(inter.author.mention,ticket.mention), delete_after= 5.0)
+
+        embedTT = discord.Embed(title="Ticket-Support",description="Please describe your problem in detail and precisely, if necessary, indicate reproduction steps \n A moderator will deal with your problem soon\n\n If your Problem has been solved or you accidentally created an ticket write `tsolved` to delete your ticket",color=0x075FB2)
+        await ticket.send(embed=embedTT)
+        await log.send("Ticket {} created by {}".format(ticket.mention,inter.author))
+
+        
+@bot.command()
+async def solved(ctx):
+    log = bot.get_channel(875700881360846899)
+    guild = bot.get_guild(718926812033581108)
+    if ctx.channel.category == bot.get_channel(875681228303532032):
+         if ctx.channel != bot.get_channel(875681346666774578):
+            members = ctx.channel.members
+            for member in members:
+                if member != guild.me:
+                    await member.send(str(ctx.channel.name)+" has been solved and closed")
+            await ctx.channel.delete()
+            await log.send("Ticket {} solved by {}".format(ctx.channel,ctx.author))
+              
+        
 
 
 async def background_task():
@@ -114,7 +181,7 @@ async def background_task():
         if console_input == "exit" or console_input == "tdc" or console_input == "update":
             if console_input == "exit" or console_input =="tdc":
                 guild = bot.get_guild(718926812033581108)
-
+                log = bot.get_channel(875700881360846899)
                 statuschannel = bot.get_channel(860642601098280970)
                 statusmsg = await statuschannel.fetch_message(871558788388360223)
                 botoffline = discord.Embed(title="**tr3xBot Status**",
@@ -137,6 +204,7 @@ async def background_task():
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(bot)," is Offline now ","on:",guild.name)
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot was shutdowned via console")
+                await log.send("Bot offline via Console")
                 await bot.close()
             if console_input == "update":
                 guild = bot.get_guild(718926812033581108) 
@@ -167,15 +235,23 @@ async def status_2():
     
 @tasks.loop(seconds=5.0)
 async def boost():
+    log = bot.get_channel(875700881360846899)
     guild = bot.get_guild(718926812033581108)
-    boostschannel = guild.get_channel(861753968890871839)
+    boostchannel = guild.get_channel(861753968890871839)
+    beforeboost = boostchannel.name
     boosts = guild.premium_subscription_count
-    await boostschannel.edit(name = f"🌐 𝘽𝙤𝙤𝙨𝙩𝙨 : {boosts}")
+    await boostchannel.edit(name = f"🌐 𝘽𝙤𝙤𝙨𝙩𝙨 : {boosts}")
+    
+    if beforeboost != boostchannel.name:
+        await log.send("Online Counter got updated from {} to {}".format((str(beforeboost)[10:]),(str(boostchannel.name)[10:])))
 @tasks.loop(seconds=10.0)
 async def member_counter():
+    log = bot.get_channel(875700881360846899)
     guild = bot.get_guild(718926812033581108)
     channelmember = guild.get_channel(858711678316052500)
     channelonline = guild.get_channel(861365241413107732)
+    beforeonline = channelonline.name
+    beforemember = channelmember.name
     memberings=0
     online=0
     members = bot.guilds[0].members 
@@ -188,8 +264,13 @@ async def member_counter():
     await channelmember.edit(name = f'⚫ 𝙈𝙚𝙢𝙗𝙚𝙧 : {guild.member_count}')
     await channelonline.edit(name = f'🟢 𝙊𝙣𝙡𝙞𝙣𝙚 : {online}')
 
+    if beforeonline != channelonline.name:
+        await log.send("Online Counter got updated from {} to {}".format((str(beforeonline)[10:]),(str(channelonline.name)[10:])))
+    if beforemember != channelmember.name:
+        await log.send("Member Counter got updated from {} to {}".format((str(beforemember)[10:]),(str(channelmember.name)[10:])))
 @bot.event
 async def on_message(message):
+    log = bot.get_channel(875700881360846899)
     if message.channel.id == 803764491988107334:
         if str(message.content).startswith(bot.command_prefix):
             pass
@@ -199,15 +280,17 @@ async def on_message(message):
             else:
                 await message.channel.purge(limit=1)
                 await message.author.send("You are not allowed to send messages which aren't commands to the '"+str(message.channel)+"' channel")
+                await log.send("Message blocked ({}) in {} from {}".format(message.content,message.channel.mention,message.author))
     if message.channel.id == 803909189990088725:
         if str(message.content).startswith(bot.command_prefix):
             await message.channel.purge(limit=1)
             await message.author.send("You are not allowed to send commands to the '"+str(message.channel)+"' channel, Please use the '"+str(message.guild.get_channel(803764491988107334))+"' channel")
+            await log.send("Message blocked ({}) in {} from {}".format(message.content,message.channel.mention,message.author))
         else:
             pass
-
-    await bot.process_commands(message)
     
+    await bot.process_commands(message)
+
 @bot.command() 
 async def say(ctx,*, arg: str = None): 
     await ctx.channel.purge(limit=1) 
@@ -230,6 +313,7 @@ async def help(ctx):
 
 @bot.command()
 async def embed(ctx, *, arg: str = None): 
+    log = bot.get_channel(875700881360846899)
     if arg is None:
         await ctx.send("To create an Embed use the following template (Title,Describtion,Footer)")
     else:            
@@ -241,12 +325,13 @@ async def embed(ctx, *, arg: str = None):
             embed.set_footer(text=args[2])
             await ctx.channel.purge(limit=1)
             await ctx.send(embed=embed)
+            await log.send("Embed has been created in {} by {}".format(ctx.channel.mention,ctx.author))
         
          
 @bot.command()
-@commands.has_permissions(administrator=True)
+@commands.has_permissions(manage_messages=True)
 async def clear(ctx,arg: str = None):
-
+    log = bot.get_channel(875700881360846899)
     if arg is None:
         await ctx.channel.purge(limit=1)
         await ctx.author.send("How many Messaages should i delete? (tclear x)")
@@ -261,6 +346,7 @@ async def clear(ctx,arg: str = None):
                                     color=0x00ffcc)
                     await ctx.channel.purge(limit=1)
                     await ctx.send(embed=embed, delete_after= 10.0)
+                    await log.send("{} Messages got deleted in {} by {}".format(count,ctx.channel.mention,ctx.author))
         
 @bot.command()
 async def roulette(ctx,arg: str = None):
@@ -546,6 +632,7 @@ async def leave(ctx):
 
 @bot.command()
 async def userlimit(ctx,arg: str = None):
+    log = bot.get_channel(875700881360846899)
     if arg is None:
         await ctx.send("To give a channel a userlimit use the followning template (ex. tuserlimit x )")
     else:
@@ -557,13 +644,16 @@ async def userlimit(ctx,arg: str = None):
                     await ctx.send("Value should be less than or equal to 99")
                 else:
                     await ctx.send("Userlimit of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" from "+str(ctx.author.voice.channel.user_limit)+" to "+arg)
+                    await log.send("Userlimit of {} was changed by "+str(ctx.author)+" from "+str(ctx.author.voice.channel.user_limit)+" to "+arg).format(ctx.author.voice.channel)
                     await ctx.author.voice.channel.edit(user_limit=int(arg))
+                    
                     
             else:
                 await ctx.send("You dont have the permission to edit channels outside the Talks Category")
 
 @bot.command()
 async def talkname(ctx,*,arg: str = None):
+    log = bot.get_channel(875700881360846899)
     if arg is None:
         await ctx.send("To give a channel a custom name use the followning template (ex. ttalkname x x x x x x )")
     else:
@@ -571,48 +661,75 @@ async def talkname(ctx,*,arg: str = None):
             await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
         else:
             if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
-                if len(arg) > 15:
+                if len(arg) > 7:
                     await ctx.send("Please choose a shorter Talkname")
                 else:
-                    await ctx.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+arg+"'")
-                    await ctx.author.voice.channel.edit(name=str(arg))
+                    newName = (str(ctx.author.voice.channel.name)+" ["+str(arg)+"]")
+                    await ctx.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+newName+"'")
+                    await log.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+newName+"'")
+                    await ctx.author.voice.channel.edit(name=newName)
                 
             else:
                 await ctx.send('You dont have the permission to edit channels outside the Talks Category')
 
+
 @bot.command()
-async def end(ctx):
+async def privat(ctx):
+    log = bot.get_channel(875700881360846899)
     if ctx.author.voice is None:
         await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
     else:
         if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
-            await ctx.send("Talk '"+str(ctx.author.voice.channel)+"' got deleted by "+str(ctx.author))
-            await ctx.author.voice.channel.delete()
-            
+            await ctx.send("Talk '"+str(ctx.author.voice.channel)+"' was made private by "+str(ctx.author))
+            await log.send("Talk '"+str(ctx.author.voice.channel)+"' was made private by "+str(ctx.author))
+            newName = (str(ctx.author.voice.channel.name)+" ["+"private"+"]")
+            await ctx.author.voice.channel.edit(name=newName)
+            await ctx.author.voice.channel.edit(user_limit=len(ctx.author.voice.channel.members))
             
         else:
             await ctx.send('You dont have the permission to edit channels outside the Talks Category')
 
 
 
+@bot.command()
+async def end(ctx):
+    log = bot.get_channel(875700881360846899)
+    if ctx.author.voice is None:
+        await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
+    else:
+        if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
+            await ctx.send("Talk '"+str(ctx.author.voice.channel)+"' got deleted by "+str(ctx.author))
+            await log.send("Talk '"+str(ctx.author.voice.channel)+"' got deleted by "+str(ctx.author))
+            await ctx.author.voice.channel.delete()
+            
+            
+        else:
+            await ctx.send('You dont have the permission to edit channels outside the Talks Category')
 
 @bot.event
 async def on_voice_state_update(member, before, after):
     guild = member.guild
+    log = bot.get_channel(875700881360846899)
     voicehub = guild.get_channel(873323443163115560)
     Talkcategory = guild.get_channel(858020017822892092)
+    afk = guild.get_channel(859718892334350356)
+    afkcategory = guild.get_channel(751729686270312510)
 
     if after.channel == voicehub:
         channel = await guild.create_voice_channel(
-            name=str(member.name)+"`s channel",
+            name="#"+str(len(Talkcategory.channels))+" Talk",
             category=Talkcategory,
             reason=None,
             bitrate= guild.bitrate_limit
         )
         await member.move_to(channel)
+        await log.send("{} got created by {} via {}".format(channel.name,member,after.channel))
+
     try:
         if not before.channel.members and before.channel.category == Talkcategory and before.channel != voicehub:
+            await log.send("{} got deleted".format(before.channel))
             await before.channel.delete()
+            
     except Exception as err:
         pass
 
@@ -852,6 +969,7 @@ async def anime(ctx):
 
 @bot.event
 async def on_member_join(member):
+    log = bot.get_channel(875700881360846899)
     welcomechannel = bot.get_channel(828410713294372885)
     guild = bot.get_guild(718926812033581108)
     await welcomechannel.send(f"Welcome {member.mention} on the tr3xGaming Discord Server !" )
@@ -860,6 +978,7 @@ async def on_member_join(member):
     embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
     embed.add_field(name="You can find my Commands here:", value="https://tr3xgaming.herokuapp.com/html/tr3xbot/commands.html", inline=False)
     await member.send(embed=embed)
+    await log.send("{} joined the Server".format(member))
 
 @tasks.loop(hours=1)
 async def fg():
