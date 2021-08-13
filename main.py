@@ -80,6 +80,7 @@ async def tr3xGamingWebsiteStatus():
         await statusmsg.edit(embed=Websiteon)
         await log.send("Changed Website-Status in {} to Online".format(statuschannel.mention))
 
+
 @tasks.loop(hours=1)
 async def rulesedit(): 
     log = bot.get_channel(875700881360846899)
@@ -228,7 +229,7 @@ async def background_task():
 
 @tasks.loop(seconds=10.0)
 async def status_1():
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="th for Help"),status=discord.Status.online)
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="thelp "),status=discord.Status.online)
 @tasks.loop(seconds=5.0)
 async def status_2():    
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="with code"),status=discord.Status.online)
@@ -299,16 +300,80 @@ async def say(ctx,*, arg: str = None):
     else:
         await ctx.send(arg)
 
+
 @bot.command(aliases=["h"]) 
-async def help(ctx):
-    
-    embed=discord.Embed(title="Hey, i am the tr3xBot from the tr3xGaming Server :D", color=0x00ffcc)
-    embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
-    embed.add_field(name="You can find my Commands here:", value="https://tr3xgaming.herokuapp.com/html/tr3xbot/commands.html", inline=False)
-    embed.set_thumbnail(url=ctx.guild.icon_url)
-    
-    await ctx.channel.purge(limit=1)
-    await ctx.author.send(embed=embed)
+async def help(ctx, arg: str = None):
+   
+    await ctx.author.create_dm()
+    if ctx.channel.id == ctx.author.dm_channel.id:
+        if arg is None:
+            embed=discord.Embed(title="tr3xBot - Help", description= "Use the following Commands for the Specific help commands here in the direct Messages",color=0x075FB2)
+            embed.add_field(name="Basic Commands",value="\n>>> *thelp basic*",inline=False)
+            embed.add_field(name="Music Commands",value="\n>>> *thelp music*",inline=False)
+            embed.add_field(name="VoiceChannel Commands",value="\n>>> *thelp vc*",inline=False)
+            embed.add_field(name="Meme Commands",value="\n>>> *thelp meme*",inline=False)
+            embed.add_field(name="NSFW Commands",value="\n>>> *thelp nsfw*",inline=False)
+            await ctx.author.send(embed=embed)
+        if arg == "basic":
+            embed=discord.Embed(title="tr3xBot - Basic Commands", color=0x075FB2)
+            embed.add_field(name="thelp",value="\n>>> *Need some Help with the Commands? thelp gotcha you*",inline=False)
+            embed.add_field(name="tclear",value="\n>>> *Oh so you want to blur tracks? - Only aviable for Admins/Mods*",inline=False)
+            embed.add_field(name="tembed",value="\n>>> *Normal Messages? Boriiing get some Style in it*",inline=False)
+            embed.add_field(name="tsay",value="\n>>> *I dont want to say anything you want, but i have to... - sadly noises*",inline=False)
+            embed.add_field(name="tkill",value="\n>>> *Yea kill this mother fuc... funtioner , yea, mother functioner - dont ask what it is*",inline=False)
+            embed.add_field(name="tdie",value="\n>>> *No no noooo*",inline=False)
+            embed.add_field(name="troulette",value="\n>>> *Wanna gamble a little bit ?*",inline=False)
+            embed.add_field(name="tcoc",value="\n>>> *Wanna flex with your clash of clans village? here we go*",inline=False)
+            embed.add_field(name="thug",value="\n>>> *Oh you had a hard day? come over here*",inline=False)
+            await ctx.author.send(embed=embed)
+        if arg == "music":
+            embed=discord.Embed(title="tr3xBot - Music Commands", color=0x075FB2)
+            embed.add_field(name="tplay",value="\n>>> *rap,pop or maybe rock ? what do you want to hear today, i got it*",inline=False)
+            embed.add_field(name="tstop",value="\n>>> *oh the party is over already?*",inline=False)
+            embed.add_field(name="tpause",value="\n>>> *little pause, we'll be right back*",inline=False)
+            embed.add_field(name="tresume",value="\n>>> *I dont want to say anything you want, but i have to... - sadly noises*",inline=False)
+            embed.add_field(name="tleave",value="\n>>> *tr3xbot is out*",inline=False)
+            await ctx.author.send(embed=embed)
+        if arg == "vc":
+            embed=discord.Embed(title="tr3xBot - VoiceChannel Commands", color=0x075FB2)
+            embed.add_field(name="ttalkname",value="\n>>> *Customize the Name of your VoiceChannel*",inline=False)
+            embed.add_field(name="tuserlimit",value="\n>>> *Customize the User-Limit of your VoiceChannel*",inline=False)
+            embed.add_field(name="tprivate",value="\n>>> *Wanna be alone? Make your VoiceChannel Private*",inline=False)
+            embed.add_field(name="tend",value="\n>>> *The end is near - use this carefully*",inline=False)
+            await ctx.author.send(embed=embed)
+        if arg == "meme":
+            embed=discord.Embed(title="tr3xBot - Meme Commands", color=0x075FB2)
+            embed.add_field(name="tmeme",value="\n>>> *Some classic memes are still the best, isnt it?*",inline=False)
+            embed.add_field(name="tcats",value="\n>>> *Miau*",inline=False)
+            embed.add_field(name="tgif",value="\n>>> *Oh yea gifs are also here*",inline=False)
+            embed.add_field(name="twaifu",value="\n>>> *You want it - You got it*",inline=False)
+            embed.add_field(name="tanime",value="\n>>> *Anime Memes - isnt anime a meme itself?*",inline=False)
+            embed.add_field(name="tdankmemes",value="\n>>> *thing about it*",inline=False)
+            await ctx.author.send(embed=embed)
+        if arg == "nsfw":
+            embed=discord.Embed(title="tr3xBot - Meme Commands", color=0x075FB2)
+            embed.add_field(name="tass",value="\n>>> *Classic - always good*",inline=False)
+            embed.add_field(name="tpussy",value="\n>>> *Classic and always good aswell*",inline=False)
+            embed.add_field(name="tteen",value="\n>>> *are we young & hungry ?*",inline=False)
+            embed.add_field(name="tmilf",value="\n>>> *Oh you like it old*",inline=False)
+            embed.add_field(name="tcum",value="\n>>> *Why would you like to see this?*",inline=False)
+            embed.add_field(name="tdick",value="\n>>> *she sayed 'he's not that small' have to check the competitor*",inline=False)
+            embed.add_field(name="tlesbian",value="\n>>> *Two are always twice as much as one - double fun*",inline=False)
+            embed.add_field(name="thentai",value="\n>>> *If you like it - take it*",inline=False)
+            await ctx.author.send(embed=embed)
+    else:
+        if arg is None:
+            embed=discord.Embed(title="tr3xBot - Help", description= "Use the following Commands for the Specific help commands here in the direct Messages",color=0x075FB2)
+            embed.add_field(name="Basic Commands",value="\n>>> *thelp basic*",inline=False)
+            embed.add_field(name="Music Commands",value="\n>>> *thelp music*",inline=False)
+            embed.add_field(name="VoiceChannel Commands",value="\n>>> *thelp vc*",inline=False)
+            embed.add_field(name="Meme Commands",value="\n>>> *thelp meme*",inline=False)
+            embed.add_field(name="NSFW Commands",value="\n>>> *thelp nsfw*",inline=False)
+            await ctx.channel.purge(limit=1)
+            await ctx.author.send(embed=embed)
+        else:
+            await ctx.send("Specific help commands are only available in private chats, use `thelp` first")
+
 
 
 @bot.command()
@@ -321,7 +386,7 @@ async def embed(ctx, *, arg: str = None):
         if len(args) == 3:
             embed = discord.Embed(title = args[0],
                                     description = args[1],
-                                    color=0x00ffcc)
+                                    color=0x075FB2)
             embed.set_footer(text=args[2])
             await ctx.channel.purge(limit=1)
             await ctx.send(embed=embed)
@@ -343,7 +408,7 @@ async def clear(ctx,arg: str = None):
                     count = int(args[0])+1
                     deleted = await ctx.channel.purge(limit=count)
                     embed = discord.Embed(title = '{} Messages deleted.'.format(len(deleted)-1),
-                                    color=0x00ffcc)
+                                    color=0x075FB2)
                     await ctx.channel.purge(limit=1)
                     await ctx.send(embed=embed, delete_after= 10.0)
                     await log.send("{} Messages got deleted in {} by {}".format(count,ctx.channel.mention,ctx.author))
@@ -414,7 +479,7 @@ async def coc(ctx, arg: str = None):
                 url = "https://static.wikia.nocookie.net/clashofclans/images/e/e0/Town_Hall14-1.png/revision/latest/scale-to-width-down/110?cb=20210413000722"
             
             
-            embed=discord.Embed(title="Clash of Clans Stats", color=0xf0d005)
+            embed=discord.Embed(title="Clash of Clans Stats", color=0x075FB2)
             embed.add_field(name="Player", value=player.name, inline=True)
             embed.add_field(name="Level", value=player.exp_level, inline=True)
             embed.add_field(name="Townhall", value=player.town_hall, inline=True)
@@ -487,12 +552,12 @@ class YTDLSource(discord.PCMVolumeTransformer):
 async def play(ctx, *, arg: str = None):
 
     if arg is None:
-        embedER = discord.Embed(title="Please tell what i should play (ex. tplay lalala or tplay <yt url>)",color=0x00ffcc)
+        embedER = discord.Embed(title="Please tell what i should play (ex. tplay lalala or tplay <yt url>)",color=0x075FB2)
         await ctx.send(embed=embedER)
     else:
         url = arg
         if ctx.author.voice is None:
-            embed = discord.Embed(title="Please connect to an Voice channel first to play Music",colour=0x00ffcc)
+            embed = discord.Embed(title="Please connect to an Voice channel first to play Music",color=0x075FB2)
             await ctx.send(embed=embed)
         else:
             if ctx.voice_client == None:
@@ -502,12 +567,12 @@ async def play(ctx, *, arg: str = None):
                             global queue
                             queue.append(url)
                             player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
-                            embed = discord.Embed(title="Queued :musical_note:", description=f'[{player.title}]({player.url}) added to queue!',colour=0x00ffcc)
+                            embed = discord.Embed(title="Queued :musical_note:", description=f'[{player.title}]({player.url}) added to queue!',color=0x075FB2)
                             await ctx.send(embed=embed)
                         else:
                             player = await YTDLSource.from_url(url, loop=bot.loop, stream=True)
                             ctx.voice_client.play(player, after=lambda e: play_next(ctx))
-                            embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+                            embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",color=0x075FB2)
                             await ctx.send(embed=embed)
 
 def play_next(ctx):
@@ -526,7 +591,7 @@ async def n(ctx):
             player = await YTDLSource.from_url(queue[0], loop=bot.loop, stream=True)
             voice_channel.play(player, after=lambda e: play_next(ctx))
 
-        embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+        embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",color=0x075FB2)
         await ctx.send(embed=embed)
         del(queue[0])
     
@@ -536,7 +601,7 @@ async def skip(ctx):
     global queue
 
     if ctx.author.voice is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to skip",colour=0x00ffcc)
+        embed = discord.Embed(title="Please connect to an Voice channel first to skip",color=0x075FB2)
         await ctx.send(embed=embed)
     else:
         if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
@@ -552,82 +617,82 @@ async def skip(ctx):
                         player = await YTDLSource.from_url(queue[0], loop=bot.loop, stream=True)
                         voice_channel.play(player, after=lambda e: play_next(ctx))
 
-                    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",colour=0x00ffcc)
+                    embed = discord.Embed(title="Now playing :musical_note:", description=f"[{player.title}]({player.url})",color=0x075FB2)
                     await ctx.send(embed=embed)
                     del(queue[0])
                 else:
                     await ctx.send("No more Songs queued!")
             else:
-                embed = discord.Embed(title="I am not playing music at the moment",colour=0x00ffcc)
+                embed = discord.Embed(title="I am not playing music at the moment",color=0x075FB2)
                 await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",color=0x075FB2)
             await ctx.send(embed=embed)
 
 
 @bot.command()
 async def pause( ctx):
     if ctx.author.voice is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to pause me",colour=0x00ffcc)
+        embed = discord.Embed(title="Please connect to an Voice channel first to pause me",color=0x075FB2)
         await ctx.send(embed=embed)
     else:
         if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
             if ctx.voice_client.is_playing():
                 ctx.voice_client.pause()
-                embed = discord.Embed(title="Paused :pause_button:",colour=0x00ffcc)
+                embed = discord.Embed(title="Paused :pause_button:",color=0x075FB2)
                 await ctx.send(embed=embed)
             else:
-                embed = discord.Embed(title=" I am not playing music at the moment",colour=0x00ffcc)
+                embed = discord.Embed(title=" I am not playing music at the moment",color=0x075FB2)
                 await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",color=0x075FB2)
             await ctx.send(embed=embed)
     
 @bot.command()
 async def resume( ctx):
     if ctx.author.voice is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to resume my audio",colour=0x00ffcc)
+        embed = discord.Embed(title="Please connect to an Voice channel first to resume my audio",color=0x075FB2)
         await ctx.send(embed=embed)
     else:
         if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
             ctx.voice_client.resume()
-            embed = discord.Embed(title="Resuming :play_pause: ",colour=0x00ffcc)
+            embed = discord.Embed(title="Resuming :play_pause: ",color=0x075FB2)
             await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(title="I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            embed = discord.Embed(title="I am not connected to any Voice Chat at the moment",color=0x075FB2)
             await ctx.send(embed=embed)
 
 @bot.command()
 async def stop( ctx):
     if ctx.author.voice is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to stop me",colour=0x00ffcc)
+        embed = discord.Embed(title="Please connect to an Voice channel first to stop me",color=0x075FB2)
         await ctx.send(embed=embed)
     else:
         if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
             if ctx.voice_client.is_playing():
                 try:
                     await ctx.voice_client.stop()
-                    embed = discord.Embed(title="Stopped :stop_button:",colour=0x00ffcc)
+                    embed = discord.Embed(title="Stopped :stop_button:",color=0x075FB2)
                     await ctx.send(embed=embed)
                 except Exception as err:
                     pass
             else:
-                embed = discord.Embed(title=" I am not playing music at the moment",colour=0x00ffcc)
+                embed = discord.Embed(title=" I am not playing music at the moment",color=0x075FB2)
                 await ctx.send(embed=embed)
         else:
-            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",color=0x075FB2)
             await ctx.send(embed=embed)
 
 @bot.command()
 async def leave(ctx):
     if ctx.author.voice is None:
-        embed = discord.Embed(title="Please connect to an Voice channel first to make me leave the Channel",colour=0x00ffcc)
+        embed = discord.Embed(title="Please connect to an Voice channel first to make me leave the Channel",color=0x075FB2)
         await ctx.send(embed=embed)
     else:
         if discord.utils.get(bot.voice_clients, guild=ctx.guild) != None:
             await ctx.voice_client.disconnect()
         else:
-            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",colour=0x00ffcc)
+            embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",color=0x075FB2)
             await ctx.send(embed=embed)
 
 @bot.command()
