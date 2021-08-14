@@ -730,8 +730,8 @@ async def talkname(ctx,*,arg: str = None):
                     await ctx.send("Please choose a shorter Talkname")
                 else:
                     newName = (str(ctx.author.voice.channel.name)+" ["+str(arg)+"]")
-                    await ctx.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+newName+"'")
-                    await log.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+newName+"'")
+                    await ctx.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author.mention)+" to '"+newName+"'")
+                    await log.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author.mention)+" to '"+newName+"'")
                     await ctx.author.voice.channel.edit(name=newName)
                 
             else:
@@ -745,8 +745,8 @@ async def privat(ctx):
         await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
     else:
         if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
-            await ctx.send("Talk '"+str(ctx.author.voice.channel)+"' was made private by "+str(ctx.author))
-            await log.send("Talk '"+str(ctx.author.voice.channel)+"' was made private by "+str(ctx.author))
+            await ctx.send("Talk '"+str(ctx.author.voice.channel)+"' was made private by "+str(ctx.author.mention))
+            await log.send("Talk '"+str(ctx.author.voice.channel)+"' was made private by "+str(ctx.author.mention))
             newName = (str(ctx.author.voice.channel.name)+" ["+"private"+"]")
             await ctx.author.voice.channel.edit(name=newName)
             await ctx.author.voice.channel.edit(user_limit=len(ctx.author.voice.channel.members))
@@ -763,8 +763,8 @@ async def end(ctx):
         await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
     else:
         if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == owner:
-            await ctx.send("Talk '"+str(ctx.author.voice.channel)+"' got deleted by "+str(ctx.author))
-            await log.send("Talk '"+str(ctx.author.voice.channel)+"' got deleted by "+str(ctx.author))
+            await ctx.send("Talk '"+str(ctx.author.voice.channel)+"' got deleted by "+str(ctx.author.mention))
+            await log.send("Talk '"+str(ctx.author.voice.channel)+"' got deleted by "+str(ctx.author.mention))
             await ctx.author.voice.channel.delete()
             
             
@@ -778,17 +778,23 @@ async def on_voice_state_update(member, before, after):
     voicehub = guild.get_channel(873323443163115560)
     Talkcategory = guild.get_channel(858020017822892092)
     afk = guild.get_channel(859718892334350356)
-    afkcategory = guild.get_channel(751729686270312510)
 
     if after.channel == voicehub:
         channel = await guild.create_voice_channel(
             name="#"+str(len(Talkcategory.channels))+" Talk",
             category=Talkcategory,
             reason=None,
-            bitrate= guild.bitrate_limit
+            bitrate= guild.bitrate_limit,
+            overwrites = {
+                guild.default_role: discord.PermissionOverwrite(view_channel=False)
+            }
         )
         await member.move_to(channel)
         await log.send("{} got created by {} via {}".format(channel.name,member,after.channel))
+
+    if after.channel == afk:
+        await member.send("You seem to be afk for a while, you got moved to the afk channel")
+        await log.send(str(member)+" is afk")
 
     try:
         if not before.channel.members and before.channel.category == Talkcategory and before.channel != voicehub:
