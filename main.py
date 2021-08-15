@@ -1,7 +1,4 @@
-import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,urllib,json
-from discord import message
-from typing import Text
-from os import name
+import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,urllib
 from discord.ext import commands, tasks
 from random import choice
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
@@ -36,13 +33,13 @@ async def on_ready():
     await LoginOutput()
     await tr3xBotStatusOnline()
     
+    
 
 async def LoginOutput():
     log = bot.get_channel(875700881360846899)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot))
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Successfully started")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
-    
     
     await log.send("Bot started")
 async def tr3xBotStatusOnline():
@@ -154,7 +151,7 @@ async def createticket():
         ticket = await guild.create_text_channel(category=category,name="ticket "+str(random.randint(2000,9999)), overwrites=overwrites)
         await inter.reply("{} your ticket {} has been created!".format(inter.author.mention,ticket.mention), delete_after= 5.0)
 
-        embedTT = discord.Embed(title="Ticket-Support",description="Please describe your problem in detail and precisely, if necessary, indicate reproduction steps \n A moderator will deal with your problem soon\n\n If your Problem has been solved or you accidentally created an ticket write `tsolved` to delete your ticket",color=0x075FB2)
+        embedTT = discord.Embed(title="Ticket-Support",description="Please describe your problem in detail and precisely, if necessary, indicate reproduction steps \nA moderator will deal with your problem soon\n\nIf your Problem has been solved or you accidentally created an ticket write `tsolved` to delete your ticket",color=0x075FB2)
         await ticket.send(embed=embedTT)
         await log.send("Ticket {} created by {}".format(ticket.mention,inter.author))
 
@@ -168,9 +165,9 @@ async def solved(ctx):
             members = ctx.channel.members
             for member in members:
                 if member != guild.me:
-                    await member.send(str(ctx.channel.name)+" has been solved and closed")
+                    await member.send(str(ctx.channel.name)+" has been solved and closed by "+str(ctx.author))
             await ctx.channel.delete()
-            await log.send("Ticket {} solved by {}".format(ctx.channel,ctx.author))
+            await log.send("Ticket {} has been solved by {}".format(ctx.channel,ctx.author))
               
         
 
@@ -322,6 +319,8 @@ async def help(ctx, arg: str = None):
             embed.add_field(name="tsay",value="\n>>> *I dont want to say anything you want, but i have to... - sadly noises*",inline=False)
             embed.add_field(name="tkill",value="\n>>> *Yea kill this mother fuc... funtioner , yea, mother functioner - dont ask what it is*",inline=False)
             embed.add_field(name="tdie",value="\n>>> *No no noooo*",inline=False)
+            embed.add_field(name="tdm",value="\n>>> *write someone a nice dm via me*",inline=False)
+            embed.add_field(name="tpfp",value="\n>>> *Why would you like to have someones pfp ? I doont know but go on*",inline=False)
             embed.add_field(name="troulette",value="\n>>> *Wanna gamble a little bit ?*",inline=False)
             embed.add_field(name="tcoc",value="\n>>> *Wanna flex with your clash of clans village? here we go*",inline=False)
             embed.add_field(name="thug",value="\n>>> *Oh you had a hard day? come over here*",inline=False)
@@ -358,6 +357,7 @@ async def help(ctx, arg: str = None):
             embed.add_field(name="tmilf",value="\n>>> *Oh you like it old*",inline=False)
             embed.add_field(name="tcum",value="\n>>> *Why would you like to see this?*",inline=False)
             embed.add_field(name="tdick",value="\n>>> *she sayed 'he's not that small' have to check the competitor*",inline=False)
+            embed.add_field(name="tsenddick",value="\n>>>*you friends will love it, trust me*",inline=False)
             embed.add_field(name="tlesbian",value="\n>>> *Two are always twice as much as one - double fun*",inline=False)
             embed.add_field(name="thentai",value="\n>>> *If you like it - take it*",inline=False)
             await ctx.author.send(embed=embed)
@@ -446,8 +446,11 @@ async def roulette(ctx,arg: str = None):
             await ctx.send("Im sorry, you lost")
                 
 @bot.command()
-async def hug(ctx):
-    await ctx.send("{} hugs himself :smiling_face_with_tear:".format(ctx.message.author.mention))
+async def hug(ctx, member: discord.Member = None):
+    if member is None:
+        await ctx.send("{} hugs himself :smiling_face_with_tear:".format(ctx.message.author.mention))
+    else:
+        await ctx.send("{} hugs {}".format(ctx.message.author.mention,member.mention))
 
 @bot.command()
 async def coc(ctx, arg: str = None):
@@ -500,22 +503,26 @@ async def coc(ctx, arg: str = None):
             await ctx.send(embed=embed)
         else:
             await ctx.send("Sorry ",playerInput," is not a Valid Playertag, try again")
-        
-api_key = "abbc964449ba2ad5a22facf4dd51fcaf"
-base_url = "http://api.openweathermap.org/data/2.5/weather?"
-
-
+ 
 @bot.command()
-async def kill(ctx,arg: str = None):
-    if arg is None:
+async def kill(ctx,member: discord.Member = None):
+    if member is None:
         await ctx.channel.purge(limit=1)
         await ctx.send("{}".format(ctx.message.author.mention)+" killed himself")
     else:
-        if arg != None:
-            await ctx.send("{}".format(ctx.message.author.mention)+" killed "+arg)
+        await ctx.send("{} killed {}".format(ctx.message.author.mention,member.mention))
             
+@bot.command()
+async def dm(ctx,member: discord.Member = None,*, arg):
+    await ctx.channel.purge(limit=1)
+    if arg is None:
+        await ctx.author.send("What should i send? (ex. tdm @tr3xBot I like you)")
+    else:
+        if member is None:
+            await ctx.author.send(arg)
         else:
-            await ctx.send("tell me who... tkill @example")
+            await member.send(arg)
+
 
 @bot.command()
 async def die(ctx):
@@ -647,6 +654,7 @@ async def pause( ctx):
         else:
             embed = discord.Embed(title=" I am not connected to any Voice Chat at the moment",color=0x075FB2)
             await ctx.send(embed=embed)
+    
     
 @bot.command()
 async def resume( ctx):
@@ -806,6 +814,46 @@ async def on_voice_state_update(member, before, after):
     except Exception as err:
         pass
 
+@bot.command()
+async def pfp(ctx,*, member: discord.Member = None):
+    if member is None:
+        embed = discord.Embed(title="{}'s profile picture".format(str(ctx.author)[:-5]), description="")
+        embed.set_image(url=ctx.author.avatar)
+        await ctx.send(embed=embed)
+    else:
+        embed = discord.Embed(title="{}'s profile picture".format(str(member)[:-5]), description="")
+        embed.set_image(url=member.avatar)
+        await ctx.send(embed=embed)
+
+@bot.command(pass_context=True)
+async def senddick(ctx,*,member: discord.Member = None):
+    if member is None:
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('dicks').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
+
+            embed = discord.Embed(title="Oh no an Owngoal", description="")
+            embed.set_image(url=submission.url)
+            await ctx.author.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
+    else:
+        nsfw = ctx.guild.get_channel(800715988794081281)
+        if ctx.channel == nsfw:
+            memes_submissions = reddit.subreddit('dicks').hot()
+            post_to_pick = random.randint(1, 100)
+            for i in range(0, post_to_pick):
+                submission = next(x for x in memes_submissions if not x.stickied)
+
+            embed = discord.Embed(title="Looks like someone had a gift for you", description="")
+            embed.set_image(url=submission.url)
+            await member.send(embed=embed)
+        else:
+            await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
+
 
 @bot.command()
 async def meme(ctx):
@@ -874,6 +922,7 @@ async def ass(ctx):
             await ctx.send(embed=embed)
         else:
             await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
+
 
 @bot.command(pass_context=True)
 async def teen(ctx):
