@@ -778,6 +778,7 @@ async def on_voice_state_update(member, before, after):
     voicehub = guild.get_channel(873323443163115560)
     Talkcategory = guild.get_channel(858020017822892092)
     afk = guild.get_channel(859718892334350356)
+    MemberRole = discord.utils.get(guild.roles, name="Member")
 
     if after.channel == voicehub:
         channel = await guild.create_voice_channel(
@@ -786,6 +787,7 @@ async def on_voice_state_update(member, before, after):
             reason=None,
             bitrate= guild.bitrate_limit,
             overwrites = {
+                MemberRole: discord.PermissionOverwrite(view_channel=True),
                 guild.default_role: discord.PermissionOverwrite(view_channel=False)
             }
         )
