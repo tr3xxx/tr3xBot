@@ -6,7 +6,7 @@ class help(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=['h'])
     async def help(self, ctx, arg: str = None):
         await ctx.author.create_dm()
         if ctx.channel.id == ctx.author.dm_channel.id:

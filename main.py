@@ -7,7 +7,6 @@ from dislash import InteractionClient, ActionRow, Button, ButtonStyle
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 
 bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
-
 reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',user_agent='tr3xBot')
 
 
@@ -21,9 +20,11 @@ for folder in os.listdir("modules/basic"):
     if os.path.exists(os.path.join("modules/basic", folder, "cog.py")):
      bot.load_extension(f"modules.basic.{folder}.cog")
 for folder in os.listdir("modules/nsfw"):
-    print(folder)
     if os.path.exists(os.path.join("modules/nsfw", folder, "cog.py")):
      bot.load_extension(f"modules.nsfw.{folder}.cog")
+for folder in os.listdir("modules/meme"):
+    if os.path.exists(os.path.join("modules/meme", folder, "cog.py")):
+     bot.load_extension(f"modules.meme.{folder}.cog")
     
  
 
@@ -573,100 +574,6 @@ async def on_voice_state_update(member, before, after):
             
     except Exception as err:
         pass
-
-
-
-@bot.command()
-async def meme(ctx):
-    async with ctx.typing():
-        memes_submissions = reddit.subreddit('memes').hot()
-        post_to_pick = random.randint(1, 100)
-        for i in range(0, post_to_pick):
-            submission = next(x for x in memes_submissions if not x.stickied)
-
-        embed = discord.Embed(title="", description="")
-        embed.set_image(url=submission.url)
-        await ctx.send(embed=embed)
-
-@bot.command(pass_context=True)
-async def dankmemes(ctx):
-    async with ctx.typing():
-        memes_submissions = reddit.subreddit('dankmemes').hot()
-        post_to_pick = random.randint(1, 100)
-        for i in range(0, post_to_pick):
-            submission = next(x for x in memes_submissions if not x.stickied)
-
-        embed = discord.Embed(title="", description="")
-        embed.set_image(url=submission.url)
-        await ctx.send(embed=embed)
-
-@bot.command(pass_context=True)
-async def cats(ctx):
-    async with ctx.typing():
-        memes_submissions = reddit.subreddit('cats').hot()
-        post_to_pick = random.randint(1, 100)
-        for i in range(0, post_to_pick):
-            submission = next(x for x in memes_submissions if not x.stickied)
-
-        embed = discord.Embed(title="", description="")
-        embed.set_image(url=submission.url)
-        await ctx.send(embed=embed)
-
-
-
-
-
-@bot.command(pass_context=True)
-async def gif(ctx):
-    async with ctx.typing():
-        memes_submissions = reddit.subreddit('gifs').hot()
-        post_to_pick = random.randint(1, 100)
-        for i in range(0, post_to_pick):
-            submission = next(x for x in memes_submissions if not x.stickied)
-
-        embed = discord.Embed(title="", description="")
-        embed.set_image(url=submission.url)
-        await ctx.send(embed=embed)
-
-
-@bot.command(pass_context=True)
-async def waifu(ctx):
-    async with ctx.typing():
-        memes_submissions = reddit.subreddit('waifusfortr3x').hot()
-        post_to_pick = random.randint(1, 40)
-        for i in range(0, post_to_pick):
-            submission = next(x for x in memes_submissions if not x.stickied)
-
-        embed = discord.Embed(title="", description="")
-        embed.set_image(url=submission.url)
-
-        alreadysended = False
-        messages = await ctx.history(limit=200).flatten()
-        for msg in messages:
-            embeds = msg.embeds
-            for embed in embeds:
-                if embed.image_url == submission.url:
-                    alreadysended = True
-                    break
-            if alreadysended == False:
-                await ctx.send(embed=embed)
-                break
-            else:
-                break
-        #await ctx.send(embed=embed)
-
-@bot.command(pass_context=True)
-async def anime(ctx):
-    async with ctx.typing():
-        memes_submissions = reddit.subreddit('Animemes').hot()
-        post_to_pick = random.randint(1, 100)
-        for i in range(0, post_to_pick):
-            submission = next(x for x in memes_submissions if not x.stickied)
-
-        embed = discord.Embed(title="", description="")
-        embed.set_image(url=submission.url)
-        await ctx.send(embed=embed)
-
 
 @bot.event
 async def on_member_join(member):
