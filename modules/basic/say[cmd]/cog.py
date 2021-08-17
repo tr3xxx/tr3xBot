@@ -1,7 +1,6 @@
 from discord.ext import commands
 
 class Say(commands.Cog):
-    """Receives say commands"""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
