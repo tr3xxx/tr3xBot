@@ -1,4 +1,4 @@
-import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,urllib
+import asyncio, time, requests, random, discord,youtube_dl, aioconsole,time,praw,coc,urllib,os
 from discord.ext import commands, tasks
 from random import choice
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
@@ -33,7 +33,10 @@ async def on_ready():
     await LoginOutput()
     await tr3xBotStatusOnline()
     
-    
+
+for folder in os.listdir("BotCommands"):
+    if os.path.exists(os.path.join("BotCommands", folder, "cog.py")):
+     bot.load_extension(f"BotCommands.{folder}.cog")
 
 async def LoginOutput():
     log = bot.get_channel(875700881360846899)
@@ -289,13 +292,7 @@ async def on_message(message):
     
     await bot.process_commands(message)
 
-@bot.command() 
-async def say(ctx,*, arg: str = None): 
-    await ctx.channel.purge(limit=1) 
-    if arg is None:
-        await ctx.send("What should i say ?")
-    else:
-        await ctx.send(arg)
+
 
 
 @bot.command(aliases=["h"]) 
