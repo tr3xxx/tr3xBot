@@ -36,30 +36,30 @@ for folder in os.listdir("modules/events"):
 
 @bot.event
 async def on_ready():
-    log = bot.get_channel(875700881360846899)
 
     for folder in os.listdir("modules/tasks"):
         if os.path.exists(os.path.join("modules/tasks", folder, "cog.py")):
             print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
             bot.load_extension(f"modules.tasks.{folder}.cog")
     
+    
+    
+
+    log = bot.get_channel(875700881360846899)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot))
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Successfully started")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
     await log.send("Bot started")
     
-    await statusonline()
-    
-
-async def statusonline():
-    log = bot.get_channel(875700881360846899)
     statuschannel = bot.get_channel(860642601098280970)
     statusmsg = await statuschannel.fetch_message(871558788388360223)
     tr3x = bot.get_user(633412273641095188)
-    botonline = discord.Embed(title="**tr3xBot Status**",description= '`tr3xBot` is currently online ✅ \n \n If you experience problems please get in contact with {} asap'.format(tr3x.mention),color=0x0CFF00)
+    botonline = discord.Embed(title="**tr3xBot Status**",
+                              description= '`tr3xBot` is currently online ✅ \n \n If you experience problems please get in contact with {} asap'.format(tr3x.mention),
+                              color=0x0CFF00)
     botonline.set_footer(text="presents by tr3xBot")
     await statusmsg.edit(embed=botonline)
     await log.send("Changed Bot-Status in {} to Online".format(statuschannel.mention))
-    
-    bot.run("ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.kfT7gSJUokKHamktiHR8SgvpXrg")
+
+bot.run("ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.kfT7gSJUokKHamktiHR8SgvpXrg")
 
