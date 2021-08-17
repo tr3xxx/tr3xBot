@@ -1,8 +1,6 @@
 import discord
 from discord.ext import commands
-
-owner = 633412273641095188
-botid = 830842260462632992
+from config import AFK_CHANNEL, BOT_LOG, TALK_CATEGORY, VOICEHUB_CHANNEL
 
 class on_voice_state_update(commands.Cog):
 
@@ -12,10 +10,10 @@ class on_voice_state_update(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         guild = member.guild
-        log = self.bot.get_channel(875700881360846899)
-        voicehub = guild.get_channel(873323443163115560)
-        Talkcategory = guild.get_channel(858020017822892092)
-        afk = guild.get_channel(859718892334350356)
+        log = self.bot.get_channel(BOT_LOG)
+        voicehub = guild.get_channel(VOICEHUB_CHANNEL)
+        Talkcategory = guild.get_channel(TALK_CATEGORY)
+        afk = guild.get_channel(AFK_CHANNEL)
         MemberRole = discord.utils.get(guild.roles, name="Member")
 
         if after.channel == voicehub:

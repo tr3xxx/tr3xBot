@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from config import BOT_LOG
 
 class clear(commands.Cog):
 
@@ -9,7 +10,7 @@ class clear(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.command()
     async def clear(self,ctx,arg: str = None):
-        log = self.bot.get_channel(875700881360846899)
+        log = self.bot.get_channel(BOT_LOG)
         if arg is None:
             await ctx.channel.purge(limit=1)
             await ctx.author.send("How many Messaages should i delete? (tclear x)")

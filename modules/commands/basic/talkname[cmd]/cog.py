@@ -1,5 +1,5 @@
-import discord
 from discord.ext import commands
+from config import BOT_LOG, OWNER_ID, TALK_CATEGORY
 
 class talkname(commands.Cog):
 
@@ -8,14 +8,14 @@ class talkname(commands.Cog):
 
     @commands.command()
     async def talkname(self,ctx,*,arg: str = None):
-        log = self.bot.get_channel(875700881360846899)
+        log = self.bot.get_channel(BOT_LOG)
         if arg is None:
             await ctx.send("To give a channel a custom name use the followning template (ex. ttalkname x x x x x x )")
         else:
             if ctx.author.voice is None:
                 await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
             else:
-                if ctx.author.voice.channel.category == ctx.guild.get_channel(858020017822892092) or ctx.author.id == self.bot.get_user(633412273641095188):
+                if ctx.author.voice.channel.category == ctx.guild.get_channel(TALK_CATEGORY) or ctx.author.id == self.bot.get_user(OWNER_ID):
                     if len(arg) > 7:
                         await ctx.send("Please choose a shorter Talkname")
                     else:

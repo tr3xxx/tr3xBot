@@ -1,8 +1,6 @@
 import discord
 from discord.ext import commands
-
-owner = 633412273641095188
-botid = 830842260462632992
+from config import BOT_LOG,WELCOME_CHANNEL
 
 class on_member_join(commands.Cog):
 
@@ -11,9 +9,8 @@ class on_member_join(commands.Cog):
         
     @commands.Cog.listener()
     async def on_member_join(self,member):
-        log = self.bot.get_channel(875700881360846899)
-        welcomechannel = self.bot.get_channel(828410713294372885)
-        guild = self.bot.get_guild(718926812033581108)
+        log = self.bot.get_channel(BOT_LOG)
+        welcomechannel = self.bot.get_channel(WELCOME_CHANNEL)
         await welcomechannel.send(f"Welcome {member.mention} on the tr3xGaming Discord Server !" )
 
         embed=discord.Embed(title=" Welcome on the tr3xGaming Server, i am the tr3xBot", color=0x00ffcc)

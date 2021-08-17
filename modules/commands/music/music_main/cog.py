@@ -3,8 +3,8 @@ import discord
 import youtube_dl
 import asyncio
 queue = []
-ytdl_format_options = {'format': 'bestaudio/best','outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s','restrictfilenames': True,'noplaylist': False,'nocheckcertificate': True,'ignoreerrors': False,'logtostderr': False,'quiet': True,'no_warnings': True,'default_search': 'auto','source_address': '0.0.0.0' }
-ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+from config import FFMPEG_OPTIONS,YTDL_FORMAT_OPTIONS
+
 
 class music(commands.Cog):
     
@@ -25,7 +25,7 @@ class music(commands.Cog):
             async def from_url(cls, url, *, loop=None, stream=False):
                 
 
-                ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+                ytdl = youtube_dl.YoutubeDL(YTDL_FORMAT_OPTIONS)
 
                 loop = loop or asyncio.get_event_loop()
                 data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
@@ -36,7 +36,7 @@ class music(commands.Cog):
                 
                 
                 filename = data['url'] if stream else ytdl.prepare_filename(data) 
-                return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+                return cls(discord.FFmpegPCMAudio(filename, **FFMPEG_OPTIONS), data=data)
 
     @commands.command()
     async def play(self,ctx, *, arg: str = None):

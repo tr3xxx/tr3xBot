@@ -1,8 +1,9 @@
 import discord
 import coc
 from discord.ext import commands
+from config import COC_DEV_EMAIL,COC_DEV_PASS
 
-cocclient = coc.login('hapol38642@activesniper.com','U9K!!wO*&RRYUz^WyUHvIVuYw6L') # https://developer.clashofclans.com
+cocclient = coc.login(COC_DEV_EMAIL,COC_DEV_PASS)
 
 class coc(commands.Cog):
 

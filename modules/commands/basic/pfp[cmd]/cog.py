@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+
 class pfp(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
@@ -15,7 +16,7 @@ class pfp(commands.Cog):
         else:
             embed = discord.Embed(title="{}'s profile picture".format(str(member)[:-5]), description="")
             embed.set_image(url=member.avatar)
-        await ctx.send(embed=embed)
+            await ctx.send(embed=embed)
 
 def setup(bot: commands.Bot):
     bot.add_cog(pfp(bot))

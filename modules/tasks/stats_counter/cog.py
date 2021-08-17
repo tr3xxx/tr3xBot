@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands,tasks
+from config import BOT_LOG, GUILD_ID, MEMBER_CHANNEL, ONLINE_CHANNEL
 
-class boost_counter(commands.Cog):
+class stats_counter(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -10,10 +11,10 @@ class boost_counter(commands.Cog):
     
     @tasks.loop(seconds=10.0)
     async def member_counter(self):
-        log = self.bot.get_channel(875700881360846899)
-        guild = self.bot.get_guild(718926812033581108)
-        channelmember = guild.get_channel(858711678316052500)
-        channelonline = guild.get_channel(861365241413107732)
+        log = self.bot.get_channel(BOT_LOG)
+        guild = self.bot.get_guild(GUILD_ID)
+        channelmember = guild.get_channel(MEMBER_CHANNEL)
+        channelonline = guild.get_channel(ONLINE_CHANNEL)
         beforeonline = channelonline.name
         beforemember = channelmember.name
         memberings=0
@@ -34,4 +35,4 @@ class boost_counter(commands.Cog):
             await log.send("Member Counter got updated from {} to {}".format((str(beforemember)[10:]),(str(channelmember.name)[10:])))
 
 def setup(bot: commands.Bot):
-    bot.add_cog(boost_counter(bot))
+    bot.add_cog(stats_counter(bot))

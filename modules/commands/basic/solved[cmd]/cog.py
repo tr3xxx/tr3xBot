@@ -1,4 +1,5 @@
 from discord.ext import commands
+from config import BOT_LOG, CREATE_TICKET_CHANNEL, GUILD_ID,SUPPORT_CATEGORY
 
 class solved(commands.Cog):
 
@@ -7,10 +8,10 @@ class solved(commands.Cog):
 
     @commands.command() 
     async def solved(self,ctx):
-        log = self.bot.get_channel(875700881360846899)
-        guild = self.bot.get_guild(718926812033581108)
-        if ctx.channel.category == self.bot.get_channel(875681228303532032):
-            if ctx.channel != self.bot.get_channel(875681346666774578):
+        log = self.bot.get_channel(BOT_LOG)
+        guild = self.bot.get_guild(GUILD_ID)
+        if ctx.channel.category == self.bot.get_channel(SUPPORT_CATEGORY):
+            if ctx.channel != self.bot.get_channel(CREATE_TICKET_CHANNEL):
                 members = ctx.channel.members
                 for member in members:
                     if member != guild.me:

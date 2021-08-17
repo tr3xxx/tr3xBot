@@ -2,7 +2,7 @@ import discord
 import random
 from discord.ext import commands,tasks
 from dislash import InteractionClient, ActionRow, Button, ButtonStyle
-
+from config import BOT_LOG, CREATE_TICKET_CHANNEL, GUILD_ID, SUPPORT_CATEGORY, TICKET_MESSAGE
 
 class create_ticket(commands.Cog):
 
@@ -12,10 +12,10 @@ class create_ticket(commands.Cog):
 
     @tasks.loop(hours=1)
     async def createticket(self): 
-        log = self.bot.get_channel(875700881360846899)
-        guild = self.bot.get_guild(718926812033581108)
-        ticketchannel = self.bot.get_channel(875681346666774578)
-        ticketmessage = await ticketchannel.fetch_message(875681774527725588)
+        log = self.bot.get_channel(BOT_LOG)
+        guild = self.bot.get_guild(GUILD_ID)
+        ticketchannel = self.bot.get_channel(CREATE_TICKET_CHANNEL)
+        ticketmessage = await ticketchannel.fetch_message(TICKET_MESSAGE)
 
         embed = discord.Embed(title="Ticket-Support",description="If you need Help, have an Server certain Question or wanna give Feedback, create an Ticket and an Mod will take care of your business",color=0x075FB2)  
         embed.set_thumbnail(url="https://cdn.iconscout.com/icon/premium/png-512-thumb/contact-support-2452176-2029802.png") 
@@ -34,7 +34,7 @@ class create_ticket(commands.Cog):
         await log.send("Ticket-Button Listener active")
         while True:
             inter = await ticketmessage.wait_for_button_click()
-            category =  self.bot.get_channel(875681228303532032)
+            category =  self.bot.get_channel(SUPPORT_CATEGORY)
             Modrole = discord.utils.get(guild.roles, name="Mods")
             overwrites = {
                 guild.default_role: discord.PermissionOverwrite(read_messages=False),

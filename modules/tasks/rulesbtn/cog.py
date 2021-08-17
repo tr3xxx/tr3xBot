@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands,tasks
-from dislash import InteractionClient, ActionRow, Button, ButtonStyle
+from dislash import ActionRow, Button, ButtonStyle
+from config import BOT_LOG, OWNER_ID,RULES_CHANNEL, RULES_MESSAGE
 
 
 class rulesbtn(commands.Cog):
@@ -11,10 +12,10 @@ class rulesbtn(commands.Cog):
 
     @tasks.loop(hours=1)
     async def rules(self): 
-        log = self.bot.get_channel(875700881360846899)
-        channel = self.bot.get_channel(803240539578302524)
-        Rulemessage = await channel.fetch_message(860636421047320627)
-        tr3x = self.bot.get_user(633412273641095188)
+        log = self.bot.get_channel(BOT_LOG)
+        channel = self.bot.get_channel(RULES_CHANNEL)
+        Rulemessage = await channel.fetch_message(RULES_MESSAGE)
+        tr3x = self.bot.get_user(OWNER_ID)
         embed = discord.Embed(title="",description= "",color=0x075FB2)                        
         embed.add_field(name="To get access to the complete server and to use all functions accept the rules but take in mind:\n\n**If you accept you agree with all rules below as well as the general Discord TOS ( https://discord.com/terms )**\n\n",value="\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",inline=False)
         embed.add_field(name=" Languages",value="\n>>> *English and German are the only allowed languages on this server*",inline=False)

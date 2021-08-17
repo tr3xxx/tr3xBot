@@ -1,4 +1,5 @@
 from discord.ext import commands
+from config import BOT_COMMANDS_CHANNEL, BOT_LOG, OWNER_ID, BOT_USER_ID
 
 class on_message(commands.Cog):
 
@@ -9,13 +10,12 @@ class on_message(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self,message):
 
-        log = self.bot.get_channel(875700881360846899)
-        if message.channel.id == 803764491988107334: 
+        log = self.bot.get_channel(BOT_LOG)
+        if message.channel.id == BOT_COMMANDS_CHANNEL: 
             if str(message.content).startswith(self.bot.command_prefix):
                 pass
             else:
-                if message.author.id == self.bot.get_user(830842260462632992) or message.author.id == self.bot.get_user(633412273641095188):
-                    print(message.author.id)
+                if message.author.id == self.bot.get_user(BOT_USER_ID) or message.author.id == self.bot.get_user(OWNER_ID):
                     pass
                 else:
                     await message.channel.purge(limit=1)

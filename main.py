@@ -1,12 +1,13 @@
 import time,discord,os
 from discord.ext import commands
 from dislash import InteractionClient
+from config import BOT_LOG, OWNER_ID, STATUS_CHANNEL, STATUS_MESSAGE, TOKEN,BOT_PREFIX
 
 #py -3 -m pip install -U "package
 
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 
-bot = commands.Bot(command_prefix="t",help_command=None, intents=discord.Intents().all())
+bot = commands.Bot(command_prefix=BOT_PREFIX,help_command=None, intents=discord.Intents().all())
 slash = InteractionClient(bot)
 queue = []
 
@@ -24,9 +25,9 @@ for folder in os.listdir("modules/commands/meme"):
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
                 bot.load_extension(f"modules.commands.meme.{folder}.cog")
 for folder in os.listdir("modules/commands/music"):
-        if os.path.exists(os.path.join("modules/commands/music", folder, "cog.py")):
-            print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
-            bot.load_extension(f"modules.commands.music.{folder}.cog")
+            if os.path.exists(os.path.join("modules/commands/music", folder, "cog.py")):
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
+                bot.load_extension(f"modules.commands.music.{folder}.cog")
 for folder in os.listdir("modules/events"):
             if os.path.exists(os.path.join("modules/events", folder, "cog.py")):
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
@@ -42,18 +43,15 @@ async def on_ready():
             print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
             bot.load_extension(f"modules.tasks.{folder}.cog")
     
-    
-    
-
-    log = bot.get_channel(875700881360846899)
+    log = bot.get_channel(BOT_LOG)
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot))
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Successfully started")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
     await log.send("Bot started")
     
-    statuschannel = bot.get_channel(860642601098280970)
-    statusmsg = await statuschannel.fetch_message(871558788388360223)
-    tr3x = bot.get_user(633412273641095188)
+    statuschannel = bot.get_channel(STATUS_CHANNEL)
+    statusmsg = await statuschannel.fetch_message(STATUS_MESSAGE)
+    tr3x = bot.get_user(OWNER_ID)
     botonline = discord.Embed(title="**tr3xBot Status**",
                               description= '`tr3xBot` is currently online ✅ \n \n If you experience problems please get in contact with {} asap'.format(tr3x.mention),
                               color=0x0CFF00)
@@ -61,5 +59,5 @@ async def on_ready():
     await statusmsg.edit(embed=botonline)
     await log.send("Changed Bot-Status in {} to Online".format(statuschannel.mention))
 
-bot.run("ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.kfT7gSJUokKHamktiHR8SgvpXrg")
+bot.run(TOKEN)
 

@@ -1,7 +1,8 @@
 import discord
 import praw
 from discord.ext import commands,tasks
-reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',user_agent='tr3xBot')
+from config import NEWS_GER_CHANNEL, REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT
+reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,client_secret=REDDIT_CLIENT_SECRET,user_agent=REDDIT_USER_AGENT)
 
 class newsGer(commands.Cog):
 
@@ -11,7 +12,7 @@ class newsGer(commands.Cog):
 
     @tasks.loop(hours=1)
     async def newsGer(self):
-        channel = self.bot.get_channel(872948474264555530)
+        channel = self.bot.get_channel(NEWS_GER_CHANNEL)
         messages = await channel.history(limit=200).flatten()
             
         memes_submissions = reddit.subreddit('NachrichtenDE').new()

@@ -1,4 +1,5 @@
 from discord.ext import commands,tasks
+from config import BOOST_CHANNEL, BOT_LOG,GUILD_ID
 
 class boost_counter(commands.Cog):
 
@@ -8,9 +9,9 @@ class boost_counter(commands.Cog):
 
     @tasks.loop(seconds=5.0)
     async def boost(self):
-        log = self.bot.get_channel(875700881360846899)
-        guild = self.bot.get_guild(718926812033581108)
-        boostchannel = guild.get_channel(861753968890871839)
+        log = self.bot.get_channel(BOT_LOG)
+        guild = self.bot.get_guild(GUILD_ID)
+        boostchannel = guild.get_channel(BOOST_CHANNEL)
         beforeboost = boostchannel.name
         boosts = guild.premium_subscription_count
         await boostchannel.edit(name = f"🌐 𝘽𝙤𝙤𝙨𝙩𝙨 : {boosts}")
