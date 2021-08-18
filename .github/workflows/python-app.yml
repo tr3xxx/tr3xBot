@@ -1,1 +1,5 @@
-
+- name: Run tests
+  env:
+  TOKEN_GITHUB_SECRET: ${{ secrets.TOKEN_GITHUB_SECRET }}
+  
+  run: main.py
