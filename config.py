@@ -1,6 +1,6 @@
 import os
 
-TOKEN = os.environ['TOKEN_GITHUB_SECRET']
+TOKEN = os.environ['TOKEN']
 BOT_LOG = 875700881360846899
 OWNER_ID = 633412273641095188
 COC_DEV_EMAIL = 'hapol38642@activesniper.com'
