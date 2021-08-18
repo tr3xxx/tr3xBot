@@ -12,7 +12,7 @@
 
 <h2><img src="https://cdn.discordapp.com/emojis/766498653753049109.png?v=1" height="20px"> • Info</h2>
 
-<p>This Bot is hosted on Heroku<br>tr3xBot is an little and new Project form the tr3xGaming Discord Server managed by the Server- and Botowner tr3x, nobody whos working on it has any experience in python programming.</p>
+<p align="center">This Bot is hosted on Heroku<br>tr3xBot is an little and new Project form the tr3xGaming Discord Server managed by the Server- and Botowner tr3x, nobody whos working on it has any experience in python programming.</p>
 
 <h2><img src="https://cdn.discordapp.com/emojis/765548323166748745.png?v=1" height="20px"> • Features</h2>
 <ul>
