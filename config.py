@@ -4,6 +4,9 @@ import sqlite3
 
 WELCOME_CHANNEL = None
 BOT_LOG = 875700881360846899
+FREE_GAMES_CHANNEL = 871595543468601404
+NEWS_GER_CHANNEL = 872948474264555530
+NEWS_ENG_CHANNEL = 874616666921795594
 
 async def check_welcome_channel(member):
         db = sqlite3.connect("db.sqlite")
@@ -24,12 +27,80 @@ async def check_log_channel(ctx):
         if result is None:
             return
         else:
-            BOT_LOG1 = int(result[0])
-            return BOT_LOG1
+            BOT_LOG = int(result[0])
+            return BOT_LOG
 
+async def check_log_channel_guildonly(guild):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT channel_id FROM log_channel WHERE guild_id = {guild}")
+        result = cursor.fetchone()
+        if result is None:
+            return
+        else:
+            BOT_LOG = int(result[0])
+            return BOT_LOG
 
+async def check_fg_channel():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT channel_id FROM fg_channel ")
+        result = cursor.fetchall()
+        if result is None:
+            return
+        else:
+            return result
 
-TOKEN = os.environ['TOKEN']
+async def check_newsger_channel():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT channel_id FROM newsger_channel ")
+        result = cursor.fetchall()
+        if result is None:
+            return
+        else:
+            return result
+
+async def check_newseng_channel():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT channel_id FROM newseng_channel ")
+        result = cursor.fetchall()
+        if result is None:
+            return
+        else:
+            return result
+
+async def check_member_channel():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT member_channel_id FROM stats ")
+        result = cursor.fetchall()
+        return result
+
+async def check_online_channel():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT online_channel_id FROM stats ")
+        result = cursor.fetchall()
+        return result
+
+async def check_boost_channel():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT boost_channel_id FROM stats ")
+        result = cursor.fetchall()
+        return result
+
+async def stats_channel():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT guild_id FROM stats ")
+        result = cursor.fetchall()
+        return result
+
+TOKEN = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.pcnILdtJwWBVuiZn77BE6Joe1cg"
+#TOKEN = os.environ['TOKEN']
 OWNER_ID = 633412273641095188
 COC_DEV_EMAIL = 'hapol38642@activesniper.com'
 COC_DEV_PASS = 'U9K!!wO*&RRYUz^WyUHvIVuYw6L'
@@ -53,9 +124,6 @@ STATUS_MESSAGE = 871558788388360223
 BOOST_CHANNEL = 861753968890871839
 ONLINE_CHANNEL = 861365241413107732
 MEMBER_CHANNEL = 858711678316052500
-FREE_GAMES_CHANNEL = 871595543468601404
-NEWS_GER_CHANNEL = 872948474264555530
-NEWS_ENG_CHANNEL = 874616666921795594
 RULES_CHANNEL = 803240539578302524
 
 RULES_MESSAGE = 860636421047320627
