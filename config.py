@@ -99,8 +99,7 @@ async def stats_channel():
         result = cursor.fetchall()
         return result
 
-TOKEN = "ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.pcnILdtJwWBVuiZn77BE6Joe1cg"
-#TOKEN = os.environ['TOKEN']
+TOKEN = os.environ['TOKEN']
 OWNER_ID = 633412273641095188
 COC_DEV_EMAIL = 'hapol38642@activesniper.com'
 COC_DEV_PASS = 'U9K!!wO*&RRYUz^WyUHvIVuYw6L'
