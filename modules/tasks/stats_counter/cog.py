@@ -25,15 +25,13 @@ class stats_counter(commands.Cog):
        
         for i in range(0,len(stats_channel_array)):
             
-            guild = self.bot.get_guild(int(str(stats_channel_array[i])[2:-2]))
+                guild = self.bot.get_guild(int(str(stats_channel_array[i])[2:-2]))
 
-            channelboost  = self.bot.get_channel(int(str(result_boosy_array[i])[2:-2]))                   
-            channelmember = self.bot.get_channel(int(str(result_member_array[i])[2:-2]))
-            channelonline = self.bot.get_channel(int(str(result_online_array[i])[2:-2]))
+                channelboost  = self.bot.get_channel(int(str(result_boosy_array[i])[2:-2]))                   
+                channelmember = self.bot.get_channel(int(str(result_member_array[i])[2:-2]))
+                channelonline = self.bot.get_channel(int(str(result_online_array[i])[2:-2]))
 
-            if channelboost or channelmember or channelonline is None:
-                print(channelboost,channelmember,channelonline)
-            else:
+            
                 online=0
                 members = guild.members
                 
