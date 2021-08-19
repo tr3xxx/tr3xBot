@@ -30,30 +30,33 @@ class stats_counter(commands.Cog):
             channelboost  = self.bot.get_channel(int(str(result_boosy_array[i])[2:-2]))                   
             channelmember = self.bot.get_channel(int(str(result_member_array[i])[2:-2]))
             channelonline = self.bot.get_channel(int(str(result_online_array[i])[2:-2]))
-                            
-            online=0
-            members = guild.members
-            
-            for i in members:
-                if i.status != discord.Status.offline: 
-                    online=online+1
 
-            
-            ono = (channelonline.name).split(":")
-            onm = (channelmember.name).split(":")
-            boo = (channelboost.name).split(":")
+            if channelboost or channelmember or channelonline is None:
+                print(channelboost,channelmember,channelonline)
+            else:
+                online=0
+                members = guild.members
+                
+                for i in members:
+                    if i.status != discord.Status.offline: 
+                        online=online+1
 
-            oldnamemember = np.array(onm)
-            oldnameonline = np.array(ono)
-            oldboostch = np.array(boo)
+                
+                ono = (channelonline.name).split(":")
+                onm = (channelmember.name).split(":")
+                boo = (channelboost.name).split(":")
 
-            namemem = str(oldnamemember[0])+": "+str(guild.member_count)
-            nameon = str(oldnameonline[0])+": "+str(online)
-            nameboost = str(oldboostch[0])+": "+str(guild.premium_subscription_count)
+                oldnamemember = np.array(onm)
+                oldnameonline = np.array(ono)
+                oldboostch = np.array(boo)
 
-            await channelmember.edit(name = namemem)
-            await channelonline.edit(name = nameon)
-            await channelboost.edit(name = nameboost)
+                namemem = str(oldnamemember[0])+": "+str(guild.member_count)
+                nameon = str(oldnameonline[0])+": "+str(online)
+                nameboost = str(oldboostch[0])+": "+str(guild.premium_subscription_count)
+
+                await channelmember.edit(name = namemem)
+                await channelonline.edit(name = nameon)
+                await channelboost.edit(name = nameboost)
 
             
 
