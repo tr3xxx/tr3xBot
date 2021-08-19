@@ -1,7 +1,7 @@
 import time,discord,os
 from discord.ext import commands
 from dislash import InteractionClient
-from config import BOT_LOG, OWNER_ID, STATUS_CHANNEL, STATUS_MESSAGE, TOKEN,BOT_PREFIX
+from config import BOT_LOG, OWNER_ID, STATUS_CHANNEL, STATUS_MESSAGE,BOT_PREFIX, TOKEN
 
 #py -3 -m pip install -U "package
 
