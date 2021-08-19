@@ -1,7 +1,35 @@
 import os
+import discord
+import sqlite3
+
+WELCOME_CHANNEL = None
+BOT_LOG = 875700881360846899
+
+async def check_welcome_channel(member):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT channel_id FROM welcome_channel WHERE guild_id = {member.guild.id}")
+        result = cursor.fetchone()
+        if result is None:
+            return
+        else:
+            WELCOME_CHANNEL = int(result[0])
+            return WELCOME_CHANNEL
+
+async def check_log_channel(ctx):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT channel_id FROM log_channel WHERE guild_id = {ctx.guild.id}")
+        result = cursor.fetchone()
+        if result is None:
+            return
+        else:
+            BOT_LOG1 = int(result[0])
+            return BOT_LOG1
+
+
 
 TOKEN = os.environ['TOKEN']
-BOT_LOG = 875700881360846899
 OWNER_ID = 633412273641095188
 COC_DEV_EMAIL = 'hapol38642@activesniper.com'
 COC_DEV_PASS = 'U9K!!wO*&RRYUz^WyUHvIVuYw6L'
@@ -29,7 +57,7 @@ FREE_GAMES_CHANNEL = 871595543468601404
 NEWS_GER_CHANNEL = 872948474264555530
 NEWS_ENG_CHANNEL = 874616666921795594
 RULES_CHANNEL = 803240539578302524
-WELCOME_CHANNEL = 828410713294372885
+
 RULES_MESSAGE = 860636421047320627
 BOT_COMMANDS_CHANNEL = 803764491988107334
 YTDL_FORMAT_OPTIONS = {'format': 'bestaudio/best', 
@@ -45,3 +73,4 @@ YTDL_FORMAT_OPTIONS = {'format': 'bestaudio/best',
                         'source_address': '0.0.0.0' }
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
                   'options': '-vn'}
+

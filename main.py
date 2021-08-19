@@ -1,6 +1,7 @@
 import time,discord,os
 from discord.ext import commands
 from dislash import InteractionClient
+import sqlite3
 from config import BOT_LOG, OWNER_ID, STATUS_CHANNEL, STATUS_MESSAGE, TOKEN,BOT_PREFIX
 
 #py -3 -m pip install -U "package
@@ -32,6 +33,10 @@ for folder in os.listdir("modules/events"):
             if os.path.exists(os.path.join("modules/events", folder, "cog.py")):
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
                 bot.load_extension(f"modules.events.{folder}.cog")
+for folder in os.listdir("modules/commands/setup"):
+            if os.path.exists(os.path.join("modules/commands/setup", folder, "cog.py")):
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
+                bot.load_extension(f"modules.commands.setup.{folder}.cog")
 
  
 
@@ -48,6 +53,8 @@ async def on_ready():
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Successfully started")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data")
     await log.send("Bot started")
+
+    
     
     statuschannel = bot.get_channel(STATUS_CHANNEL)
     statusmsg = await statuschannel.fetch_message(STATUS_MESSAGE)
