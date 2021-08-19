@@ -56,6 +56,5 @@ class stats_counter(commands.Cog):
 
             
 
-
 def setup(bot: commands.Bot):
     bot.add_cog(stats_counter(bot))
