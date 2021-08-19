@@ -10,3 +10,4 @@ praw
 coc
 coc.py
 dislash.py
+numpy
