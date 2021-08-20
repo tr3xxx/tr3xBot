@@ -26,4 +26,4 @@
 </ul>
 
 
-<h3 align="center"><a href="https://discord.gg/RfAgAqF4mT">Discord Server</a> | <a href="https://tr3xgaming.herokuapp.com/">Website</a></h3>
+<h3 align="center"><a href="https://discord.gg/RfAgAqF4mT">Discord Server</a> | <a href="https://discord.com/api/oauth2/authorize?client_id=830842260462632992&permissions=8&scope=bot">Invite the Bot</a></h3>
