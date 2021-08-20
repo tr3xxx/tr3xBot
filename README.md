@@ -22,6 +22,15 @@
   <li>🎊 Welcome and Leave messages.</li>
   <li>🎀 Regularly updated and maintained.</li>
 </ul>
+  
+<h2><img src="https://cdn.discordapp.com/emojis/873431943243497493.png?v=1" height="20px"> • Comming Soon</h2>
+<ul>
+  <li>:up: Level System</li>
+  <li> More configuration options </li>
+  <li> Ticket System</li>
+  <li> Hundreds of new Commands</li>
+  <li> And much more, what any you want.</li>
+</ul>
 
 </ul>
 
