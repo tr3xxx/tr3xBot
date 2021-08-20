@@ -10,11 +10,11 @@
   <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
 </h1>
 
-<h2><img src="https://cdn.discordapp.com/emojis/766498653753049109.png?v=1" height="20px"> • Info</h2>
+<h2><img src="https://cdn.discordapp.com/emojis/766498653753049109.png?v=1" height="20px">  Info</h2>
 
 <p>tr3xBot is an little Project managed by me, tr3x<br>I dont really have experience in python programming or discords api but i am pretty proud of what the bot is now,<br> after almost 1 months of development.<br>Feedback and Bug report is very welcome, so if you want a certain function,<br> come on my Discord (https://discord.gg/RfAgAqF4mT), open an ticket and I will do my best to implement your request.</p>
 
-<h2><img src="https://cdn.discordapp.com/emojis/765548323166748745.png?v=1" height="20px"> • Features</h2>
+<h2><img src="https://cdn.discordapp.com/emojis/765548323166748745.png?v=1" height="20px">  Features</h2>
 <ul>
   <li>📌 Over 50+ commands!</li>
   <li>🔼 99%+ uptime.</li>
@@ -23,7 +23,7 @@
   <li>🎀 Regularly updated and maintained.</li>
 </ul>
   
-<h2><img src="https://cdn.discordapp.com/emojis/873431943243497493.png?v=1" height="20px"> • Comming Soon</h2>
+<h2><img src="https://cdn.discordapp.com/emojis/873431943243497493.png?v=1" height="20px">  Comming Soon</h2>
 <ul>
   <li>:up: Level System</li>
   <li>:gear: More configuration options </li>
