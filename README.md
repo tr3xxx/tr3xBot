@@ -3,7 +3,7 @@
 </h2>
 
 <h1 align="center">tr3xBot</h1>
-<h4 align="center">An OpenSource and very Server specific Discord bot.</h4>
+<h4 align="center">An OpenSource and ever evolving Discord Bot.</h4>
 
 <h1 align="center">
   <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat" />
@@ -12,7 +12,7 @@
 
 <h2><img src="https://cdn.discordapp.com/emojis/766498653753049109.png?v=1" height="20px"> • Info</h2>
 
-<p>This Bot is hosted on Heroku<br>tr3xBot is an little and new Project form the tr3xGaming Discord Server managed by the Server- and Botowner tr3x, nobody whos working on it has any experience in python programming.</p>
+<p>This Bot is hosted on Heroku<br>tr3xBot is an little Project managed by me, tr3x<br>To be honest i dont really have experience in python programming or discords api but i am pretty proud of what the bot is now, after almost 1.5 months of development.<br>Feedback and Bug report is very welcome, so if you want a certain function, come on my Discord (https://discord.gg/RfAgAqF4mT), open an ticket and I will do my best to implement your request.</p>
 
 <h2><img src="https://cdn.discordapp.com/emojis/765548323166748745.png?v=1" height="20px"> • Features</h2>
 <ul>
