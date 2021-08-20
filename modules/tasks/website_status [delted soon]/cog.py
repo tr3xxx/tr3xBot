@@ -1,8 +1,8 @@
-from config import BOT_LOG, OWNER_ID, STATUS_CHANNEL, STATUS_MESSAGE
+from config import STATUS_CHANNEL, STATUS_MESSAGE
 import discord
 import urllib
 from discord.ext import commands,tasks
-from config import BOT_LOG
+from config import check_log_channel_guildonly
 
 class website_status(commands.Cog):
 
@@ -12,10 +12,11 @@ class website_status(commands.Cog):
 
     @tasks.loop(hours=1)
     async def tr3xGamingWebsiteStatus(self):
-        log = self.bot.get_channel(BOT_LOG)
+        guild = self.bot.get_guild(718926812033581108)
+        log = self.bot.get_channel(await check_log_channel_guildonly(guild))
         statuschannel = self.bot.get_channel(STATUS_CHANNEL)
         statusmsg = await statuschannel.fetch_message(STATUS_MESSAGE)
-        tr3x = self.bot.get_user(OWNER_ID)
+        tr3x = self.bot.get_user(633412273641095188)
 
         if urllib.request.urlopen("https://tr3xgaming.herokuapp.com/").getcode() != 200:
             Websiteoff = discord.Embed(title="**tr3xGaming Website Status**",

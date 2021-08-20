@@ -1,5 +1,6 @@
 from discord.ext import commands
-from config import BOT_COMMANDS_CHANNEL, BOT_LOG, OWNER_ID, BOT_USER_ID
+import numpy as np
+from config import BOT_USER_ID, check_log_channel, check_onlycommands_channel, check_nocommands_channel
 
 class on_message(commands.Cog):
 
@@ -9,26 +10,48 @@ class on_message(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self,message):
+        try:
+            log = self.bot.get_channel(await check_log_channel(message))
+        except Exception as err:
+            pass
 
-        log = self.bot.get_channel(BOT_LOG)
-        if message.channel.id == BOT_COMMANDS_CHANNEL: 
-            if str(message.content).startswith(self.bot.command_prefix):
-                pass
-            else:
-                if message.author.id == self.bot.get_user(BOT_USER_ID) or message.author.id == self.bot.get_user(OWNER_ID):
-                    pass
+        result =  await check_onlycommands_channel()
+        result_array = np.array(result)
+        for i in range(0,len(result_array)):
+            id = int(str(result_array[i])[2:-2])
+            if message.channel.id == id: 
+                if str(message.content).startswith(self.bot.command_prefix):
+                    break
+                    
                 else:
+                    if message.author == self.bot.get_user(BOT_USER_ID):
+                        break
+                    else:
+                        await message.channel.purge(limit=1)
+                        await message.author.send("You are not allowed to send messages which aren't commands to the '"+str(message.channel)+"' channel")
+                        try:
+                            await log.send("Message blocked ({}) in {} from {}".format(message.content,message.channel.mention,message.author))
+                        except Exception as err:
+                            break
+                        break
+
+        result2 =  await check_nocommands_channel()
+        result2_array = np.array(result2)
+        for i in range(0,len(result2_array)):
+            id2 = int(str(result2_array[i])[2:-2])
+            if message.channel.id == id2:
+                if str(message.content).startswith(self.bot.command_prefix):
+                    #print(message.author.id,self.bot.get_user(BOT_USER_ID))
+                    if message.author == self.bot.get_user(BOT_USER_ID):
+                        break
                     await message.channel.purge(limit=1)
-                    await message.author.send("You are not allowed to send messages which aren't commands to the '"+str(message.channel)+"' channel")
-                    await log.send("Message blocked ({}) in {} from {}".format(message.content,message.channel.mention,message.author))
-        if message.channel.id == 803909189990088725:
-            if str(message.content).startswith(self.bot.command_prefix):
-                await message.channel.purge(limit=1)
-                await message.author.send("You are not allowed to send commands to the '"+str(message.channel)+"' channel, Please use the '"+str(message.guild.get_channel(803764491988107334))+"' channel")
-                await log.send("Message blocked ({}) in {} from {}".format(message.content,message.channel.mention,message.author))
-            else:
-                print(31)
-                pass
+                    await message.author.send("You are not allowed to send commands to the '"+str(message.channel)+"' channel, Please use the '"+str(message.guild.get_channel(803764491988107334))+"' channel")
+                    try:
+                        await log.send("Message blocked ({}) in {} from {}".format(message.content,message.channel.mention,message.author))
+                    except Exception as err:
+                            break
+                    break
+                    
         
        # await self.bot.process_commands(message)
             

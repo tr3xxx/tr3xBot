@@ -3,7 +3,7 @@ import discord
 import time
 import aioconsole
 import requests
-from config import BOT_LOG, GUILD_ID, STATUS_CHANNEL, STATUS_MESSAGE
+from config import STATUS_CHANNEL, STATUS_MESSAGE, check_log_channel_guildonly
 from discord.ext import commands
 
 class background_console(commands.Cog):
@@ -16,10 +16,10 @@ class background_console(commands.Cog):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
             console_input = await aioconsole.ainput()
-            if console_input == "exit" or console_input == "tdc" or console_input == "update":
+            if console_input == "tdc":
                 if console_input == "exit" or console_input =="tdc":
-                    guild = self.bot.get_guild(GUILD_ID)
-                    log = self.bot.get_channel(BOT_LOG)
+                    guild = self.bot.get_guild(718926812033581108)
+                    log = self.bot.get_channel(await check_log_channel_guildonly(guild))
                     statuschannel = self.bot.get_channel(STATUS_CHANNEL)
                     statusmsg = await statuschannel.fetch_message(STATUS_MESSAGE)
                     botoffline = discord.Embed(title="**tr3xBot Status**",
@@ -44,25 +44,10 @@ class background_console(commands.Cog):
                     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot was shutdowned via console")
                     await log.send("Bot offline via Console")
                     await self.bot.close()
-                if console_input == "update":
-                    guild = self.bot.get_guild(GUILD_ID)
-                    memberings=0
-                    online=0
-                    members = self.bot.guilds[0].members 
-                    for i in members:
-                        if i.status == discord.Status.offline:                         
-                            memberings=memberings+1                                    
-                        elif i.status != discord.Status.offline:                        
-                            memberings=memberings+1
-                            online=online+1
-                    print(time.strftime('[%H:%M:%S]:', time.localtime()),"The latest data is being loaded...")
-                    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(self.bot),"on:",guild.name) 
-                    print(time.strftime('[%H:%M:%S]:', time.localtime()),"IP:",requests.get('http://api.ipify.org').text)
-                    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Members: (",online,"/",memberings,")")
-                    print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Online")  
+                
             else: 
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),"unexcepted or wrong input")
-                print(time.strftime('[%H:%M:%S]:', time.localtime()),"«exit» or «tdc» for shutdown, «update» for latest data and «restart» for restart")
+                print(time.strftime('[%H:%M:%S]:', time.localtime()),"«tdc» for shutdown")
 
 
 def setup(bot: commands.Bot):

@@ -1,6 +1,7 @@
 import discord
+import numpy as np
 from discord.ext import commands
-from config import AFK_CHANNEL, BOT_LOG, TALK_CATEGORY, VOICEHUB_CHANNEL
+from config import check_voicehub_channel, check_log_channel
 
 class on_voice_state_update(commands.Cog):
 
@@ -9,38 +10,46 @@ class on_voice_state_update(commands.Cog):
         
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
+        
+        
+
         guild = member.guild
-        log = self.bot.get_channel(BOT_LOG)
-        voicehub = guild.get_channel(VOICEHUB_CHANNEL)
-        Talkcategory = guild.get_channel(TALK_CATEGORY)
-        afk = guild.get_channel(AFK_CHANNEL)
-        MemberRole = discord.utils.get(guild.roles, name="Member")
-
-        if after.channel == voicehub:
-            channel = await guild.create_voice_channel(
-                name="#"+str(len(Talkcategory.channels))+" Talk",
-                category=Talkcategory,
-                reason=None,
-                bitrate= guild.bitrate_limit,
-                overwrites = {
-                    MemberRole: discord.PermissionOverwrite(view_channel=True),
-                    guild.default_role: discord.PermissionOverwrite(view_channel=False)
-                }
-            )
-            await member.move_to(channel)
-            await log.send("{} got created by {} via {}".format(channel.name,member,after.channel))
-
-        if after.channel == afk:
-            await member.send("You seem to be afk for a while, you got moved to the afk channel")
-            await log.send(str(member)+" is afk")
+        log = self.bot.get_channel(await check_log_channel(member))
+        
+        result =  await check_voicehub_channel()
+        result_array = np.array(result)
+        for i in range(0,len(result_array)):
+            id = int(str(result_array[i])[2:-2])
+            try:
+                if after.channel.id == id:
+                    global vc 
+                    vc = self.bot.get_channel(id)
+                    global Talkcategory 
+                    Talkcategory = vc.category
+                    channel = await guild.create_voice_channel(
+                        name="#"+str(len(Talkcategory.channels))+" Talk",
+                        reason=None,
+                        category=Talkcategory,
+                        bitrate= guild.bitrate_limit
+                    )
+                    await member.move_to(channel)
+                    try:
+                        await log.send("{} got created by {} via {}".format(channel.name,member,vc))
+                    except Exception as err:
+                        pass
+            except Exception as err:
+                pass
 
         try:
-            if not before.channel.members and before.channel.category == Talkcategory and before.channel != voicehub:
-                await log.send("{} got deleted".format(before.channel))
+            if not before.channel.members and before.channel.category == Talkcategory and before.channel != vc: 
+                try:
+                    await log.send("{} got deleted".format(before.channel))
+                except Exception as err:
+                    pass
                 await before.channel.delete()
-                
+                    
         except Exception as err:
-            pass
+                pass
 
 
             

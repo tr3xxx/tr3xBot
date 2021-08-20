@@ -2,7 +2,7 @@ import discord
 import random
 import praw
 from discord.ext import commands
-from config import NSFW_CHANNEL, REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT
+from config import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT
 reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,client_secret=REDDIT_CLIENT_SECRET,user_agent=REDDIT_USER_AGENT)
 
 class senddick(commands.Cog):
@@ -13,8 +13,7 @@ class senddick(commands.Cog):
     @commands.command(pass_context=True) 
     async def senddick(self,ctx,*,member: discord.Member = None):
         if member is None:
-            nsfw = ctx.guild.get_channel(NSFW_CHANNEL)
-            if ctx.channel == nsfw:
+            if ctx.channel.is_nsfw():
                 memes_submissions = reddit.subreddit('dicks').hot()
                 post_to_pick = random.randint(1, 100)
                 for i in range(0, post_to_pick):
@@ -24,10 +23,9 @@ class senddick(commands.Cog):
                 embed.set_image(url=submission.url)
                 await ctx.author.send(embed=embed)
             else:
-                await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
+                await ctx.send("No NSFW Content here, please use an nsfw channel")
         else:
-            nsfw = ctx.guild.get_channel(NSFW_CHANNEL)
-            if ctx.channel == nsfw:
+            if ctx.channel.is_nsfw():
                 memes_submissions = reddit.subreddit('dicks').hot()
                 post_to_pick = random.randint(1, 100)
                 for i in range(0, post_to_pick):
@@ -37,7 +35,7 @@ class senddick(commands.Cog):
                 embed.set_image(url=submission.url)
                 await member.send(embed=embed)
             else:
-                await ctx.send("No NSFW Content here, please use {}".format(nsfw.mention))
+                await ctx.send("No NSFW Content here, please use an nsfw channel")
 
 
 def setup(bot: commands.Bot):

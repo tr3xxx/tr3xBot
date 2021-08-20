@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from config import BOT_LOG
+from config import check_log_channel
 
 class embed(commands.Cog):
 
@@ -9,7 +9,7 @@ class embed(commands.Cog):
 
     @commands.command() 
     async def embed(self,ctx, *, arg: str = None): 
-        log = self.bot.get_channel(BOT_LOG)
+        log = self.bot.get_channel(await check_log_channel(ctx))
         if arg is None:
             await ctx.send("To create an Embed use the following template (Title,Describtion,Footer)")
         else:            

@@ -25,15 +25,16 @@ class stats_counter(commands.Cog):
        
         for i in range(0,len(stats_channel_array)):
             
-                guild = self.bot.get_guild(int(str(stats_channel_array[i])[2:-2]))
+                try:
+                    guild = self.bot.get_guild(int(str(stats_channel_array[i])[2:-2]))
+                    channelboost  = self.bot.get_channel(int(str(result_boosy_array[i])[2:-2]))                   
+                    channelmember = self.bot.get_channel(int(str(result_member_array[i])[2:-2]))
+                    channelonline = self.bot.get_channel(int(str(result_online_array[i])[2:-2]))
+                    online=0
+                    members = guild.members
+                except Exception as err:
+                    continue
 
-                channelboost  = self.bot.get_channel(int(str(result_boosy_array[i])[2:-2]))                   
-                channelmember = self.bot.get_channel(int(str(result_member_array[i])[2:-2]))
-                channelonline = self.bot.get_channel(int(str(result_online_array[i])[2:-2]))
-
-            
-                online=0
-                members = guild.members
                 
                 for i in members:
                     if i.status != discord.Status.offline: 

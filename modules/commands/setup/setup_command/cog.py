@@ -9,12 +9,26 @@ class setupCommand(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     async def setup(self,ctx):
-        await ctx.author.send("///Setup///\n tsetup welcomechannel \n tsetup log \n tsetup fgchannel \n tsetup newschannelger \n tsetup newschanneleng")
+
+        embed=discord.Embed(title='tr3xBot Setup',description='Thanks for choosing tr3xBot\n\n Please keep in mind that this Bot is developed by only one person\n Thereofore i would appreciate if you could report every bug or wishes on my Discord (https://discord.gg/rVcPPzbQ)\n\n\n\n ',color=0x075FB2)
+        embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/830842260462632992/6f5341620fb3a4238741b50d2eef417b.png?size=1024")
+        embed.add_field(name="Welcome-Messages Channel",value="\n>>> *To set up an Custom Welcome Channel use the following Command: \n `tsetup welcomechannel <#textchannelid>`*",inline=False)
+        embed.add_field(name="Log Channel",value="\n>>> *To set up an Custom Log Channel use the following Command: \n `tsetup log <#textchannelid>`*",inline=False)
+        embed.add_field(name="Free-Games Channel",value="\n>>> *To set up an Custom Free-Games Channel use the following Command:\n  `tsetup fgchannel <#textchannelid>`*",inline=False)
+        embed.add_field(name="German-News Channel",value="\n>>> *To set up an Custom German-News Channel use the following Command: \n `tsetup newschannelger <#textchannelid>`*",inline=False)
+        embed.add_field(name="International-News Channel",value="\n>>> *To set up an Custom International-News Channel use the following Command: \n  `tsetup newschanneleng <#textchannelid>`*",inline=False)
+        embed.add_field(name="Stats Channel",value="\n>>> *To set up 3 Server specific Channel (Member Counter,Online Counter,Boost Counter) use the following Command:\n `tsetup stats`*",inline=False)
+        embed.add_field(name="Voicehub Channel",value="\n>>> *To set up an Voicehub Channel use the following Command:\n `tsetup voicehub <#voicechannelid>`*",inline=False)
+        embed.add_field(name="Commands-Only Channel",value="\n>>> *To set up an Custom Commands-Only Channel use the following Command: \n `tsetup commandsonly <#textchannelid>`*",inline=False)
+        embed.add_field(name="No-Commands Channel",value="\n>>> *To set up an Custom No-Commands Channel use the following Command: \n `tsetup nocommands <#textchannelid>`*",inline=False)
+        embed.set_footer(text="To get an overview of all commands of the bot use `thelp` \nShould something not work as expected please open a ticket on the discord linked above, i will work the problem then.")
+        
+        await ctx.send(embed=embed) 
 
     @setup.command()
     async def welcomechannel(self,ctx, channel: discord.TextChannel):
         if channel is None:
-            await ctx.send("Please tag the Channel where Welcome Messages should be send in (ex. tsetup welcomechannel #<id>)")
+            await ctx.send("Wrong Input, please use following Command (<#id> id has to be from your server/ or tag the channel without the <>) `tsetup welcomechannel <#textchannelid>` ")
         else:
             if ctx.message.author.guild_permissions.manage_messages:
                 db = sqlite3.connect("db.sqlite")
@@ -24,11 +38,11 @@ class setupCommand(commands.Cog):
                 if result is None:
                     sql = ("INSERT INTO welcome_channel(guild_id,channel_id) VALUES(?,?)")
                     val = (ctx.guild.id, channel.id)
-                    await ctx.send(f"channel has been set to {channel.mention}")
+                    await ctx.send(f"Welcome-Messages will be send to {channel.mention}")
                 elif result is not None:
                     sql = ("UPDATE welcome_channel SET channel_id = ? WHERE guild_id = ?")
                     val = (channel.id, ctx.guild.id )
-                    await ctx.send(f"channel has been updated to {channel.mention}")
+                    await ctx.send(f"Welcome-Messages will be send to {channel.mention}")
                 cursor.execute(sql,val)
                 db.commit()
                 cursor.close()
@@ -37,7 +51,7 @@ class setupCommand(commands.Cog):
     @setup.command()
     async def log(self,ctx, channel: discord.TextChannel):
             if channel is None:
-                await ctx.send("Please tag the Channel where log Messages should be send in (ex. tsetup log #<id>)")
+                await ctx.send("Wrong Input, please use following Command (<#id> id has to be from your server/ or tag the channel without the <>) `tsetup log <#textchannelid>` ")            
             else:
                 if ctx.message.author.guild_permissions.manage_messages:
                     db = sqlite3.connect("db.sqlite")
@@ -47,11 +61,11 @@ class setupCommand(commands.Cog):
                     if result is None:
                         sql = ("INSERT INTO log_channel(guild_id,channel_id) VALUES(?,?)")
                         val = (ctx.guild.id, channel.id)
-                        await ctx.send(f"log channel has been set to {channel.mention}")
+                        await ctx.send(f"Log-Messages will be send to {channel.mention}")
                     elif result is not None:
                         sql = ("UPDATE log_channel SET channel_id = ? WHERE guild_id = ?")
                         val = (channel.id, ctx.guild.id )
-                        await ctx.send(f"log channel has been updated to {channel.mention}")
+                        await ctx.send(f"Log-Messages will be send to {channel.mention}")
                     cursor.execute(sql,val)
                     db.commit()
                     cursor.close()
@@ -60,7 +74,7 @@ class setupCommand(commands.Cog):
     @setup.command()
     async def fgchannel(self,ctx, channel: discord.TextChannel):
             if channel is None:
-                await ctx.send("Please tag the Channel where fg Messages should be send in (ex. tsetup fgchannel #<id>)")
+                await ctx.send("Wrong Input, please use following Command (<#id> id has to be from your server/ or tag the channel without the <>) `tsetup fgchannel <#textchannelid>` ")            
             else:
                 if ctx.message.author.guild_permissions.manage_messages:
                     db = sqlite3.connect("db.sqlite")
@@ -70,11 +84,7 @@ class setupCommand(commands.Cog):
                     if result is None:
                         sql = ("INSERT INTO fg_channel(guild_id,channel_id) VALUES(?,?)")
                         val = (ctx.guild.id, channel.id)
-                        await ctx.send(f"fg channel has been set to {channel.mention}")
-                    elif result is not None:
-                        sql = ("UPDATE fg_channel SET channel_id = ? WHERE guild_id = ?")
-                        val = (channel.id, ctx.guild.id )
-                        await ctx.send(f"fg channel has been updated to {channel.mention}")
+                        await ctx.send(f"Free-Games will be send to {channel.mention}")
                     cursor.execute(sql,val)
                     db.commit()
                     cursor.close()
@@ -85,7 +95,7 @@ class setupCommand(commands.Cog):
     @setup.command()
     async def newschannelger(self,ctx, channel: discord.TextChannel):
             if channel is None:
-                await ctx.send("Please tag the Channel where news ger Messages should be send in (ex. tsetup newschannelger #<id>)")
+                await ctx.send("Wrong Input, please use following Command (<#id> id has to be from your server/ or tag the channel without the <>) `tsetup newschannelger <#textchannelid>` ")            
             else:
                 if ctx.message.author.guild_permissions.manage_messages:
                     db = sqlite3.connect("db.sqlite")
@@ -95,11 +105,7 @@ class setupCommand(commands.Cog):
                     if result is None:
                         sql = ("INSERT INTO newsger_channel(guild_id,channel_id) VALUES(?,?)")
                         val = (ctx.guild.id, channel.id)
-                        await ctx.send(f"news ger channel has been set to {channel.mention}")
-                    elif result is not None:
-                        sql = ("UPDATE newsger_channel SET channel_id = ? WHERE guild_id = ?")
-                        val = (channel.id, ctx.guild.id )
-                        await ctx.send(f"news ger channel has been updated to {channel.mention}")
+                        await ctx.send(f"German-News will be send to {channel.mention}")
                     cursor.execute(sql,val)
                     db.commit()
                     cursor.close()
@@ -110,7 +116,7 @@ class setupCommand(commands.Cog):
     @setup.command()
     async def newschanneleng(self,ctx, channel: discord.TextChannel):
             if channel is None:
-                await ctx.send("Please tag the Channel where news eng Messages should be send in (ex. tsetup newschannelger #<id>)")
+                await ctx.send("Wrong Input, please use following Command (<#id> id has to be from your server/ or tag the channel without the <>) `tsetup newschanneleng <#textchannelid>` ")            
             else:
                 if ctx.message.author.guild_permissions.manage_messages:
                     db = sqlite3.connect("db.sqlite")
@@ -120,11 +126,7 @@ class setupCommand(commands.Cog):
                     if result is None:
                         sql = ("INSERT INTO newseng_channel(guild_id,channel_id) VALUES(?,?)")
                         val = (ctx.guild.id, channel.id)
-                        await ctx.send(f"news eng channel has been set to {channel.mention}")
-                    elif result is not None:
-                        sql = ("UPDATE newseng_channel SET channel_id = ? WHERE guild_id = ?")
-                        val = (channel.id, ctx.guild.id )
-                        await ctx.send(f"news eng channel has been updated to {channel.mention}")
+                        await ctx.send(f"International-News will be send to {channel.mention}")
                     cursor.execute(sql,val)
                     db.commit()
                     cursor.close()
@@ -134,6 +136,13 @@ class setupCommand(commands.Cog):
     
     @setup.command()
     async def stats(self,ctx):
+
+                online=0
+                members = ctx.guild.members
+                
+                for i in members:
+                    if i.status != discord.Status.offline: 
+                        online=online+1
 
                 if ctx.message.author.guild_permissions.manage_messages:
                     db = sqlite3.connect("db.sqlite")
@@ -146,9 +155,9 @@ class setupCommand(commands.Cog):
                     result_boost = cursor.fetchall()
                     [] == False
                     if result_member == [] and result_online == [] and result_boost == []:
-                            member_channel = await ctx.guild.create_voice_channel(name="Member Counter:")
-                            online_channel = await ctx.guild.create_voice_channel(name="Online Counter:")
-                            boost_channel = await ctx.guild.create_voice_channel(name="Boost Counter:")
+                            member_channel = await ctx.guild.create_voice_channel(name=("Member Counter: "+str(ctx.guild.member_count)))
+                            online_channel = await ctx.guild.create_voice_channel(name=("Online Counter: "+str(online)))
+                            boost_channel = await ctx.guild.create_voice_channel(name="Boost Counter: "+str(ctx.guild.premium_subscription_count))
 
 
                             sql = ("INSERT INTO stats(guild_id,member_channel_id,online_channel_id,boost_channel_id) VALUES(?,?,?,?)")
@@ -161,11 +170,74 @@ class setupCommand(commands.Cog):
                     if result_member != [] and result_online != [] and result_boost != []:
                             await ctx.send("stats channel are already created on this server, sorry")
                     
-                
+    @setup.command()
+    async def voicehub(self,ctx, channel: discord.VoiceChannel):
+            if channel is None:
+                await ctx.send("Wrong Input, please use following Command (<#id> id has to be from your server/ or tag the channel without the <>) `tsetup voicehub <#textchannelid>` ")            
+            else:
+                if ctx.message.author.guild_permissions.manage_messages:
+                    db = sqlite3.connect("db.sqlite")
+                    cursor = db.cursor() 
+                    cursor.execute(f"SELECT channel_id FROM voicehub_channel WHERE guild_id = {ctx.guild.id}")
+                    result = cursor.fetchone()
+                    if result is None:
+                        sql = ("INSERT INTO voicehub_channel(guild_id,channel_id) VALUES(?,?)")
+                        val = (ctx.guild.id, channel.id)
+                        await ctx.send(f"{channel.mention} will now work as a Voicehub")
+                    cursor.execute(sql,val)
+                    db.commit()
+                    cursor.close()
+                    db.close()           
                         
+    @setup.command()
+    async def commandsonly(self,ctx, channel: discord.TextChannel):
+            if channel is None:
+                await ctx.send("Wrong Input, please use following Command (<#id> id has to be from your server/ or tag the channel without the <>) `tsetup commandsonly <#textchannelid>` ")            
+            else:
+                if ctx.message.author.guild_permissions.manage_messages:
+                    db = sqlite3.connect("db.sqlite")
+                    cursor = db.cursor() 
+                    cursor.execute(f"SELECT channel_id FROM command_only_channel WHERE guild_id = {ctx.guild.id}")
+                    sql = ("INSERT INTO command_only_channel(guild_id,channel_id) VALUES(?,?)")
+                    val = (ctx.guild.id, channel.id)
+                    await ctx.send(f"{channel.mention} is now a Command-Only Channel")
                     
-            
+                    cursor.execute(sql,val)
+                    db.commit()
+                    cursor.close()
+                    db.close()    
+
+    @setup.command()
+    async def nocommands(self,ctx, channel: discord.TextChannel):
+            if channel is None:
+                await ctx.send("Wrong Input, please use following Command (<#id> id has to be from your server/ or tag the channel without the <>) `tsetup nocommands <#textchannelid>` ")            
+            else:
+                if ctx.message.author.guild_permissions.manage_messages:
+                    db = sqlite3.connect("db.sqlite")
+                    cursor = db.cursor() 
+                    cursor.execute(f"SELECT channel_id FROM no_commands_channel WHERE guild_id = {ctx.guild.id}")
+                    sql = ("INSERT INTO no_commands_channel(guild_id,channel_id) VALUES(?,?)")
+                    val = (ctx.guild.id, channel.id)
+                    await ctx.send(f"{channel.mention} is now a No-Commands Channel")
+                    
+                    cursor.execute(sql,val)
+                    db.commit()
+                    cursor.close()
+                    db.close()           
     
+    @setup.command()
+    async def end(self,ctx):
+        setupch = discord.utils.get(ctx.guild.channels, name='tr3xbot-setup')
+        if ctx.message.author.guild_permissions.manage_messages:
+            if ctx.channel.id is setupch.id:
+                await ctx.send('Setup completed!')
+                await ctx.channel.delete()
+            else:
+                await ctx.send('Setup could not be terminated because this is not the setup channel, please use {} to terminate the setup if one is in progress'.format(setupch.mention))
+    
+
+        
+  
 
 def setup(bot: commands.Bot):
     bot.add_cog(setupCommand(bot))

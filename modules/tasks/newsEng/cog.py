@@ -2,7 +2,7 @@ import discord
 import praw
 import numpy as np
 from discord.ext import commands,tasks
-from config import FREE_GAMES_CHANNEL, NEWS_ENG_CHANNEL, REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT, check_newseng_channel
+from config import  REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT, check_newseng_channel
 reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,client_secret=REDDIT_CLIENT_SECRET,user_agent=REDDIT_USER_AGENT)
 
 class newsEng(commands.Cog):
@@ -16,9 +16,11 @@ class newsEng(commands.Cog):
         result = await check_newseng_channel()
         result_array = np.array(result)
         for i in range (0,len(result_array)):
-           
-            channel = self.bot.get_channel(int(str(result_array[i])[2:-2]))
-            messages = await channel.history(limit=200).flatten()
+            try:
+                channel = self.bot.get_channel(int(str(result_array[i])[2:-2]))
+                messages = await channel.history(limit=200).flatten()
+            except Exception as err:
+                continue
                 
             memes_submissions = reddit.subreddit('news').new()
             post_to_pick = 1
