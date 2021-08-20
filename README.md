@@ -12,7 +12,7 @@
 
 <h2><img src="https://cdn.discordapp.com/emojis/766498653753049109.png?v=1" height="20px"> • Info</h2>
 
-<p>This Bot is hosted on Heroku<br>tr3xBot is an little Project managed by me, tr3x<br>I dont really have experience in python programming or discords api but i am pretty proud of what the bot is now,<br> after almost 1.5 months of development.<br>Feedback and Bug report is very welcome, so if you want a certain function,<br> come on my Discord (https://discord.gg/RfAgAqF4mT), open an ticket and I will do my best to implement your request.</p>
+<p>tr3xBot is an little Project managed by me, tr3x<br>I dont really have experience in python programming or discords api but i am pretty proud of what the bot is now,<br> after almost 1 months of development.<br>Feedback and Bug report is very welcome, so if you want a certain function,<br> come on my Discord (https://discord.gg/RfAgAqF4mT), open an ticket and I will do my best to implement your request.</p>
 
 <h2><img src="https://cdn.discordapp.com/emojis/765548323166748745.png?v=1" height="20px"> • Features</h2>
 <ul>
