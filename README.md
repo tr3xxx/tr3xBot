@@ -16,11 +16,17 @@
 
 <h2><img src="https://cdn.discordapp.com/emojis/765548323166748745.png?v=1" height="20px">  Features</h2>
 <ul>
-  <li>📌 Over 50+ commands!</li>
+  <li>🗃️ Over 50+ commands (memes,nsfw,...)</li>
   <li>🔼 99%+ uptime.</li>
-  <li>🎶 High quality Music playback.</li>
-  <li>🎊 Welcome and Leave messages.</li>
-  <li>🎀 Regularly updated and maintained.</li>
+  <li>🎧 High quality Music playback.</li>
+  <li>📰 Posting the News (German/English Supported)</li>
+  <li>🎮 Posting the newest Free Games</li>
+  <li>🔊 Unlimited Voicehubs for your Server</li>
+  <li>📊 Stats Counter (Member-,Online-,Boosts Counter)</li>
+  <li>🧾 Server specific Log </li>
+  <li>🎊 Welcome messages.</li>
+  <li>💻 Regularly maintenances and updates.</li>
+  
 </ul>
   
 <h2><img src="https://cdn.discordapp.com/emojis/873431943243497493.png?v=1" height="20px">  Comming Soon</h2>
