@@ -22,7 +22,10 @@ class on_member_join(commands.Cog):
         embed=discord.Embed(title=" Welcome on the tr3xGaming Server, i am the tr3xBot", color=0x00ffcc)
         embed.set_author(name="tr3xBot", url="https://discord.gg/KexhwUVG7p")
         embed.add_field(name="You can find my Commands here:", value="https://tr3xgaming.herokuapp.com/html/tr3xbot/commands.html", inline=False)
-        await member.send(embed=embed)
+        try:
+            await member.send(embed=embed)
+        except Exception as err:
+            pass
         await log.send("{} joined the Server".format(member))
             
 
