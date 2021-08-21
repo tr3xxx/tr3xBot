@@ -38,7 +38,7 @@
   <li>:gear: More configuration options </li>
   <li>✉️ Twitter,YouTube,Twitch and GitHub Notifications</li>
   <li>🔨 Moderation Commands (Ban,Warn,Mute and more!) </li>
-  <li>💬 Link-Shorter Commands </li>
+  <li>💬 Link-Shorter Command </li>
   <li>:joystick: Hundreds of new Commands</li>
   <li>:dizzy: And much more, whatever you want.</li>
   
