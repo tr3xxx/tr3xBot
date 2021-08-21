@@ -1,7 +1,6 @@
 import sqlite3
 import os
 
-
 async def check_welcome_channel(member):
         db = sqlite3.connect("db.sqlite")
         cursor = db.cursor()
