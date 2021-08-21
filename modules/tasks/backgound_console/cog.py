@@ -18,31 +18,21 @@ class background_console(commands.Cog):
             console_input = await aioconsole.ainput()
             if console_input == "tdc":
                 if console_input == "exit" or console_input =="tdc":
-                    guild = self.bot.get_guild(718926812033581108)
-                    log = self.bot.get_channel(await check_log_channel_guildonly(guild))
-                    statuschannel = self.bot.get_channel(STATUS_CHANNEL)
-                    statusmsg = await statuschannel.fetch_message(STATUS_MESSAGE)
-                    botoffline = discord.Embed(title="**tr3xBot Status**",
-                                            description= '`tr3xBot` is currently offline ⛔',
-                                            color=0xff0000)
-                    botoffline.add_field(name="**What does this mean for you?**",value="All features like commands or the member/online count wont update until i am back online",inline=False)
-                    botoffline.add_field(name="**Why i am offline?**",value="Most likely i am offline cause an maintenance break or an server crash",inline=False)
-                    botoffline.set_footer(text="presents by tr3xBot")
-                    await statusmsg.edit(embed=botoffline)
+                    
 
-                    voice = discord.utils.get(self.bot.voice_clients, guild=guild)
+                    #voice = discord.utils.get(self.bot.voice_clients, guild=guild)
 
-                    try:
-                        if voice.is_connected() == True:
-                            await voice.disconnect()
-                    except Exception as err:
-                        pass
+                    #try:
+                     #   if voice.is_connected() == True:
+                     #       await voice.disconnect()
+                    #except Exception as err:
+                    #    pass
                     
                     await self.bot.change_presence(status=discord.Status.invisible)
-                    print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(self.bot)," is Offline now ","on:",guild.name)
+                    #print(time.strftime('[%H:%M:%S]:', time.localtime()),"{0.user}".format(self.bot)," is Offline now ","on:",guild.name)
                     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Confirmed Offline")
                     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot was shutdowned via console")
-                    await log.send("Bot offline via Console")
+                    #await log.send("Bot offline via Console")
                     await self.bot.close()
                 
             else: 

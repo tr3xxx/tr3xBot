@@ -46,24 +46,10 @@ async def on_ready():
             print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
             bot.load_extension(f"modules.tasks.{folder}.cog")
 
-    
-    
-  
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Online as {0.user}".format(bot))
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"Successfully started")
     print(time.strftime('[%H:%M:%S]:', time.localtime()),"«tdc» for shutdown")
     
-
-    
-    
-    statuschannel = bot.get_channel(860642601098280970)
-    statusmsg = await statuschannel.fetch_message(871558788388360223)
-    tr3x = bot.get_user(633412273641095188)
-    botonline = discord.Embed(title="**tr3xBot Status**",
-                              description= '`tr3xBot` is currently online ✅ \n \n If you experience problems please get in contact with {} asap'.format(tr3x.mention),
-                              color=0x0CFF00)
-    botonline.set_footer(text="presents by tr3xBot")
-    await statusmsg.edit(embed=botonline)
 
 bot.run(TOKEN)
 

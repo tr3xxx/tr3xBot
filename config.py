@@ -113,6 +113,7 @@ async def check_nocommands_channel():
         result = cursor.fetchall()
         return result
 
+
 TOKEN = os.environ['TOKEN']
 COC_DEV_EMAIL = 'hapol38642@activesniper.com'
 COC_DEV_PASS = 'U9K!!wO*&RRYUz^WyUHvIVuYw6L'
