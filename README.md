@@ -1,5 +1,5 @@
 <h2 align="center">
-  <img src="https://cdn.discordapp.com/avatars/830842260462632992/6f5341620fb3a4238741b50d2eef417b.png?size=128" height='100px' width='100px'>
+  <img src="https://cdn.discordapp.com/avatars/830842260462632992/eda635240a85e78d2dac3f0239d8bf9b.png?size=128" height='100px' width='100px'>
 </h2>
 
 <h1 align="center">tr3xBot</h1>
