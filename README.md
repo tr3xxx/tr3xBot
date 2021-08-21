@@ -33,7 +33,6 @@
 <ul>
   <li>:up: Level System</li>
   <li>:gear: More configuration options </li>
-  <li>:ticket: Ticket System</li>
   <li>:joystick: Hundreds of new Commands</li>
   <li>✉️ Twitter,YouTube,Twitch and GitHub Notifications</li>
   <li>:dizzy: And much more, whatever you want.</li>
