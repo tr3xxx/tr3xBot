@@ -9,7 +9,7 @@ class stats_counter(commands.Cog):
         self.bot = bot
         self.member_counter.start()
 
-    @tasks.loop(minutes=1)
+    @tasks.loop(seconds=30.0)
     async def member_counter(self):
         stats_channel_list = await stats_channel()
         result_member = await check_member_channel()

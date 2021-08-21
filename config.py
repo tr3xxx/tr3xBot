@@ -113,6 +113,70 @@ async def check_nocommands_channel():
         result = cursor.fetchall()
         return result
 
+async def check_ticketsystem_guild_id():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT guild_id FROM ticketsystem ")
+        result = cursor.fetchall()
+        return result
+        
+
+async def check_ticketsystem_ticket_channel(guild):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT ticketcreate_channel_id FROM ticketsystem WHERE guild_id = {guild.id}")
+        result = cursor.fetchone()
+        return int(str(result)[2:-3])
+
+async def check_ticketsystem_ticket_msg(guild):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT ticketcreate_msg_id FROM ticketsystem WHERE guild_id = {guild.id}")
+        result = cursor.fetchone()
+        return int(str(result)[2:-3])
+
+async def check_ticketsystem_ticket_category(guild):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT category_id FROM ticketsystem WHERE guild_id = {guild.id}")
+        result = cursor.fetchone()
+        return int(str(result)[2:-3])
+
+async def check_ticketsystem_ticket_role(guild):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT role_id FROM ticketsystem WHERE guild_id = {guild.id}")
+        result = cursor.fetchone()
+        return int(str(result)[2:-3])
+
+async def check_ticketsystem_ticket_solve():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT ticket_channel_id FROM tickets")
+        result = cursor.fetchall()
+        return result
+
+async def messages_reaction_roles():
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT message_id FROM reaction_role")
+        result = cursor.fetchall()
+        return result
+
+async def emoji_reaction_roles(msgid):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT emoji FROM reaction_role WHERE message_id = {msgid}")
+        result = cursor.fetchone()
+        return result
+
+async def reaction_roles_role(msgid):
+        db = sqlite3.connect("db.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT role FROM reaction_role WHERE message_id = {msgid}")
+        result = cursor.fetchone()
+        return (str(result)[2:-2])
+
 
 TOKEN = os.environ['TOKEN']
 COC_DEV_EMAIL = 'hapol38642@activesniper.com'

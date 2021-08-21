@@ -27,6 +27,7 @@ class help(commands.Cog):
                 embed.add_field(name="tsay",value="\n>>> *I dont want to say anything you want, but i have to... - sadly noises*",inline=False)
                 embed.add_field(name="tkill",value="\n>>> *Yea kill this mother fuc... funtioner , yea, mother functioner - dont ask what it is*",inline=False)
                 embed.add_field(name="tdie",value="\n>>> *No no noooo*",inline=False)
+                embed.add_field(name="tgithub",value="\n>>> *Wanna see what's under the hood?*",inline=False)
                 embed.add_field(name="tinvite",value="\n>>> *Yeah, invite me *",inline=False)
                 embed.add_field(name="tdm",value="\n>>> *write someone a nice dm via me*",inline=False)
                 embed.add_field(name="tpfp",value="\n>>> *Why would you like to have someones pfp ? I doont know but go on*",inline=False)
