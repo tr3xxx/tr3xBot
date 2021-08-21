@@ -24,17 +24,22 @@
   <li>🔊 Unlimited Voicehubs for your Server</li>
   <li>📊 Stats Counter (Member-,Online-,Boosts Counter)</li>
   <li>🧾 Server specific Log </li>
-  <li>🎊 Welcome messages.</li>
+  <li>🎊 Welcome and Leave messages.</li>
+  <li>📱 Clash of Clans Stats </li>
+  <li>😹 Reactionroles </li>
   <li>💻 Regularly maintenances and updates.</li>
   
 </ul>
   
 <h2><img src="https://cdn.discordapp.com/emojis/873431943243497493.png?v=1" height="20px">  Comming Soon</h2>
 <ul>
+  <li>🔧 Bug fixxes</li>
   <li>:up: Level System</li>
   <li>:gear: More configuration options </li>
-  <li>:joystick: Hundreds of new Commands</li>
   <li>✉️ Twitter,YouTube,Twitch and GitHub Notifications</li>
+  <li>🔨 Moderation Commands (Ban,Warn,Mute and more!) </li>
+  <li>💬 Link-Shorter Commands </li>
+  <li>:joystick: Hundreds of new Commands</li>
   <li>:dizzy: And much more, whatever you want.</li>
   
 </ul>
