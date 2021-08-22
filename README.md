@@ -27,6 +27,9 @@
   <li>🎊 Welcome and Leave messages.</li>
   <li>📱 Clash of Clans Stats </li>
   <li>😹 Reactionroles </li>
+  <li>:up: Chat-Based Level System (Voice Leveling is coming soon!)</li>
+  <li>🔨 Moderation Commands (Ban,Warn,Mute and more!) </li>
+  <li>💬 Link-Shorter Command </li>
   <li>💻 Regularly maintenances and updates.</li>
   
 </ul>
@@ -34,11 +37,9 @@
 <h2><img src="https://cdn.discordapp.com/emojis/873431943243497493.png?v=1" height="20px">  Comming Soon</h2>
 <ul>
   <li>🔧 Bug fixxes</li>
-  <li>:up: Level System</li>
+  
   <li>:gear: More configuration options </li>
   <li>✉️ Twitter,YouTube,Twitch and GitHub Notifications</li>
-  <li>🔨 Moderation Commands (Ban,Warn,Mute and more!) </li>
-  <li>💬 Link-Shorter Command </li>
   <li>:joystick: Hundreds of new Commands</li>
   <li>:dizzy: And much more, whatever you want.</li>
   
