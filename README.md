@@ -28,7 +28,7 @@
   <li>📱 Clash of Clans Stats </li>
   <li>😹 Reactionroles </li>
   <li>:up: Chat-Based Level System (Voice Leveling is coming soon!)</li>
-  <li>🔨 Moderation Commands (Ban,Warn,Mute and more!) </li>
+  <li>🔨 Moderation Commands (Ban,Kick,Mute) </li>
   <li>💬 Link-Shorter Command </li>
   <li>💻 Regularly maintenances and updates.</li>
   
