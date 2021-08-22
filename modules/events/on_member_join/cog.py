@@ -36,6 +36,11 @@ class on_member_join(commands.Cog):
         
         
         
+
+
+        
+        
+        
         
             
 

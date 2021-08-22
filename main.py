@@ -3,7 +3,7 @@ from discord.ext import commands
 from dislash import InteractionClient
 from config import BOT_PREFIX, TOKEN
 
-#py -3 -m pip install -U "package
+#py -3 -m pip install -U 'package'
 
 print(time.strftime('[%H:%M:%S]:', time.localtime()),"Bot is starting...")
 
@@ -36,6 +36,7 @@ for folder in os.listdir("modules/commands/setup"):
             if os.path.exists(os.path.join("modules/commands/setup", folder, "cog.py")):
                 print(time.strftime('[%H:%M:%S]:', time.localtime()),folder,"loaded")
                 bot.load_extension(f"modules.commands.setup.{folder}.cog")
+
 
  
 

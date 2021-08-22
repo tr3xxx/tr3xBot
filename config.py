@@ -177,8 +177,32 @@ async def reaction_roles_role(msgid):
         result = cursor.fetchone()
         return (str(result)[2:-2])
 
+async def get_rank(exp):
+        if exp <100:
+            return int(1)
+        if exp <400:
+            return int(2)
+        if exp <1000:
+            return int(3)
+        if exp <3000:
+            return int(4)
+        if exp <5000:
+            return int(5)
+        if exp <7500:
+            return int(6)
+        if exp <12000:
+            return int(7)
+        if exp <20000:
+            return int(8)
+        if exp <40000:
+            return int(9)
+        if exp <100000:
+            return int(10)
+        else:
+            return int(11)
 
-TOKEN = os.environ['TOKEN']
+TOKEN = 'ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.ZmgWAN3d5S8gNOmlAVYu_ARtbR8'
+#TOKEN = os.environ['TOKEN']
 COC_DEV_EMAIL = 'hapol38642@activesniper.com'
 COC_DEV_PASS = 'U9K!!wO*&RRYUz^WyUHvIVuYw6L'
 SUPPORT_CATEGORY = 875681228303532032
