@@ -27,7 +27,7 @@
   <li>🎊 Welcome and Leave messages.</li>
   <li>📱 Clash of Clans Stats </li>
   <li>😹 Reactionroles </li>
-  <li>:up: Chat- and Voice-Based Level System</li>
+  <li>:up: Chat and Voice based Level System</li>
   <li>🔨 Moderation Commands (Ban,Kick,Mute) </li>
   <li>💬 Link-Shorter Command </li>
   <li>💻 Regularly maintenances and updates.</li>
