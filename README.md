@@ -1,9 +1,9 @@
+<h1 align="center">tr3xBot</h1>
 
 <p align="center" >
   <img src="https://cdn.discordapp.com/avatars/830842260462632992/eda635240a85e78d2dac3f0239d8bf9b.png?size=128" height='100px' width='100px'>
 </p>
 
-<p align="center"><h1>tr3xBot</h1></p>
 <p align="center">
   <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat" />
   <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
