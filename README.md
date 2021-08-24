@@ -16,7 +16,7 @@
 <p align="center" >tr3xBot is an OpenSource and Free to use Discord-Bot, developed by me, tr3x. <br>I dont have any experience in programming with Discord API or Python general, <br>but after about 1 month of development the bot looks pretty good, or is something missing?<br> Then let me know, just like bugs or suggestions for improvement related to the code,  <br> preferably via my Discord Server (which is linked below) so that I can take care of it <br><br>  An Website for the Bot will probably be published in september.</p>
 
 <h2 align="center"><img src="https://cdn.discordapp.com/emojis/765548323166748745.png?v=1" height="20px">  Features</h2>
-<ul align="center">
+<ul>
   <li>🗃️ Over 50+ commands (memes,nsfw,...)</li>
   <li>🔼 99%+ uptime.</li>
   <li>🎧 High quality Music playback.</li>
@@ -36,7 +36,7 @@
 </ul>
   
 <h2 align="center"><img src="https://cdn.discordapp.com/emojis/873431943243497493.png?v=1" height="20px">  Comming Soon</h2>
-<ul align="center">
+<ul>
   <li>🔧 Bug fixxes</li>
   
   <li>:gear: More configuration options</li>
