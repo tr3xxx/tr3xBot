@@ -1,3 +1,4 @@
+<center>
 <h2 align="center">
   <img src="https://cdn.discordapp.com/avatars/830842260462632992/eda635240a85e78d2dac3f0239d8bf9b.png?size=128" height='100px' width='100px'>
 </h2>
@@ -50,3 +51,5 @@
 
 
 <h3 align="center"><a href="https://discord.gg/RfAgAqF4mT">Discord Server</a> | <a href="https://discord.com/api/oauth2/authorize?client_id=830842260462632992&permissions=8&scope=bot">Invite the Bot</a></h3>
+
+</center>
