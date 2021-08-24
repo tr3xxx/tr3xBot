@@ -4,8 +4,6 @@
 </h2>
 
 <h1 align="center">tr3xBot</h1>
-<h4 align="center">An OpenSource and ever evolving Discord Bot.</h4>
-
 <h1 align="center">
   <img src="https://img.shields.io/badge/discord.py-2.0-blue?style=flat" />
   <img src="https://img.shields.io/badge/Python-3.9-green?style=flat&logo=python" />
