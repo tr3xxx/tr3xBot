@@ -49,7 +49,3 @@
 
 
 <h3 align="center"><a href="https://discord.gg/RfAgAqF4mT">Discord Server</a> | <a href="https://discord.com/api/oauth2/authorize?client_id=830842260462632992&permissions=8&scope=bot">Invite the Bot</a></h3>
-
-
-<a href="https://discordbotlist.com/bots/830842260462632992"><img src="https://discordbotlist.com/api/v1/bots/830842260462632992/widget"></a>
-
