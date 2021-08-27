@@ -1,7 +1,7 @@
 <h1 align="center">tr3xBot</h1>
 
 <p align="center" >
-  <img src="https://cdn.discordapp.com/avatars/830842260462632992/eda635240a85e78d2dac3f0239d8bf9b.png?size=128" height='100px' width='100px'>
+  <img src="https://github.com/tr3xxx/tr3xBot/blob/main/tr3xBotLogo%20(1).ico" height='100px' width='100px'>
 </p>
 
 <p align="center">
