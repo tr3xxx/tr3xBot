@@ -15,7 +15,7 @@ class waifu(commands.Cog):
     async def waifu(self,ctx):
         async with ctx.typing():
             memes_submissions = reddit.subreddit('waifusfortr3x').hot()
-            post_to_pick = random.randint(1, 40)
+            post_to_pick = random.randint(1, 52)
             for i in range(0, post_to_pick):
                 submission = next(x for x in memes_submissions if not x.stickied)
 
