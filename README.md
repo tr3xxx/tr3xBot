@@ -1,7 +1,7 @@
 <h1 align="center">tr3xBot</h1>
 
 <p align="center" >
-  <img src="https://github.com/tr3xxx/tr3xBot/blob/main/tr3xBotLogo%20(1).ico" height='100px' width='100px'>
+  <img src="https://github.com/tr3xxx/tr3xBot/blob/main/assets/logo.ico" height='100px' width='100px'>
 </p>
 
 <p align="center">
