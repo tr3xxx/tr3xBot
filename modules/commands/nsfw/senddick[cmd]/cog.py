@@ -14,26 +14,32 @@ class senddick(commands.Cog):
     async def senddick(self,ctx,*,member: discord.Member = None):
         if member is None:
             if ctx.channel.is_nsfw():
-                memes_submissions = reddit.subreddit('dicks').hot()
-                post_to_pick = random.randint(1, 100)
-                for i in range(0, post_to_pick):
-                    submission = next(x for x in memes_submissions if not x.stickied)
-
-                embed = discord.Embed(title="Oh no an Owngoal", description="")
-                embed.set_image(url=submission.url)
-                await ctx.author.send(embed=embed)
+                while True:
+                    memes_submissions = reddit.subreddit('dicks').hot()
+                    post_to_pick = random.randint(1, 100)
+                    for i in range(0, post_to_pick):
+                        submission = next(x for x in memes_submissions if not x.stickied)
+                    check_souce =  str(submission.url[8:])
+                    if check_souce.startswith('i'):
+                        await ctx.author.send(submission.url)
+                        break
+                    else:
+                        pass
             else:
                 await ctx.send("No NSFW Content here, please use an nsfw channel")
         else:
             if ctx.channel.is_nsfw():
-                memes_submissions = reddit.subreddit('dicks').hot()
-                post_to_pick = random.randint(1, 100)
-                for i in range(0, post_to_pick):
-                    submission = next(x for x in memes_submissions if not x.stickied)
-
-                embed = discord.Embed(title="Looks like someone had a gift for you", description="")
-                embed.set_image(url=submission.url)
-                await member.send(embed=embed)
+                while True:
+                    memes_submissions = reddit.subreddit('dicks').hot()
+                    post_to_pick = random.randint(1, 100)
+                    for i in range(0, post_to_pick):
+                        submission = next(x for x in memes_submissions if not x.stickied)
+                    check_souce =  str(submission.url[8:])
+                    if check_souce.startswith('i'):
+                        await member.send(submission.url)
+                        break
+                    else:
+                        pass
             else:
                 await ctx.send("No NSFW Content here, please use an nsfw channel")
 

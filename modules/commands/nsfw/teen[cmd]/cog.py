@@ -14,17 +14,19 @@ class teen(commands.Cog):
     async def teen(self,ctx):
         async with ctx.typing():
             if ctx.channel.is_nsfw():
-                memes_submissions = reddit.subreddit('LegalTeens').hot()
-                post_to_pick = random.randint(1, 100)
-                for i in range(0, post_to_pick):
-                    submission = next(x for x in memes_submissions if not x.stickied)
-
-                embed = discord.Embed(title="", description="")
-                embed.set_image(url=submission.url)
-                await ctx.send(embed=embed)
+                while True:
+                    memes_submissions = reddit.subreddit('LegalTeens').hot()
+                    post_to_pick = random.randint(1, 100)
+                    for i in range(0, post_to_pick):
+                        submission = next(x for x in memes_submissions if not x.stickied)
+                    check_souce =  str(submission.url[8:])
+                    if check_souce.startswith('i'):
+                        await ctx.send(submission.url)
+                        break
+                    else:
+                        pass
             else:
                 await ctx.send("No NSFW Content here, please use an nsfw channel")
-
 
 
 def setup(bot: commands.Bot):

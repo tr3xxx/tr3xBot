@@ -14,28 +14,17 @@ class waifu(commands.Cog):
     @commands.command(pass_context=True)
     async def waifu(self,ctx):
         async with ctx.typing():
-            memes_submissions = reddit.subreddit('waifusfortr3x').hot()
-            post_to_pick = random.randint(1, 52)
-            for i in range(0, post_to_pick):
-                submission = next(x for x in memes_submissions if not x.stickied)
-
-            embed = discord.Embed(title="", description="")
-            embed.set_image(url=submission.url)
-
-            alreadysended = False
-            messages = await ctx.history(limit=200).flatten()
-            for msg in messages:
-                embeds = msg.embeds
-                for embed in embeds:
-                    if embed.image_url == submission.url:
-                        alreadysended = True
+            while True:
+                    memes_submissions = reddit.subreddit('waifusfortr3x').hot()
+                    post_to_pick = random.randint(1, 100)
+                    for i in range(0, post_to_pick):
+                        submission = next(x for x in memes_submissions if not x.stickied)
+                    check_souce =  str(submission.url[8:])
+                    if check_souce.startswith('i'):
+                        await ctx.send(submission.url)
                         break
-                if alreadysended == False:
-                    await ctx.send(embed=embed)
-                    break
-                else:
-                    break
-            #await ctx.send(embed=embed)
+                    else:
+                        pass
 
 
 

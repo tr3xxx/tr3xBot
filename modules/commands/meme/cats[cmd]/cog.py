@@ -14,14 +14,18 @@ class cats(commands.Cog):
     @commands.command(pass_context=True)
     async def cats(self,ctx):
         async with ctx.typing():
-            memes_submissions = reddit.subreddit('cats').hot()
-            post_to_pick = random.randint(1, 100)
-            for i in range(0, post_to_pick):
-                submission = next(x for x in memes_submissions if not x.stickied)
+                while True:
+                    memes_submissions = reddit.subreddit('cats').hot()
+                    post_to_pick = random.randint(1, 100)
+                    for i in range(0, post_to_pick):
+                        submission = next(x for x in memes_submissions if not x.stickied)
+                    check_souce =  str(submission.url[8:])
+                    if check_souce.startswith('i'):
+                        await ctx.send(submission.url)
+                        break
+                    else:
+                        pass
 
-            embed = discord.Embed(title="", description="")
-            embed.set_image(url=submission.url)
-            await ctx.send(embed=embed)
 
 
 
