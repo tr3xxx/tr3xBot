@@ -201,7 +201,7 @@ async def get_rank(exp):
         else:
             return int(11)
 
-TOKEN = os.environ['TOKEN']
+TOKEN = 'ODMwODQyMjYwNDYyNjMyOTky.YHMkJw.GJvcPII0i4LbrUoeTt2tKiq7dwM'
 COC_DEV_EMAIL = 'hapol38642@activesniper.com'
 COC_DEV_PASS = 'U9K!!wO*&RRYUz^WyUHvIVuYw6L'
 SUPPORT_CATEGORY = 875681228303532032

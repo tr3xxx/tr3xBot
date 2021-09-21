@@ -40,10 +40,12 @@ class stats_counter(commands.Cog):
                     if i.status != discord.Status.offline: 
                         online=online+1
 
-                
-                ono = (channelonline.name).split(":")
-                onm = (channelmember.name).split(":")
-                boo = (channelboost.name).split(":")
+                try:
+                    ono = (channelonline.name).split(":")
+                    onm = (channelmember.name).split(":")
+                    boo = (channelboost.name).split(":")
+                except Exception as err:
+                    continue
 
                 oldnamemember = np.array(onm)
                 oldnameonline = np.array(ono)

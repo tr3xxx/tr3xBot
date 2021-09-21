@@ -16,7 +16,8 @@ class userlimit(commands.Cog):
             global vc
             vc = self.bot.get_channel(id)
             log = self.bot.get_channel(await check_log_channel(ctx))
-            
+            if vc is None:
+                continue
             if arg is None:
                 await ctx.send("To give a channel a userlimit use the followning template (ex. tuserlimit x )")
             else:
@@ -35,8 +36,8 @@ class userlimit(commands.Cog):
                             await ctx.author.voice.channel.edit(user_limit=int(arg))
                             break
 
-                    else:
-                        await ctx.send('You dont have the permission to edit channels outside the Talks Category')
+                    #else:
+                   #     await ctx.send('You dont have the permission to edit channels outside the Talks Category')
 
         
 

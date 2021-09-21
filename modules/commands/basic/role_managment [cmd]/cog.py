@@ -15,7 +15,10 @@ class role_Managment(commands.Cog):
                     await ctx.send('To create a Role use tcreaterole <rolename>')
                 else:
                         role = await ctx.guild.create_role(name=rolename)   
-                        await log.send(f"{role.mention}({str(rolename)}) got created by {ctx.author}") 
+                        try:
+                            await log.send(f"{role.mention}({str(rolename)}) got created by {ctx.author}") 
+                        except Exception as err:
+                            pass
             else:
                 await ctx.author.send('You dont have the permission to create Roles on this Server!')
     

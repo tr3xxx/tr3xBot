@@ -16,7 +16,8 @@ class private(commands.Cog):
             global vc
             vc = self.bot.get_channel(id)
             log = self.bot.get_channel(await check_log_channel(ctx))
-
+            if vc is None:
+                continue
             if ctx.author.voice is None:
                 await ctx.send("Connect to a Voice Channel in Talks first to edit it ")
             else:
@@ -31,8 +32,8 @@ class private(commands.Cog):
                     await ctx.author.voice.channel.edit(user_limit=len(ctx.author.voice.channel.members))
                     break
                     
-                else:
-                    await ctx.send('You dont have the permission to edit channels outside the Talks Category')
+                #else:
+                #    await ctx.send('You dont have the permission to edit channels outside the Talks Category')
 
         
 
