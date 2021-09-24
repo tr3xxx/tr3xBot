@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from config import check_log_channel
+from utils.check_log import log
 
 class embed(commands.Cog):
 
@@ -9,7 +9,7 @@ class embed(commands.Cog):
 
     @commands.command() 
     async def embed(self,ctx, *, arg: str = None): 
-        log = self.bot.get_channel(await check_log_channel(ctx))
+        log_channel = self.bot.get_channel(log(ctx))
         if arg is None:
             await ctx.send("To create an Embed use the following template (Title,Describtion,Footer)")
         else:            
@@ -21,7 +21,10 @@ class embed(commands.Cog):
                 embed.set_footer(text=args[2])
                 await ctx.channel.purge(limit=1)
                 await ctx.send(embed=embed)
-                await log.send("Embed has been created in {} by {}".format(ctx.channel.mention,ctx.author))
+                try:
+                    await log_channel.send("Embed has been created in {} by {}".format(ctx.channel.mention,ctx.author))
+                except Exception as err:
+                    pass
         
 
 def setup(bot: commands.Bot):

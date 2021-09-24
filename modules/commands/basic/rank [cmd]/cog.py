@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from config import check_log_channel, get_rank
+from utils.check_rank import get_rank
 import sqlite3
 
 class rank(commands.Cog):

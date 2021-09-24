@@ -86,6 +86,9 @@ class help(commands.Cog):
                 embed.add_field(name="tsenddick",value="\n>>>*you friends will love it, trust me*",inline=False)
                 embed.add_field(name="tlesbian",value="\n>>> *Two are always twice as much as one - double fun*",inline=False)
                 embed.add_field(name="thentai",value="\n>>> *If you like it - take it*",inline=False)
+                embed.add_field(name="tethothub",value="\n>>> *NEW*",inline=False)
+                embed.add_field(name="tthighs",value="\n>>> *NEW*",inline=False)
+                embed.add_field(name="tgothsluts",value="\n>>> *NEW*",inline=False)
                 await ctx.author.send(embed=embed)
         else:
             if arg is None:

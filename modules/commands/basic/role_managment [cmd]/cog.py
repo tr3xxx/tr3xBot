@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-from config import check_log_channel
+from utils.check_log import log
 
 class role_Managment(commands.Cog):
 
@@ -9,14 +9,14 @@ class role_Managment(commands.Cog):
 
     @commands.command() 
     async def createrole(self,ctx,rolename: str = None ): 
-            log = self.bot.get_channel(await check_log_channel(ctx))
+            log_channel = self.bot.get_channel(log(ctx))
             if ctx.message.author.guild_permissions.manage_roles:
                 if rolename == None:
                     await ctx.send('To create a Role use tcreaterole <rolename>')
                 else:
                         role = await ctx.guild.create_role(name=rolename)   
                         try:
-                            await log.send(f"{role.mention}({str(rolename)}) got created by {ctx.author}") 
+                            await log_channel.send(f"{role.mention}({str(rolename)}) got created by {ctx.author}") 
                         except Exception as err:
                             pass
             else:
@@ -34,14 +34,14 @@ class role_Managment(commands.Cog):
     
     @commands.command()
     async def removeroleconfirm(self,ctx,role: discord.Role = None, servername: str = None):
-        log = self.bot.get_channel(await check_log_channel(ctx))
+        log_channel = self.bot.get_channel(log(ctx))
         if ctx.message.author.guild_permissions.administrator:
             if role == None:
                     await ctx.send('Wrong Input, to delete a role type tremoveroleconfirm <@role> <servername>')
             else:
                     if str(servername) == str(ctx.guild.name):
                         rolename = str(role)
-                        await log.send(f"{rolename} got delted by {ctx.author}")
+                        await log_channel.send(f"{rolename} got delted by {ctx.author}")
                         await ctx.send(f'{rolename} got deleted')
                         await role.delete()
                         

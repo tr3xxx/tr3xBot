@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-from config import check_log_channel
+from utils.check_log import log
 
 class moderation_commands(commands.Cog):
 
@@ -15,7 +15,7 @@ class moderation_commands(commands.Cog):
                     await ctx.author.send('To ban a user type tban @user ')
                 else:
                     try:
-                        log = self.bot.get_channel(await check_log_channel(ctx))
+                        log_channel = self.bot.get_channel(log(ctx))
                         await ctx.send(f'{user} got permanently banned by {ctx.author}')
                         await log.send(f'{user} got permanently banned by {ctx.author}')
                         await user.send(f'You got permantly bannend from {str(ctx.guild.name)} by {str(ctx.author)}')
@@ -34,7 +34,7 @@ class moderation_commands(commands.Cog):
                     await ctx.author.send('To kick a user type tkick @user ')
                 else:
                     try:
-                        log = self.bot.get_channel(await check_log_channel(ctx))
+                        log_channel = self.bot.get_channel(log(ctx))
                         await ctx.send(f'{user} got kicked by {ctx.author}')
                         await log.send(f'{user} got kicked by {ctx.author}')
                         await user.send(f'You got kicked from {str(ctx.guild.name)} by {str(ctx.author)}')
@@ -53,7 +53,7 @@ class moderation_commands(commands.Cog):
                     await ctx.author.send('To mute a user type tmute @user ')
                 else:
                     try:
-                        log = self.bot.get_channel(await check_log_channel(ctx))
+                        log_channel = self.bot.get_channel(log(ctx))
                         await ctx.send(f'{user} got muted by {ctx.author}')
                         await log.send(f'{user} got muted by {ctx.author}')
                         await user.send(f'You got mute on {str(ctx.guild.name)} by {str(ctx.author)}')
@@ -72,7 +72,7 @@ class moderation_commands(commands.Cog):
                     await ctx.author.send('To unmute a user type tunmute @user ')
                 else:
                     try:
-                        log = self.bot.get_channel(await check_log_channel(ctx))
+                        log_channel = self.bot.get_channel(log(ctx))
                         await log.send(f'{user} got unmuted by {ctx.author}')
                         await user.edit(mute = False)
                     except Exception as err:

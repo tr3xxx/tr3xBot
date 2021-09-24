@@ -1,6 +1,7 @@
 from discord.ext import commands
 import numpy as np
-from config import check_voicehub_channel, check_log_channel
+from utils.check_log import log
+from utils.check_voicehub import get_vc
 
 class userlimit(commands.Cog):
 
@@ -9,13 +10,13 @@ class userlimit(commands.Cog):
     
     @commands.command()
     async def userlimit(self,ctx,*,arg: str = None):
-        result =  await check_voicehub_channel()
+        result =  get_vc()
         result_array = np.array(result)
         for i in range(0,len(result_array)):
             id = int(str(result_array[i])[2:-2])
             global vc
             vc = self.bot.get_channel(id)
-            log = self.bot.get_channel(await check_log_channel(ctx))
+            log_channel = self.bot.get_channel(log(ctx))
             if vc is None:
                 continue
             if arg is None:
@@ -30,7 +31,7 @@ class userlimit(commands.Cog):
                         else:
                             await ctx.send("Userlimit of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" from "+str(ctx.author.voice.channel.user_limit)+" to "+arg)
                             try:
-                                await log.send("Userlimit of "+str(ctx.author.voice.channel)+" was changed by "+str(ctx.author)+" from "+str(ctx.author.voice.channel.user_limit)+" to "+arg)
+                                await log_channel.send("Userlimit of "+str(ctx.author.voice.channel)+" was changed by "+str(ctx.author)+" from "+str(ctx.author.voice.channel.user_limit)+" to "+arg)
                             except Exception as err:
                                 pass
                             await ctx.author.voice.channel.edit(user_limit=int(arg))

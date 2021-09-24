@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from config import check_log_channel
+from utils.check_log import log
 
 class clear(commands.Cog):
 
@@ -10,7 +10,8 @@ class clear(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.command()
     async def clear(self,ctx,arg: str = None):
-        log = self.bot.get_channel(await check_log_channel(ctx))
+        
+        log_channel = self.bot.get_channel(log(ctx))
         if arg is None:
             await ctx.channel.purge(limit=1)
             await ctx.author.send("How many Messaages should i delete? (tclear x)")
@@ -25,7 +26,7 @@ class clear(commands.Cog):
                         await ctx.channel.purge(limit=1)
                         await ctx.send(embed=embed, delete_after= 10.0)
                         try:
-                            await log.send("{} Messages got deleted in {} by {}".format(count,ctx.channel.mention,ctx.author))
+                            await log_channel.send("{} Messages got deleted in {} by {}".format(count,ctx.channel.mention,ctx.author))
                         except Exception as err:
                             pass
 

@@ -1,30 +1,36 @@
-import discord
-import random
-import praw
-from discord.ext import commands
-from config import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT
-reddit = praw.Reddit(client_id=REDDIT_CLIENT_ID,client_secret=REDDIT_CLIENT_SECRET,user_agent=REDDIT_USER_AGENT)
 
+import asyncpraw
+from discord.ext import commands
+from utils.reddit_login import client_id,client_secret,user_agent
+reddit = asyncpraw.Reddit(client_id=client_id(),client_secret=client_secret(),user_agent=user_agent())
 
 class waifu(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(pass_context=True)
-    async def waifu(self,ctx):
-        async with ctx.typing():
+    @commands.command(pass_context=True, aliases=['waifu'])
+    async def waifus(self,ctx):
+       async with ctx.typing():
             while True:
-                    memes_submissions = reddit.subreddit('waifusfortr3x').hot()
-                    post_to_pick = random.randint(1, 100)
-                    for i in range(0, post_to_pick):
-                        submission = next(x for x in memes_submissions if not x.stickied)
-                    check_souce =  str(submission.url[8:])
-                    if check_souce.startswith('i'):
-                        await ctx.send(submission.url)
-                        break
-                    else:
-                        pass
+                    subreddit = await reddit.subreddit("waifusfortr3x")
+                    async for submission in subreddit.new(limit=40):
+                        check_souce =  str(submission.url[8:])
+                        alreadysended = False
+                        messages = await ctx.channel.history(limit=40).flatten()
+                        for msg in messages:
+                            if msg.content == submission.url:
+                                alreadysended = True
+                                break
+
+                        if alreadysended == False:
+                            if check_souce.startswith('i'):
+                                await ctx.send(submission.url)
+                                break
+                        continue   
+                    break 
+              
+        
 
 
 

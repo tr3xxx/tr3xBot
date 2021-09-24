@@ -1,6 +1,7 @@
 from discord.ext import commands
 import numpy as np
-from config import check_log_channel, check_voicehub_channel
+from utils.check_log import log
+from utils.check_voicehub import get_vc
 
 class talkname(commands.Cog):
 
@@ -9,14 +10,13 @@ class talkname(commands.Cog):
 
     @commands.command()
     async def talkname(self,ctx,*,arg: str = None):
-        result =  await check_voicehub_channel()
+        result =  get_vc()
         result_array = np.array(result)
         for i in range(0,len(result_array)):
             id = int(str(result_array[i])[2:-2])
-            #global vc
             vc = self.bot.get_channel(id)
             try:
-                log = self.bot.get_channel(await check_log_channel(ctx))
+                log_channel = self.bot.get_channel(log(ctx))
             except Exception as err:
                 pass
             if vc is None:
@@ -41,7 +41,7 @@ class talkname(commands.Cog):
                                 newName = (str(ctx.author.voice.channel.name)+" ["+str(arg)+"]")
                                 await ctx.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author.mention)+" to '"+newName+"'")
                                 try:
-                                    await log.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+newName+"'")
+                                    await log_channel.send("Talkname of '"+str(ctx.author.voice.channel)+"' got changed by "+str(ctx.author)+" to '"+newName+"'")
                                 except Exception as err:
                                     pass
                                 await ctx.author.voice.channel.edit(name=newName)

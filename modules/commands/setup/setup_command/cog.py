@@ -1,9 +1,7 @@
-from os import name
+
 import discord
 from discord.ext import commands
 import sqlite3
-from dislash import InteractionClient, ActionRow, Button, ButtonStyle
-
 class setupCommand(commands.Cog):
 
     def __init__(self, bot: commands.Bot):

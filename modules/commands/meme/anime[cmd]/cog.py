@@ -1,9 +1,9 @@
 import discord
 import random
-import praw
+import asyncpraw
 from discord.ext import commands
-reddit = praw.Reddit(client_id='1v8p8QXgpNnQuvs2Zl-8UA',client_secret='-y2Bgh7e0JVA2LD7XnVazi62xffm3Q',user_agent='tr3xBot')
-
+from utils.reddit_login import client_id,client_secret,user_agent
+reddit = asyncpraw.Reddit(client_id=client_id(),client_secret=client_secret(),user_agent=user_agent())
 
 class anime(commands.Cog):
 
@@ -12,18 +12,26 @@ class anime(commands.Cog):
 
     @commands.command(pass_context=True)
     async def anime(self,ctx):
-        async with ctx.typing():
-                while True:
-                    memes_submissions = reddit.subreddit('Animemes').hot()
-                    post_to_pick = random.randint(1, 100)
-                    for i in range(0, post_to_pick):
-                        submission = next(x for x in memes_submissions if not x.stickied)
-                    check_souce =  str(submission.url[8:])
-                    if check_souce.startswith('i'):
-                        await ctx.send(submission.url)
-                        break
-                    else:
-                        pass
+       async with ctx.typing():
+            while True:
+                    subreddit = await reddit.subreddit("animemes")
+                    async for submission in subreddit.new(limit=40):
+                        check_souce =  str(submission.url[8:])
+                        alreadysended = False
+                        messages = await ctx.channel.history(limit=40).flatten()
+                        for msg in messages:
+                            if msg.content == submission.url:
+                                alreadysended = True
+                                break
+
+                        if alreadysended == False:
+                            if check_souce.startswith('i'):
+                                await ctx.send(submission.url)
+                                break
+                        continue   
+                    break 
+              
+        
 
 
 def setup(bot: commands.Bot):

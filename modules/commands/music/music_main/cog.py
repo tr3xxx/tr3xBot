@@ -3,8 +3,8 @@ import discord
 import youtube_dl
 import asyncio
 queue = []
-from config import FFMPEG_OPTIONS,YTDL_FORMAT_OPTIONS
-
+from utils.ffmpeg_options import FFMPEG_OPTIONS
+from utils.ytdl_format import YTDL_FORMAT_OPTIONS
 
 class music(commands.Cog):
     
