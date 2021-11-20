@@ -12,6 +12,7 @@ class on_guild_join(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_join(self,guild):
         
+        tr3xbot = self.bot.get_user(830842260462632992)
         setupch = await guild.create_text_channel(name="tr3xBot-Setup", overwrites={guild.default_role: discord.PermissionOverwrite(read_messages=False)})
         embed= discord.Embed(title='tr3xBot Setup',description='Thanks for choosing tr3xBot\n\n Please keep in mind that this Bot is developed by only one person\n Thereofore i would appreciate if you could report every bug or wishes on my Discord (https://discord.gg/rVcPPzbQ)\n\n Use `tsetup end` to end the setup after you finished it\n\n\n ',color=0x075FB2)
         embed.add_field(name="Welcome-Messages Channel",value="\n>>> *To set up an Custom Welcome Channel use the following Command: \n `tsetup welcomechannel <#textchannelid>`*",inline=False)

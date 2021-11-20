@@ -1,2 +1,2 @@
 def token():
-    return 'TOKEN'
+    return ' '

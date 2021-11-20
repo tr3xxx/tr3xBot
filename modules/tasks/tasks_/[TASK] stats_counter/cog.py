@@ -1,7 +1,7 @@
 import discord
 import numpy as np
 from discord.ext import commands,tasks
-from config import check_member_channel, check_online_channel, stats_channel, check_boost_channel
+from utils.get_stats_channel import check_member_channel, check_online_channel, stats_channel, check_boost_channel
 
 class stats_counter(commands.Cog):
 
@@ -54,11 +54,12 @@ class stats_counter(commands.Cog):
                 namemem = str(oldnamemember[0])+": "+str(guild.member_count)
                 nameon = str(oldnameonline[0])+": "+str(online)
                 nameboost = str(oldboostch[0])+": "+str(guild.premium_subscription_count)
-
-                await channelmember.edit(name = namemem)
-                await channelonline.edit(name = nameon)
-                await channelboost.edit(name = nameboost)
-
+                try:
+                    await channelmember.edit(name = namemem)
+                    await channelonline.edit(name = nameon)
+                    await channelboost.edit(name = nameboost)
+                except Exception as err:
+                    continue
             
 
 def setup(bot: commands.Bot):

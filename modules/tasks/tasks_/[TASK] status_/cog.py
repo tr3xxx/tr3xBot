@@ -21,11 +21,11 @@ class status(commands.Cog):
     async def status_(self):
         while True:
             
-            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= (str(await status.member_count(self))+' people')),status=discord.Status.dnd)
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= (str(await status.member_count(self))+' people')),status=discord.Status.online)
             await asyncio.sleep(5)
-            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=(str(len(self.bot.guilds))+' servers')),status=discord.Status.dnd)
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=(str(len(self.bot.guilds))+' servers')),status=discord.Status.online)
             await asyncio.sleep(5)
-            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name='thelp '),status=discord.Status.dnd)
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name='thelp '),status=discord.Status.online)
             await asyncio.sleep(5)
 
     

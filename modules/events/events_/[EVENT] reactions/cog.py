@@ -16,11 +16,11 @@ class reactions(commands.Cog):
         msg_array = np.array(messages)
         for i in range(0,len(msg_array)):
             if payload.message_id == int(str(msg_array[i])[2:-2]):
-                emoji_ = await emoji_reaction_roles(int(str(msg_array[i])[2:-2]),payload.emoji)
+                emoji_ = await emoji_reaction_roles(int(str(msg_array[i])[2:-2]))
                 print('21')
                 if str(payload.emoji) == (str(emoji_)[2:-3]):
                     print('23')
-                    role_name = await reaction_roles_role(int(str(msg_array[i])[2:-2]),payload.emoji)
+                    role_name = await reaction_roles_role(int(str(msg_array[i])[2:-2]))
                     print('25')
                     role = discord.utils.get(payload.member.guild.roles, name=str(role_name)[:-1])
                     print(role)
@@ -39,9 +39,9 @@ class reactions(commands.Cog):
         msg_array = np.array(messages)
         for i in range(0,len(msg_array)):
             if payload.message_id == int(str(msg_array[i])[2:-2]):
-                emoji_ = await emoji_reaction_roles(int(str(msg_array[i])[2:-2]),payload.emoji)
+                emoji_ = await emoji_reaction_roles(int(str(msg_array[i])[2:-2]))
                 if str(payload.emoji) == (str(emoji_)[2:-3]):
-                    role_name = await reaction_roles_role(int(str(msg_array[i])[2:-2]),payload.emoji)
+                    role_name = await reaction_roles_role(int(str(msg_array[i])[2:-2]))
                     guild = self.bot.get_guild(payload.guild_id)
                     member = discord.utils.get(guild.members, id=payload.user_id)
                     role = discord.utils.get(member.guild.roles, name=str(role_name)[:-1])
