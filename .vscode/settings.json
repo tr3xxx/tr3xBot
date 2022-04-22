@@ -19,7 +19,7 @@
     "workbench.iconTheme": "vscode-icons",
     "javascript.suggestionActions.enabled": false,
     "explorer.confirmDragAndDrop": false,
-    "workbench.colorTheme": "One Dark Pro",
+    "workbench.colorTheme": "GitHub Dark",
     "liveServer.settings.donotShowInfoMsg": true,
     "window.zoomLevel": -1,
     "explorer.confirmDelete": false,

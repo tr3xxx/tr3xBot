@@ -1,7 +1,7 @@
 <h1 align="center">tr3xBot</h1>
 
 <p align="center" >
-  <img src="https://github.com/tr3xxx/tr3xBot/blob/main/assets/bot dc logo.png" height='100pxpx' width='256px'>
+  <img src="https://github.com/tr3xxx/tr3xBot/blob/main/assets/logo.ico" height='100px' width='100px'>
 </p>
 
 <p align="center">
@@ -11,7 +11,7 @@
 
 <h2 align = "center" ><img src="https://cdn.discordapp.com/emojis/766498653753049109.png?v=1" height="20px">  Info</h2>
 
-<p align="center" ><br>tr3xBot is an OpenSource and Free to use Discord-Bot, developed by me, tr3x. <br>I dont have any experience in programming with Discord API or Python general, <br>Is something missing?<br> Then let me know, just like bugs or suggestions for improvement related to the code,  <br> preferably via my Discord Server (which is linked below) so I can take care of it <br><br> www.tr3xbot.me<br><br><br></p>
+<p align="center" ><br>tr3xBot is an OpenSource and Free to use Discord-Bot, developed by me, tr3x. <br>I dont have any experience in programming with Discord API or Python general, <br>but after about 1 month of development the bot looks pretty good, or is something missing?<br> Then let me know, just like bugs or suggestions for improvement related to the code,  <br> preferably via my Discord Server (which is linked below) so that I can take care of it <br><br> www.tr3xbot.me<br><br><br></p>
 
 <h2 align="center"><img src="https://cdn.discordapp.com/emojis/765548323166748745.png?v=1" height="20px">  Features</h2>
 <ul>
